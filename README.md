@@ -13,7 +13,11 @@ $ git pull (recuperando a última versão do repositório remoto da equipe)
 $ git checkout –b <work_branch> (criando o ramo onde serão feitas as alterações locais)
 ```
 
-#### Passo 3) Trabalhando...
+#### Passo 3) Trabalhando e fazendo commits
+```
+$ git add .
+$ git commit -m "<mensagem de commit>"
+```
 
 #### Passo 4) Recuperando as alterações realizadas desde que comecei a trabalhar
 ```
