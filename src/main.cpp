@@ -1,6 +1,7 @@
 #include "gui/mainwindow.h"
 #include <QApplication>
 #include <algebra/vec3.h>
+#include <algebra/vec4.h>
 #include <iostream>
 
 using namespace std;

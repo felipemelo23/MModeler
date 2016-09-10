@@ -6,6 +6,7 @@
 class Vec3 : public VecN
 {
 public:
+    Vec3(double value=0);
     Vec3(double x, double y, double z);
     ~Vec3();
 

@@ -1,5 +1,7 @@
 #include "vec3.h"
 
+Vec3::Vec3(double value) : VecN(3,value) {}
+
 Vec3::Vec3(double x, double y, double z) : VecN(3,x,y,z) {}
 
 Vec3::~Vec3() {}
