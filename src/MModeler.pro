@@ -20,7 +20,10 @@ SOURCES += main.cpp\
     algebra/vecn.cpp \
     algebra/vec4.cpp \
     algebra/vec3.cpp \
-    algebra/mtx4x4.cpp
+    algebra/mtx4x4.cpp \
+    visualization/globject.cpp \
+    visualization/glscene.cpp \
+    visualization/gloctreeadapter.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -29,6 +32,9 @@ HEADERS  += gui/mainwindow.h \
     algebra/vecn.h \
     algebra/vec4.h \
     algebra/vec3.h \
-    algebra/mtx4x4.h
+    algebra/mtx4x4.h \
+    visualization/globject.h \
+    visualization/glscene.h \
+    visualization/gloctreeadapter.h
 
 FORMS    += gui/mainwindow.ui
