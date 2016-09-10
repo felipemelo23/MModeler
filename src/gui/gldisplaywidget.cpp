@@ -36,11 +36,7 @@ glDisplayWidget::~glDisplayWidget() {}
 
 void glDisplayWidget::keyPressEvent(QKeyEvent *event)
 {
-    event->accept();
-
     int key = event->key();
-
-    cout << key << endl;
 
     switch (key) {
     case Qt::Key_R:
