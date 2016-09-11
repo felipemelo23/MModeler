@@ -4,6 +4,8 @@
 #include <QGLWidget>
 #include <QMouseEvent>
 
+#include <visualization/glscene.h>
+
 class glDisplayWidget : public QGLWidget
 {
     Q_OBJECT
@@ -22,6 +24,8 @@ public:
     void setGrid(bool value);
 
 protected:
+    glScene *scene;
+
     double backgroundColor[3];
 
     int width;

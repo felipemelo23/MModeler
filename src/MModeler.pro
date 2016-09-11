@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     algebra/mtx4x4.cpp \
     visualization/globject.cpp \
     visualization/glscene.cpp \
-    visualization/gloctreeadapter.cpp
+    visualization/gloctreeadapter.cpp \
+    visualization/glface.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -36,6 +37,7 @@ HEADERS  += gui/mainwindow.h \
     algebra/mtx4x4.h \
     visualization/globject.h \
     visualization/glscene.h \
-    visualization/gloctreeadapter.h
+    visualization/gloctreeadapter.h \
+    visualization/glface.h
 
 FORMS    += gui/mainwindow.ui
