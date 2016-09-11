@@ -1,5 +1,6 @@
 #include "gui/mainwindow.h"
 #include <QApplication>
+#include <algebra/mtx4x4.h>
 #include <algebra/vec3.h>
 #include <algebra/vec4.h>
 #include <iostream>
