@@ -2,6 +2,8 @@
 
 Mtx4x4::Mtx4x4(double value) : MtxNxN(4,value) {}
 
+Mtx4x4::Mtx4x4(double v00, double v01, double v02, double v03, double v10, double v11, double v12, double v13, double v20, double v21, double v22, double v23, double v30, double v31, double v32, double v33) : MtxNxN(4,v00,v01,v02,v03,v10,v11,v12,v13,v20,v21,v22,v23,v30,v31,v32,v33) {}
+
 Mtx4x4::~Mtx4x4() {}
 
 Vec4 *Mtx4x4::getLine(unsigned int line)

@@ -14,6 +14,37 @@ Mtx::Mtx(unsigned int lines, unsigned int columns, double value)
     initializeMatrix(value);
 }
 
+Mtx::Mtx(unsigned int lines, unsigned int columns, double v1, double v2, ...)
+{
+    this->lines = lines;
+    this->columns = columns;
+
+    initializeMatrix(1);
+
+    setValue(0,0,v1);
+    setValue(0,1,v2);
+
+    if (lines*columns > 2) {
+        va_list vl;
+
+        va_start(vl,v2);
+
+        for (int column = 2; column < getColumns(); column++) {
+            double value = va_arg(vl,double);
+            setValue(0,column,value);
+        }
+
+        for (int line = 1; line < getLines(); line++) {
+            for (int column = 0; column < getColumns(); column++) {
+                double value = va_arg(vl,double);
+                setValue(line,column,value);
+            }
+        }
+
+        va_end(vl);
+    }
+}
+
 Mtx::~Mtx()
 {
     delete values;

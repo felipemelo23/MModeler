@@ -3,12 +3,14 @@
 
 #include "mtx.h"
 #include "vecn.h"
+#include <stdarg.h>
 
 class MtxNxN : public Mtx
 {
 public:
     MtxNxN(double value=0);
     MtxNxN(int n, double value=0);
+    MtxNxN(int n, double v1, double v2, ...);
     ~MtxNxN();
 
     int getN();

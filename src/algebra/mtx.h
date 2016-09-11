@@ -5,6 +5,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <stdarg.h>
 
 using std::vector;
 using std::string;
@@ -17,6 +18,7 @@ public:
     /* CONSTRUCTORS */
     Mtx(double value=0);
     Mtx(unsigned int lines, unsigned int columns, double value=0);
+    Mtx(unsigned int lines, unsigned int columns, double v1, double v2, ...);
     virtual ~Mtx();
 
     /* BASIC ACCESSORS */

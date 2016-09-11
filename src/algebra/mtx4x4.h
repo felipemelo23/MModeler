@@ -8,6 +8,10 @@ class Mtx4x4 : public MtxNxN
 {
 public:
     Mtx4x4(double value=0);
+    Mtx4x4(double v00,double v01,double v02,double v03,
+           double v10,double v11,double v12,double v13,
+           double v20,double v21,double v22,double v23,
+           double v30,double v31,double v32,double v33);
     ~Mtx4x4();
 
     Vec4 *getLine(unsigned int line);
