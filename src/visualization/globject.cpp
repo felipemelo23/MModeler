@@ -56,27 +56,44 @@ void glObject::addFace(glFace *face)
     faces->push_back(face);
 
     int *vi = face->getVertices();
+    Vec3 *center = new Vec3();
+    Vec3 *trash;
 
-    Vec3 *v1 = getVertex(vi[1])->sub(getVertex(vi[0]));
-    Vec3 *v2 = getVertex(vi[2])->sub(getVertex(vi[0]));
-    Vec3 *v3;
+    for (int i=0;i<face->getSides();i++) {
+        trash = center;
+        center = center->sum(getVertex(vi[i]));
+        delete trash;
+    }
 
-    Vec3 *normal = v1->cross(v2);
-    normal->normalize();
+    trash = center;
+    center = center->prod(1/face->getSides());
+    delete trash;
 
-    faceNormals->push_back(normal);
+    Vec3 *faceNormal = new Vec3();
 
-    v1 = getVertex(vi[0])->sum(normal);
-    v2 = getVertex(vi[1])->sum(normal);
-    v3 = getVertex(vi[2])->sum(normal);
+    for (int i=0;i<face->getSides();i++) {
+        Vec3 *v1 = getVertex(vi[i])->sub(center);
+        Vec3 *v2 = getVertex(vi[(i+1)%face->getSides()])->sub(center);
 
-    v1->normalize();
-    v2->normalize();
-    v3->normalize();
+        Vec3 *normal = v1->cross(v2);
+        normal->normalize();
 
-    setVertexNormal(vi[0],v1);
-    setVertexNormal(vi[1],v2);
-    setVertexNormal(vi[2],v3);
+        trash = faceNormal;
+        faceNormal = faceNormal->sum(normal);
+        delete trash;
+
+        v1 = getVertex(vi[i])->sum(normal);
+        v2 = getVertex(vi[(i+1)%face->getSides()])->sum(normal);
+
+        v1->normalize();
+        v2->normalize();
+
+        setVertexNormal(vi[i],v1);
+        setVertexNormal(vi[(i+1)%face->getSides()],v2);
+    }
+
+    faceNormal->normalize();
+    faceNormals->push_back(faceNormal);
 }
 
 glFace *glObject::getFace(int index)
@@ -91,7 +108,7 @@ Vec3 *glObject::getFaceNormal(int index)
 
 int glObject::numOfFaces()
 {
-    return faceNormals->size();
+    return faces->size();
 }
 
 bool glObject::getSolid()
@@ -139,11 +156,11 @@ void glObject::draw()
         Vec3 *normal;
 
         if (solid)
-            glBegin(GL_TRIANGLES);
+            glBegin(GL_POLYGON);
         else
             glBegin(GL_LINE_STRIP);
 
-        for (int j=0;j<3;j++) {
+        for (int j=0;j<faces->at(i)->getSides();j++) {
             temp = getVertex(v[j]);
 
             if (smooth)
