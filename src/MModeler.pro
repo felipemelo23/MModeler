@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     visualization/glscene.cpp \
     visualization/gloctreeadapter.cpp \
     visualization/glface.cpp \
-    algebra/vec2.cpp
+    algebra/vec2.cpp \
+    gui/objectsmanager.cpp \
+    gui/commandinterpreter.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -40,6 +42,8 @@ HEADERS  += gui/mainwindow.h \
     visualization/glscene.h \
     visualization/gloctreeadapter.h \
     visualization/glface.h \
-    algebra/vec2.h
+    algebra/vec2.h \
+    gui/objectsmanager.h \
+    gui/commandinterpreter.h
 
 FORMS    += gui/mainwindow.ui
