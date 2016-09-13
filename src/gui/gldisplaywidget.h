@@ -1,8 +1,11 @@
 #ifndef GLDISPLAYWIDGET_H
 #define GLDISPLAYWIDGET_H
 
+#include "objectsmanager.h"
+
 #include <QGLWidget>
 #include <QMouseEvent>
+#include <QTimer>
 
 #include <visualization/glscene.h>
 
@@ -25,6 +28,7 @@ public:
 
 protected:
     glScene *scene;
+    ObjectsManager *objects;
 
     double backgroundColor[3];
 
@@ -53,6 +57,8 @@ protected:
     bool gizmo;
     bool grid;
 
+    QTimer timer;
+
     void drawGizmo();
     void drawGrid();
 
@@ -64,6 +70,9 @@ protected:
     void resizeGL(int w, int h);
     void paintGL();
     void resetView();
+
+private slots:
+    void checkDirts();
 };
 
 #endif // GLDISPLAYWIDGET_H

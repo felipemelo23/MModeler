@@ -327,3 +327,18 @@ void glDisplayWidget::drawScene() {
     scene->drawObjects();
 }
 
+void glDisplayWidget::checkDirts() {
+    while (objects->hasDirts()) {
+        int i = objects->popDirt();
+        int type = objects->getObject(i)->getType();
+
+        switch (type) {
+        case Object::OCTREE:
+            //TO DO
+            break;
+        default:
+            break;
+        }
+    }
+}
+
