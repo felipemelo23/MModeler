@@ -10,7 +10,7 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
 
     backgroundColor[0] = 0.1;
     backgroundColor[1] = 0.1;
-    backgroundColor[2] = 0.1;
+    backgroundColor[2] = 0.2;
 
     lmbPressed = false;
     mmbPressed = false;
@@ -32,6 +32,28 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
     grid = true;
 
     scene = new glScene();
+
+    glObject *pyr = new glObject();
+
+    pyr->addVertex(new Vec3(1,1,1));
+    pyr->addVertex(new Vec3(-1,1,1));
+    pyr->addVertex(new Vec3(-1,-1,1));
+    pyr->addVertex(new Vec3(1,-1,1));
+    pyr->addVertex(new Vec3(-1,1,-1));
+    pyr->addVertex(new Vec3(1,1,-1));
+    pyr->addVertex(new Vec3(1,-1,-1));
+    pyr->addVertex(new Vec3(-1,-1,-1));
+
+    pyr->addFace(new glFace(4,0,1,2,3));
+    pyr->addFace(new glFace(4,4,5,6,7));
+    pyr->addFace(new glFace(4,5,0,3,6));
+    pyr->addFace(new glFace(4,1,4,7,2));
+    pyr->addFace(new glFace(4,5,4,1,0));
+    pyr->addFace(new glFace(4,7,6,3,2));
+
+
+    scene->addObject(pyr);
+
 }
 
 glDisplayWidget::~glDisplayWidget() {}
