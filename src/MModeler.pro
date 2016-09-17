@@ -28,7 +28,15 @@ SOURCES += main.cpp\
     visualization/glface.cpp \
     algebra/vec2.cpp \
     gui/objectsmanager.cpp \
-    gui/commandinterpreter.cpp
+    gui/cmd_interpreter/command.cpp \
+    gui/cmd_interpreter/commandinterpreter.cpp \
+    gui/cmd_interpreter/insert.cpp \
+    gui/cmd_interpreter/select.cpp \
+    gui/cmd_interpreter/deselect.cpp \
+    gui/cmd_interpreter/delete.cpp \
+    gui/cmd_interpreter/translate.cpp \
+    gui/cmd_interpreter/rotate.cpp \
+    gui/cmd_interpreter/scale.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -44,6 +52,14 @@ HEADERS  += gui/mainwindow.h \
     visualization/glface.h \
     algebra/vec2.h \
     gui/objectsmanager.h \
-    gui/commandinterpreter.h
+    gui/cmd_interpreter/command.h \
+    gui/cmd_interpreter/commandinterpreter.h \
+    gui/cmd_interpreter/insert.h \
+    gui/cmd_interpreter/select.h \
+    gui/cmd_interpreter/deselect.h \
+    gui/cmd_interpreter/delete.h \
+    gui/cmd_interpreter/translate.h \
+    gui/cmd_interpreter/rotate.h \
+    gui/cmd_interpreter/scale.h
 
 FORMS    += gui/mainwindow.ui

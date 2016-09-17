@@ -1,7 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+
 #include <QMainWindow>
+#include <gui/cmd_interpreter/commandinterpreter.h>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    CommandInterpreter *interpreter;
+    ObjectsManager *objects;
 };
 
 #endif // MAINWINDOW_H

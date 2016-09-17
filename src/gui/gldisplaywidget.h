@@ -26,6 +26,8 @@ public:
     void setGizmo(bool value);
     void setGrid(bool value);
 
+    void setObjects(ObjectsManager *objects);
+
 protected:
     glScene *scene;
     ObjectsManager *objects;
@@ -57,7 +59,7 @@ protected:
     bool gizmo;
     bool grid;
 
-    QTimer timer;
+    QTimer *timer;
 
     void drawGizmo();
     void drawGrid();

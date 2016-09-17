@@ -32,28 +32,6 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
     grid = true;
 
     scene = new glScene();
-
-    glObject *pyr = new glObject();
-
-    pyr->addVertex(new Vec3(1,1,1));
-    pyr->addVertex(new Vec3(-1,1,1));
-    pyr->addVertex(new Vec3(-1,-1,1));
-    pyr->addVertex(new Vec3(1,-1,1));
-    pyr->addVertex(new Vec3(-1,1,-1));
-    pyr->addVertex(new Vec3(1,1,-1));
-    pyr->addVertex(new Vec3(1,-1,-1));
-    pyr->addVertex(new Vec3(-1,-1,-1));
-
-    pyr->addFace(new glFace(4,0,1,2,3));
-    pyr->addFace(new glFace(4,4,5,6,7));
-    pyr->addFace(new glFace(4,5,0,3,6));
-    pyr->addFace(new glFace(4,1,4,7,2));
-    pyr->addFace(new glFace(4,5,4,1,0));
-    pyr->addFace(new glFace(4,7,6,3,2));
-
-
-    scene->addObject(pyr);
-
 }
 
 glDisplayWidget::~glDisplayWidget() {}
@@ -197,6 +175,16 @@ void glDisplayWidget::setGrid(bool value)
     grid = value;
 }
 
+void glDisplayWidget::setObjects(ObjectsManager *objects)
+{
+    this->objects = objects;
+    this->timer = new QTimer(this);
+
+    this->timer->start(33);
+
+    connect(timer,SIGNAL(timeout()),this,SLOT(checkDirts()));
+}
+
 void glDisplayWidget::drawGizmo()
 {
     glPushMatrix();
@@ -330,14 +318,34 @@ void glDisplayWidget::drawScene() {
 void glDisplayWidget::checkDirts() {
     while (objects->hasDirts()) {
         int i = objects->popDirt();
-        int type = objects->getObject(i)->getType();
 
-        switch (type) {
-        case Object::OCTREE:
-            //TO DO
-            break;
-        default:
-            break;
+        if (objects->numOfObjects() < scene->numOfObjects()) {
+            scene->removeObject(i);
+        } else {
+            int type = objects->getObject(i)->getType();
+
+            glObject *newObj;
+
+            switch (type) {
+            case Object::SPHERE:
+                //TO DO
+                break;
+            case Object::RBPRISM:
+                //TO DO
+                break;
+            case Object::RBPYRAMID:
+                //TO DO
+                break;
+            case Object::OCTREE:
+                //TO DO
+                break;
+            }
+
+            if (objects->numOfObjects() > scene->numOfObjects()) {
+                scene->addObject(newObj);
+            } else {
+                scene->setObject(i,newObj);
+            }
         }
     }
 }

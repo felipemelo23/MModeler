@@ -14,6 +14,7 @@ public:
 
     void addObject(glObject *object);
     glObject *getObject(int index);
+    void setObject(int index, glObject *object);
     void removeObject(int index);
     int numOfObjects();
 

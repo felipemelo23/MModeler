@@ -3,9 +3,11 @@
 
 #include <vector>
 #include <queue>
+#include <utility>
 
 using std::vector;
 using std::queue;
+using std::pair;
 
 class ObjectsManager
 {
@@ -18,13 +20,19 @@ public:
     void removeObject(int index);
     int numOfObjects();
 
+    void addSelected(int objId);
+    void removeSelected(int objId);
+    int getSelected(int index);
+    int numOfSelected();
+
     bool hasDirts();
     int popDirt();
-    void pushDirt(int value);
+    void pushDirt(int value, int mode);
 
 private:
     vector<Object*> *objects;
-    queue<int> *dirts;
+    vector<int> *selecteds;
+    queue<pair<int,int>> *dirts;
 
 };
 

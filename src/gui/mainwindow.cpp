@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    objects = new ObjectsManager();
+    ui->display->setObjectects(objects);
+    interpreter = new CommandInterpreter(objects);
 }
 
 MainWindow::~MainWindow()

@@ -22,6 +22,15 @@ glObject *glScene::getObject(int index)
     return objects->at(index);
 }
 
+void glScene::setObject(int index, glObject *object)
+{
+    glObject *trash = objects->at(index);
+
+    objects->at(index) = object;
+
+    delete trash;
+}
+
 void glScene::removeObject(int index)
 {
     objects->erase(objects->begin()+index);
