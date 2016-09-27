@@ -11,7 +11,6 @@ private:
 public:
     RBPrism(int numOfSides=3);
     ~RBPrism();
-
 };
 
 #endif // RBPRISM_H

@@ -36,7 +36,13 @@ SOURCES += main.cpp\
     gui/cmd_interpreter/delete.cpp \
     gui/cmd_interpreter/translate.cpp \
     gui/cmd_interpreter/rotate.cpp \
-    gui/cmd_interpreter/scale.cpp
+    gui/cmd_interpreter/scale.cpp \
+    objects/sphere.cpp \
+    objects/rbpyramid.cpp \
+    objects/rbprism.cpp \
+    objects/ocnode.cpp \
+    objects/object.cpp \
+    objects/boundingbox.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -60,6 +66,12 @@ HEADERS  += gui/mainwindow.h \
     gui/cmd_interpreter/delete.h \
     gui/cmd_interpreter/translate.h \
     gui/cmd_interpreter/rotate.h \
-    gui/cmd_interpreter/scale.h
+    gui/cmd_interpreter/scale.h \
+    objects/sphere.h \
+    objects/rbpyramid.h \
+    objects/rbprism.h \
+    objects/ocnode.h \
+    objects/object.h \
+    objects/boundingbox.h
 
 FORMS    += gui/mainwindow.ui

@@ -13,6 +13,21 @@ RBPyramid::~RBPyramid()
     delete wo;
 }
 
+void RBPyramid::section(Vec2 **v, double ray)
+{
+    double teta = (2*3.141592)/numOfSides;
+
+    v[0] = new Vec2(0,ray);
+
+    Mtx *rot = new Mtx(2,2,cos(teta),-sin(teta),
+                           sin(teta,cos(teta)));
+
+    for (int i=1;i<numOfSides;i++)
+    {
+        v[i] = rot->prod(v[i-1]);
+    }
+}
+
 bool RBPyramid::isInside(Vec4 *pos)
 {
     Vec4 *canon = wo->prod(pos);
@@ -24,16 +39,7 @@ bool RBPyramid::isInside(Vec4 *pos)
     double teta = (2*3.141592)/numOfSides;
 
     Vec2 **v = new Vec2*[numOfSides];
-
-    v[0] = new Vec2(0,r);
-
-    Mtx *rot = new Mtx(2,2,cos(teta),-sin(teta),
-                           sin(teta,cos(teta)));
-
-    for (int i=1;i<numOfSides;i++)
-    {
-        v[i] = rot->prod(v[i-1]);
-    }
+    section(v,r);
 
     Vec2 *pos2d = new Vec2(canon->getX(),canon->getZ());
 
@@ -44,5 +50,49 @@ bool RBPyramid::isInside(Vec4 *pos)
         i++;
     }
 
+    //limpeza de memoria:
+
+        delete canon;
+        delete pos2d;
+        for(int i=0; i<numOfSides; i++)
+            delete v[i];
+        delete v;
+
+    //memoria limpa...
+
     return output;
+}
+
+Vec3* RBPrism::getMaximumCoords()
+{
+    //qual vai ser a coordenada maxima?
+}
+
+Vec3* RBPrism::getMinimumCoords()
+{
+    Vec2 **v = new Vec2*[numOfSides];
+    section(v);
+
+    //como a seccao eh um poligono, entao sua coordenada Y serah correspondente a Z, em 3D.
+
+    double x = v[0]->getX();
+    double z = v[0]->getY();
+
+    for (int i=1;i<8;i++)
+    {
+        if (x < v[i]->getX()) x = v[i]->getX();
+        if (z , v[i]->getZ()) z = v[i]->getZ();
+    }
+
+    double y = -1;
+
+    //limpeza de memoria:
+
+        for(int i=0; i<numOfSides; i++)
+            delete v[i];
+        delete v;
+
+    //memoria limpa...
+
+    return new Vec3(x,y,z);
 }

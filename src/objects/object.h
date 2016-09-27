@@ -3,6 +3,7 @@
 
 #include <algebra/mtx4x4.h>
 #include <algebra/vec3.h>
+#include <algebra/vec2.h>
 
 /*A classe object servira apenas como interface para
 facilitar implementacao e para fazer passagem de parametross*/
@@ -24,6 +25,8 @@ public:
 
     virtual Vec3 *getMinimumCoords()=0;
     virtual Vec3 *getMaximumCoords()=0;
+
+    virtual void section(Vec2 **v, double ray=1)=0;
 };
 
 #endif // OBJECT_H
