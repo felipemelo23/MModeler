@@ -13,9 +13,12 @@ class Object
 private:
     Mtx4x4 *wo;
     Mtx4x4 *ow;
+    int type;
 
 public:
     Vec3 getOrigin();
+
+    int getType();
 
     void translate(double x, double y, double z);
     void scale(double x, double y, double z);
@@ -27,6 +30,14 @@ public:
     virtual Vec3 *getMaximumCoords()=0;
 
     virtual void section(Vec2 **v, double ray=1)=0;
+
+
+    static const int SPHERE = 0;
+    static const int RBPRISM = 1;
+    static const int RBPYRAMID = 2;
+    static const int OCTREE = 3;
+    static const int CONE = 4;
+    static const int CYLINDER = 5;
 };
 
 #endif // OBJECT_H

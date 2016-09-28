@@ -42,7 +42,9 @@ SOURCES += main.cpp\
     objects/rbprism.cpp \
     objects/ocnode.cpp \
     objects/object.cpp \
-    objects/boundingbox.cpp
+    objects/boundingbox.cpp \
+    algebra/mtx2x2.cpp \
+    algebra/mtx3x3.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -72,6 +74,8 @@ HEADERS  += gui/mainwindow.h \
     objects/rbprism.h \
     objects/ocnode.h \
     objects/object.h \
-    objects/boundingbox.h
+    objects/boundingbox.h \
+    algebra/mtx2x2.h \
+    algebra/mtx3x3.h
 
 FORMS    += gui/mainwindow.ui

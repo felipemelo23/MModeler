@@ -34,6 +34,11 @@ void Object::scale(double x, double y, double z)
     delete trash;
 }
 
+int Object::getType()
+{
+    return type;
+}
+
 void Object::translate(double x, double y, double z)
 {
     Mtx4x4 *trash = ow;

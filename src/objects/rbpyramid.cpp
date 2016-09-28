@@ -1,10 +1,13 @@
 #include <objects/rbpyramid.h>
 
+#include <algebra/mtx2x2.h>
+#include <algebra/mtx3x3.h>
 #include <algebra/vec2.h>
 
 RBPyramid::RBPyramid(int numOfSides)
 {
     this->numOfSides = numOfSides;
+    this->type = Object::RPPYRAMID;
 }
 
 RBPyramid::~RBPyramid()
@@ -13,14 +16,13 @@ RBPyramid::~RBPyramid()
     delete wo;
 }
 
-void RBPyramid::section(Vec2 **v, double ray)
+void RBPyramid::section(Vec2 **v, double radius)
 {
     double teta = (2*3.141592)/numOfSides;
 
-    v[0] = new Vec2(0,ray);
+    v[0] = new Vec2(0,radius);
 
-    Mtx *rot = new Mtx(2,2,cos(teta),-sin(teta),
-                           sin(teta,cos(teta)));
+    Mtx2x2 *rot = Mtx2x2::getRotateMtx(teta);
 
     for (int i=1;i<numOfSides;i++)
     {
@@ -36,9 +38,9 @@ bool RBPyramid::isInside(Vec4 *pos)
         return false;
 
     double r = (1-canon->getY())/2;
-    double teta = (2*3.141592)/numOfSides;
 
     Vec2 **v = new Vec2*[numOfSides];
+
     section(v,r);
 
     Vec2 *pos2d = new Vec2(canon->getX(),canon->getZ());
@@ -70,8 +72,17 @@ Vec3* RBPrism::getMaximumCoords()
 
 Vec3* RBPrism::getMinimumCoords()
 {
-    Vec2 **v = new Vec2*[numOfSides];
-    section(v);
+    Vec3 **v = new Vec3*[numOfSides + 1];
+
+    Mtx3x3 *rot = Mtx3x3::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
+
+    v[0] = new Vec3(0,1,0);
+    v[1] = new Vec3(0,0,1);
+
+    for (int i=2;i<numOfSides;i++)
+    {
+        v[i] = rot->prod(v[i-1]);
+    }
 
     //como a seccao eh um poligono, entao sua coordenada Y serah correspondente a Z, em 3D.
 

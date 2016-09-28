@@ -2,7 +2,8 @@
 
 RBPrism::RBPrism(int numOfSides)
 {
-
+    this->numOfSides = numOfSides;
+    this->type = Object::RBPRISM;
 }
 
 RBPrism::~RBPrism()

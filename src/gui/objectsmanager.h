@@ -5,6 +5,8 @@
 #include <queue>
 #include <utility>
 
+#include <objects/object.h>
+
 using std::vector;
 using std::queue;
 using std::pair;
@@ -32,7 +34,7 @@ public:
 private:
     vector<Object*> *objects;
     vector<int> *selecteds;
-    queue<pair<int,int>> *dirts;
+    queue<pair<int,int> > *dirts;
 
 };
 

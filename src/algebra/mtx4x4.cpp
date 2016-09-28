@@ -80,9 +80,7 @@ Mtx4x4 *Mtx4x4::getTranslateMtx(double x, double y, double z)
 
 Mtx4x4 *Mtx4x4::getRotateMtx(double degree, bool x, bool y, bool z)
 {
-    Mtx4x4 *R = new Mtx4x4();
-
-    R = getIdentity();
+    Mtx4x4 *R = getIdentity();
 
     if (x) {
         R->setValue(1,1,cos(degree));
