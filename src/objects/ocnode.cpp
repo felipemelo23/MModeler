@@ -134,7 +134,7 @@ void Ocnode::classify(Object *src, int maxDepth)
     {
         state = 0;
 
-        children = new vector();
+        children = new vector<Ocnode*>();
 
         for(int i=0; i<8; i++)
         {
@@ -142,7 +142,7 @@ void Ocnode::classify(Object *src, int maxDepth)
             children->at(i)->setDepth(depth+1);
             children->at(i)->setSize(size/2);
 
-            children->at(i)->translate(getX(), getY(), getZ());
+            children->at(i)->translate(getOrigin()->getX(),getOrigin()->getY(),getOrigin()->getZ());
         }
 
 
