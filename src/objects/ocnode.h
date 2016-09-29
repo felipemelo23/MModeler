@@ -3,6 +3,7 @@
 
 #include <objects/object.h>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,13 +12,14 @@ class Ocnode : public Object
 
 private:
     short state;
-    int depth;
+    int depth=0;
     double size;
     Ocnode* parent;
     vector<Ocnode*> *children;
+    bool isRoot;
 
 public:
-    Ocnode();
+    Ocnode(bool isRoot=false);
 
     short getState() const;
     void setState(short value);

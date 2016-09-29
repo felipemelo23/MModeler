@@ -1,11 +1,12 @@
 #include <objects/ocnode.h>
 
-Ocnode::Ocnode() : Object()
+Ocnode::Ocnode(bool isRoot) : Object()
 {
     this->type = Object::OCTREE;
     this->name = "Octree";
 
     this->children = NULL;
+    this->isRoot = isRoot;
 }
 
 short Ocnode::getState() const
@@ -98,7 +99,60 @@ Vec4 **Ocnode::getVertices()
     return v;
 }
 
+/* Pseudo Codigo:
+
+  -> Obter vertices do ocnode;
+  -> Conferir se o no eh raiz:
+    >> se sim: criar a boundingbox e converter o centro do noh
+        para coordenadas de mundo.
+
+  -> Conferir se pontos estao contidos no objeto:
+    >> se todos: preto
+    >> se nenhum: branco
+    >> default: cinza
+
+  -> Se maxDepth foi alcancado, encerrar a recursao
+
+*/
+
 void Ocnode::classify(Object *src, int maxDepth)
 {
+    //define a boundingbox do objeto
+    if(isRoot)
+    {
+        Vec3 *range = src->getMaximumCoords()->sub(src->getMinimumCoords());
+        size = max(max(range->getX(),range->getY()) , range->getZ());
+    }
 
+    Vec4 **v = getVertices();
+    int count=0;
+
+    for(int i=0; i<8; i++)
+        if(src->isInside(v[i])) count++;
+
+    if(((count < 8) && (count > 0) && (depth < maxDepth)) || (isRoot))  //cinza
+    {
+        state = 0;
+
+        children = new vector();
+
+        for(int i=0; i<8; i++)
+        {
+            children->push_back(new Ocnode());
+            children->at(i)->setDepth(depth+1);
+            children->at(i)->setSize(size/2);
+
+            children->at(i)->translate(getX(), getY(), getZ());
+        }
+
+
+    }
+    else if (count == 0)    //branco
+    {
+        state = -1;
+    }
+    else    //preto
+    {
+        state = 1;
+    }
 }

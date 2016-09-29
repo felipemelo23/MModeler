@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MModeler
 TEMPLATE = app
 
+LIBS = -lopengl32 -lglut32
+
 CONFIG += c++11
 
 SOURCES += main.cpp\
