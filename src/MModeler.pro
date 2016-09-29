@@ -47,7 +47,8 @@ SOURCES += main.cpp\
     gui/cmd_interpreter/insertcmd.cpp \
     visualization/glrbprismadapter.cpp \
     visualization/glrbpyramidadapter.cpp \
-    visualization/glsphereadapter.cpp
+    visualization/glsphereadapter.cpp \
+    visualization/glcompoundobject.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -82,6 +83,7 @@ HEADERS  += gui/mainwindow.h \
     gui/cmd_interpreter/insertcmd.h \
     visualization/glrbprismadapter.h \
     visualization/glrbpyramidadapter.h \
-    visualization/glsphereadapter.h
+    visualization/glsphereadapter.h \
+    visualization/glcompoundobject.h
 
 FORMS    += gui/mainwindow.ui

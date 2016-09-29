@@ -2,6 +2,7 @@
 
 glFace::glFace(int sides, int *v)
 {
+    this->empty = false;
     this->sides = sides;
     this->vertices = new int[sides];
 
@@ -11,6 +12,7 @@ glFace::glFace(int sides, int *v)
 
 glFace::glFace(int sides, int v1, int v2, int v3, ...)
 {
+    this->empty = false;
     this->sides = sides;
     vertices = new int[sides];
 
@@ -41,4 +43,14 @@ int *glFace::getVertices()
 int glFace::getSides() const
 {
     return sides;
+}
+
+bool glFace::getEmpty() const
+{
+    return empty;
+}
+
+void glFace::setEmpty(bool value)
+{
+    empty = value;
 }

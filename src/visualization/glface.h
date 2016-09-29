@@ -13,7 +13,11 @@ public:
 
     int getSides() const;
 
+    bool getEmpty() const;
+    void setEmpty(bool value);
+
 private:
+    bool empty;
     int sides;
     int *vertices;
 

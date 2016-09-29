@@ -167,7 +167,7 @@ void glObject::draw()
         Vec3 *temp;
         Vec3 *normal;
 
-        if (solid)
+        if ((solid)&&(!faces->at(i)->getEmpty()))
             glBegin(GL_POLYGON);
         else
             glBegin(GL_LINE_STRIP);

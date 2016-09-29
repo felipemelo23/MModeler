@@ -14,7 +14,7 @@ private:
     int depth;
     double size;
     Ocnode* parent;
-    vector<Ocnode*> child;
+    vector<Ocnode*> *children;
 
 public:
     Ocnode();
@@ -27,14 +27,15 @@ public:
     void setSize(double value);
     Ocnode *getParent() const;
     void setParent(Ocnode *value);
-    vector<Ocnode*> getChild() const;
-    void setChild(const vector<Ocnode*> &value);
+    vector<Ocnode *> *getChildren() const;
+    Ocnode *getChild(int index);
 
     void classify(Object* src, int maxDepth);
 
     bool isInside(Vec4 *pos);
     Vec3 *getMinimumCoords();
     Vec3 *getMaximumCoords();
+    Vec4 **getVertices();
 };
 
 #endif // Ocnode_H
