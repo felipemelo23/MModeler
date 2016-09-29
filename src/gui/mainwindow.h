@@ -20,6 +20,9 @@ private:
     Ui::MainWindow *ui;
     CommandInterpreter *interpreter;
     ObjectsManager *objects;
+
+private slots:
+    void feedCommand();
 };
 
 #endif // MAINWINDOW_H
