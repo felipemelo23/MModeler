@@ -99,3 +99,55 @@ bool Sphere::isInside(Vec4 *pos)
 
     return norm <= 1;
 }
+
+Vec4 **Sphere::getVertices(int height, int width)
+{
+    Vec4 **v = new Vec4*[(height-1)*width + 2];
+
+    Mtx4x4 *rotZ = Mtx4x4::getRotateMtx((3.141592)/height,false,false,true);
+    Mtx4x4 *rotY = Mtx4x4::getRotateMtx((2*3.141592)/width,false,true,false);
+
+    v[0] = new Vec4(0,0.5,0,1);
+    v[1] = new Vec4(0,-0.5,0,1);
+
+    for (int i=0;i<height-1;i++) {
+        v[i+2] = rotZ->prod(v[i+1]);
+    }
+
+    for (int i=1;i<width;i++) {
+        int currBase = 2+(height-1)*i;
+        int prevBase = 2+(height-1)*(i-1);
+        for (int j=0;j<height-1;j++) {
+            v[currBase+j] = rotY->prod(v[prevBase+j]);
+        }
+    }
+
+    Vec4 *trash;
+    for (int i=0;i<(height-1)*width + 2;i++) {
+        trash = v[i];
+        v[i] = ow->prod(v[i]);
+        delete trash;
+    }
+
+    delete rotZ;
+    delete rotY;
+
+    return v;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

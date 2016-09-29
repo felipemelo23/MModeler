@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     algebra/mtx3x3.cpp \
     gui/cmd_interpreter/insertcmd.cpp \
     visualization/glrbprismadapter.cpp \
-    visualization/glrbpyramidadapter.cpp
+    visualization/glrbpyramidadapter.cpp \
+    visualization/glsphereadapter.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -80,6 +81,7 @@ HEADERS  += gui/mainwindow.h \
     algebra/mtx3x3.h \
     gui/cmd_interpreter/insertcmd.h \
     visualization/glrbprismadapter.h \
-    visualization/glrbpyramidadapter.h
+    visualization/glrbpyramidadapter.h \
+    visualization/glsphereadapter.h
 
 FORMS    += gui/mainwindow.ui

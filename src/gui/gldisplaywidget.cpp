@@ -4,8 +4,12 @@
 
 #include <visualization/glrbprismadapter.h>
 #include <visualization/glrbpyramidadapter.h>
-
+#include <visualization/glsphereadapter.h>
+#include <time.h>
 #include <objects/rbpyramid.h>
+#include <objects/sphere.h>
+#include <random>
+
 using namespace std;
 
 glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
@@ -305,20 +309,16 @@ void glDisplayWidget::initDisplay() {
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
 
-    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
     GLfloat mat_ambient[] = { 0.6, 0.6, 0.6, 1.0};
-    GLfloat mat_shininess[] = { 15.0 };
-    GLfloat light1_position[] = { 10.0, 10.0, 10.0, 0.0 };
-    GLfloat light2_position[] = { 10.0, 10.0, -10.0, 0.0 };
-    GLfloat light3_position[] = { -10.0, 10.0, 10.0, 0.0 };
-    GLfloat light4_position[] = { -10.0, 10.0, -10.0, 0.0 };
+    GLfloat light1_position[] = { 10.0, 10.0, 10.0, 1.0 };
+    GLfloat light2_position[] = { 10.0, 10.0, -10.0, 1.0 };
+    GLfloat light3_position[] = { -10.0, 10.0, 10.0, 1.0 };
+    GLfloat light4_position[] = { -10.0, 10.0, -10.0, 1.0 };
     glShadeModel (GL_SMOOTH);
 
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
     glLightfv(GL_LIGHT0, GL_POSITION, light1_position);
     glLightfv(GL_LIGHT1, GL_POSITION, light2_position);
     glLightfv(GL_LIGHT2, GL_POSITION, light3_position);
@@ -345,7 +345,7 @@ void glDisplayWidget::checkDirts() {
 
             switch (type) {
             case Object::SPHERE:
-                //TO DO
+                newObj = glSphereAdapter::adapt(((Sphere*)objects->getObject(i)));
                 break;
             case Object::RBPRISM:
                 newObj = glRBPrismAdapter::adapt(((RBPrism*)objects->getObject(i)));
@@ -359,8 +359,19 @@ void glDisplayWidget::checkDirts() {
             }
 
             if (mode == 1) {
+                srand(time(NULL));
+                double *color = new double[3];
+
+                do {
+                    color[0] = (rand()%256)/255.0;
+                    color[1] = (rand()%256)/255.0;
+                    color[2] = (rand()%256)/255.0;
+                } while (color[0] + color[1] + color[2] > 2);
+
+                newObj->setColor(color);
                 scene->addObject(newObj);
             } else {
+                newObj->setColor(scene->getObject(i)->getColor());
                 scene->setObject(i,newObj);
             }
         }

@@ -27,8 +27,6 @@ void MainWindow::feedCommand()
 {
     interpreter->interpretCommand(ui->cmdFeed->text());
     updateObjectsTree();
-    cout << "objects: " << objects->numOfObjects() << endl;
-    cout << "selecteds: " << objects->numOfSelected() << endl;
     ui->cmdFeed->clear();
 }
 

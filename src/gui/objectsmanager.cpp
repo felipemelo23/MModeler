@@ -29,8 +29,11 @@ Object *ObjectsManager::getObject(int index)
 
 void ObjectsManager::removeObject(int index)
 {
-    removeSelected(index);
-    objects->erase(objects->begin()+index);
+    if (objects->size() > 0) {
+        removeSelected(index);
+        if (index < objects->size())
+            objects->erase(objects->begin()+index);
+    }
 }
 
 int ObjectsManager::numOfObjects()
