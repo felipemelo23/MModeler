@@ -5,8 +5,6 @@
 
 #include <QStringList>
 
-
-
 class Translate : public Command
 {
 public:

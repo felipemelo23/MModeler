@@ -30,7 +30,6 @@ SOURCES += main.cpp\
     gui/objectsmanager.cpp \
     gui/cmd_interpreter/command.cpp \
     gui/cmd_interpreter/commandinterpreter.cpp \
-    gui/cmd_interpreter/insert.cpp \
     gui/cmd_interpreter/select.cpp \
     gui/cmd_interpreter/deselect.cpp \
     gui/cmd_interpreter/delete.cpp \
@@ -44,7 +43,8 @@ SOURCES += main.cpp\
     objects/object.cpp \
     objects/boundingbox.cpp \
     algebra/mtx2x2.cpp \
-    algebra/mtx3x3.cpp
+    algebra/mtx3x3.cpp \
+    gui/cmd_interpreter/insertcmd.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -62,7 +62,6 @@ HEADERS  += gui/mainwindow.h \
     gui/objectsmanager.h \
     gui/cmd_interpreter/command.h \
     gui/cmd_interpreter/commandinterpreter.h \
-    gui/cmd_interpreter/insert.h \
     gui/cmd_interpreter/select.h \
     gui/cmd_interpreter/deselect.h \
     gui/cmd_interpreter/delete.h \
@@ -76,6 +75,7 @@ HEADERS  += gui/mainwindow.h \
     objects/object.h \
     objects/boundingbox.h \
     algebra/mtx2x2.h \
-    algebra/mtx3x3.h
+    algebra/mtx3x3.h \
+    gui/cmd_interpreter/insertcmd.h
 
 FORMS    += gui/mainwindow.ui

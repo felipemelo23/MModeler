@@ -7,7 +7,7 @@
 RBPyramid::RBPyramid(int numOfSides)
 {
     this->numOfSides = numOfSides;
-    this->type = Object::RPPYRAMID;
+    this->type = Object::RBPYRAMID;
 }
 
 RBPyramid::~RBPyramid()
@@ -54,54 +54,99 @@ bool RBPyramid::isInside(Vec4 *pos)
 
     //limpeza de memoria:
 
-        delete canon;
-        delete pos2d;
-        for(int i=0; i<numOfSides; i++)
-            delete v[i];
-        delete v;
+    delete canon;
+    delete pos2d;
+    for(int i=0; i<numOfSides; i++)
+        delete v[i];
+    delete v;
 
     //memoria limpa...
 
     return output;
 }
 
-Vec3* RBPrism::getMaximumCoords()
+Vec3* RBPyramid::getMaximumCoords()
 {
-    //qual vai ser a coordenada maxima?
-}
+    Vec4 **v = new Vec4*[numOfSides + 1];
 
-Vec3* RBPrism::getMinimumCoords()
-{
-    Vec3 **v = new Vec3*[numOfSides + 1];
+    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
-    Mtx3x3 *rot = Mtx3x3::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
-
-    v[0] = new Vec3(0,1,0);
-    v[1] = new Vec3(0,0,1);
+    v[0] = new Vec4(0,1,0,1);
+    v[1] = new Vec4(0,0,1,1);
 
     for (int i=2;i<numOfSides;i++)
     {
         v[i] = rot->prod(v[i-1]);
     }
 
-    //como a seccao eh um poligono, entao sua coordenada Y serah correspondente a Z, em 3D.
-
-    double x = v[0]->getX();
-    double z = v[0]->getY();
-
-    for (int i=1;i<8;i++)
+    Vec4 *trash;
+    for (int i=0;i<numOfSides+1;i++)
     {
-        if (x < v[i]->getX()) x = v[i]->getX();
-        if (z , v[i]->getZ()) z = v[i]->getZ();
+        trash = v[i];
+        v[i] = ow->prod(v[i]);
+        delete trash;
     }
 
-    double y = -1;
+    double x = v[0]->getX();
+    double y = v[0]->getY();
+    double z = v[0]->getZ();
+
+    for (int i=1;i<numOfSides+1;i++)
+    {
+        if (x < v[i]->getX()) x = v[i]->getX();
+        if (y < v[i]->getY()) y = v[i]->getY();
+        if (z < v[i]->getZ()) z = v[i]->getZ();
+    }
 
     //limpeza de memoria:
 
-        for(int i=0; i<numOfSides; i++)
-            delete v[i];
-        delete v;
+    for(int i=0; i<numOfSides; i++)
+        delete v[i];
+    delete v;
+
+    //memoria limpa...
+
+    return new Vec3(x,y,z);
+}
+
+Vec3 *RBPyramid::getMinimumCoords()
+{
+    Vec4 **v = new Vec4*[numOfSides + 1];
+
+    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
+
+    v[0] = new Vec4(0,1,0,1);
+    v[1] = new Vec4(0,0,1,1);
+
+    for (int i=2;i<numOfSides;i++)
+    {
+        v[i] = rot->prod(v[i-1]);
+    }
+
+    Vec4 *trash;
+    for (int i=0;i<numOfSides+1;i++)
+    {
+        trash = v[i];
+        v[i] = ow->prod(v[i]);
+        delete trash;
+    }
+
+    double x = v[0]->getX();
+    double y = v[0]->getY();
+    double z = v[0]->getZ();
+
+    for (int i=1;i<numOfSides+1;i++)
+    {
+        if (x > v[i]->getX()) x = v[i]->getX();
+        if (y > v[i]->getY()) y = v[i]->getY();
+        if (z > v[i]->getZ()) z = v[i]->getZ();
+    }
+
+    //limpeza de memoria:
+
+    for(int i=0; i<numOfSides; i++)
+        delete v[i];
+    delete v;
 
     //memoria limpa...
 

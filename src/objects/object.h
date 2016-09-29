@@ -10,14 +10,13 @@ facilitar implementacao e para fazer passagem de parametross*/
 
 class Object
 {
-private:
+protected:
     Mtx4x4 *wo;
     Mtx4x4 *ow;
     int type;
 
 public:
-    Vec3 getOrigin();
-
+    Vec3 *getOrigin();
     int getType();
 
     void translate(double x, double y, double z);
@@ -29,7 +28,7 @@ public:
     virtual Vec3 *getMinimumCoords()=0;
     virtual Vec3 *getMaximumCoords()=0;
 
-    virtual void section(Vec2 **v, double ray=1)=0;
+    virtual void section(Vec2 **v, double radius=0.5)=0;
 
 
     static const int SPHERE = 0;
@@ -38,6 +37,7 @@ public:
     static const int OCTREE = 3;
     static const int CONE = 4;
     static const int CYLINDER = 5;
+
 };
 
 #endif // OBJECT_H

@@ -4,7 +4,7 @@ ObjectsManager::ObjectsManager()
 {
     objects = new vector<Object*>();
     selecteds = new vector<int>();
-    dirts = new queue<int>();
+    dirts = new queue<pair<int,int> >();
 }
 
 ObjectsManager::~ObjectsManager()
@@ -72,7 +72,7 @@ bool ObjectsManager::hasDirts()
     return !dirts->empty();
 }
 
-int ObjectsManager::popDirt()
+pair<int,int> ObjectsManager::popDirt()
 {
     pair<int,int> front = dirts->front();
     dirts->pop();
@@ -85,5 +85,5 @@ int ObjectsManager::popDirt()
 */
 void ObjectsManager::pushDirt(int value, int mode)
 {
-    dirts->push(std::make_pair<int,int>(value,mode));
+    dirts->push(std::make_pair(value,mode));
 }

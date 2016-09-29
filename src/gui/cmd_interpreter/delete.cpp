@@ -20,7 +20,7 @@ void Delete::execute(QStringList params, ObjectsManager *objects)
         for (int i=1;i<params.size();i++) {
             objects->removeSelected(params.at(i).toInt());
             objects->removeObject(params.at(i).toInt());
-            objects->pushDirt(params.at(i),-1);
+            objects->pushDirt(params.at(i).toInt(),-1);
         }
     }
 }

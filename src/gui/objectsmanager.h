@@ -28,7 +28,7 @@ public:
     int numOfSelected();
 
     bool hasDirts();
-    int popDirt();
+    pair<int, int> popDirt();
     void pushDirt(int value, int mode);
 
 private:

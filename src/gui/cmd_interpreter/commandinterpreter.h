@@ -2,13 +2,16 @@
 #define COMMANDINTERPRETER_H
 
 #include "command.h"
+#include "delete.h"
+#include "deselect.h"
+#include "rotate.h"
+#include "scale.h"
+#include "select.h"
+#include "translate.h"
 #include <gui/objectsmanager.h>
 #include <QStringList>
 #include <QString>
 #include <vector>
-
-using std::string;
-using std::vector;
 
 class CommandInterpreter
 {

@@ -45,37 +45,27 @@ void Ocnode::setParent(Ocnode *value)
     parent = value;
 }
 
-Children Ocnode::getChild() const
+vector<Ocnode *> Ocnode::getChild() const
 {
     return child;
 }
 
-void Ocnode::setChild(const Children &value)
+void Ocnode::setChild(const vector<Ocnode *> &value)
 {
     child = value;
 }
 
-Object* Ocnode::getBoundingBox()
+bool Ocnode::isInside(Vec4 *pos)
 {
 
 }
 
-void Ocnode::rotate(double degree, bool x, bool y, bool z)
+Vec3 *Ocnode::getMinimumCoords()
 {
 
 }
 
-void Ocnode::scale(double x, double y, double z)
-{
-
-}
-
-void Ocnode::translate(double x, double y, double z)
-{
-
-}
-
-bool Ocnode::isInside(Vec3 pos)
+Vec3 *Ocnode::getMaximumCoords()
 {
 
 }

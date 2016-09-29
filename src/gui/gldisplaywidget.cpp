@@ -317,9 +317,12 @@ void glDisplayWidget::drawScene() {
 
 void glDisplayWidget::checkDirts() {
     while (objects->hasDirts()) {
-        int i = objects->popDirt();
+        pair<int,int> dirt = objects->popDirt();
 
-        if (objects->numOfObjects() < scene->numOfObjects()) {
+        int i = dirt.first;
+        int mode = dirt.second;
+
+        if (mode == -1) {
             scene->removeObject(i);
         } else {
             int type = objects->getObject(i)->getType();
@@ -341,7 +344,7 @@ void glDisplayWidget::checkDirts() {
                 break;
             }
 
-            if (objects->numOfObjects() > scene->numOfObjects()) {
+            if (mode == 1) {
                 scene->addObject(newObj);
             } else {
                 scene->setObject(i,newObj);

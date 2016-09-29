@@ -1,18 +1,10 @@
 #include "commandinterpreter.h"
-#include "delete.h"
-#include "deselect.h"
-#include "insert.h"
-#include "rotate.h"
-#include "scale.h"
-#include "select.h"
-#include "translate.h"
 
 CommandInterpreter::CommandInterpreter(ObjectsManager *objects)
 {
     this->objects = objects;
     this->acceptableCommand = vector<Command*>();
 
-    this->acceptableCommand.push_back(new Insert());
     this->acceptableCommand.push_back(new Delete());
     this->acceptableCommand.push_back(new Select());
     this->acceptableCommand.push_back(new Deselect());

@@ -6,16 +6,15 @@
 
 using namespace std;
 
-typedef vector<Ocnode*> Children;
-
 class Ocnode : public Object
 {
+
 private:
     short state;
     int depth;
     double size;
     Ocnode* parent;
-    Children child;
+    vector<Ocnode*> child;
 
 public:
     Ocnode();
@@ -28,10 +27,14 @@ public:
     void setSize(double value);
     Ocnode *getParent() const;
     void setParent(Ocnode *value);
-    Children getChild() const;
-    void setChild(const Children &value);
+    vector<Ocnode*> getChild() const;
+    void setChild(const vector<Ocnode*> &value);
 
     void classify(Object* src, int maxDepth);
+
+    bool isInside(Vec4 *pos);
+    Vec3 *getMinimumCoords();
+    Vec3 *getMaximumCoords();
 };
 
 #endif // Ocnode_H

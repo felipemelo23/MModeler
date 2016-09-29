@@ -1,5 +1,7 @@
 #include <objects/rbprism.h>
 
+#include <algebra/mtx2x2.h>
+
 RBPrism::RBPrism(int numOfSides)
 {
     this->numOfSides = numOfSides;
@@ -8,17 +10,17 @@ RBPrism::RBPrism(int numOfSides)
 
 RBPrism::~RBPrism()
 {
-
+    delete ow;
+    delete wo;
 }
 
-void RBPrism::section(Vec2 **v, double ray)
+void RBPrism::section(Vec2 **v, double radius)
 {
     double teta = (2*3.141592)/numOfSides;
 
     v[0] = new Vec2(0,1); //o "raio" maximo do prisma canonico serah 1
 
-    Mtx *rot = new Mtx(2,2,cos(teta),-sin(teta),
-                           sin(teta,cos(teta)));
+    Mtx2x2 *rot = Mtx2x2::getRotateMtx(teta);
 
     for (int i=1;i<numOfSides;i++)
     {
@@ -26,7 +28,7 @@ void RBPrism::section(Vec2 **v, double ray)
     }
 }
 
-bool RBPrism::isInside(Vec3 pos)
+bool RBPrism::isInside(Vec4 *pos)
 {
     Vec4 *canon = wo->prod(pos);
 
@@ -48,11 +50,11 @@ bool RBPrism::isInside(Vec3 pos)
 
     //limpeza de memoria:
 
-        delete canon;
-        delete pos2d;
-        for(int i=0; i<numOfSides; i++)
-            delete v[i];
-        delete v;
+    delete canon;
+    delete pos2d;
+    for(int i=0; i<numOfSides; i++)
+        delete v[i];
+    delete v;
 
     //memoria limpa...
 
@@ -63,32 +65,46 @@ bool RBPrism::isInside(Vec3 pos)
 
 Vec3* RBPrism::getMaximumCoords()
 {
-    Vec2 **v = new Vec2*[numOfSides];
-    section(v);
+    Vec4 **v = new Vec4*[2*numOfSides];
 
-    for (int i=0;i<numOfSides;i++)
-    {
-        v[i] = ow->prod(v[i]);
-    }
+    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
-    //como a seccao eh um poligono, entao sua coordenada Y serah correspondente a Z, em 3D.
+    v[0] = new Vec4(0,0,1,1);
+    v[numOfSides] = new Vec4(0,1,1,1);
 
-    double x = v[0]->getX();
-    double z = v[0]->getY();
-    double y = 1; //? isso ta certo?
-
-    //isso daqui sempre vai resultar (1,1,1)?
     for (int i=1;i<numOfSides;i++)
     {
-        if (x > v[i]->getX()) x = v[i]->getX();
-        if (z > v[i]->getZ()) z = v[i]->getZ();
+        v[i] = rot->prod(v[i-1]);
+        v[numOfSides+i] = rot->prod(v[numOfSides+i-1]);
+    }
+
+    Vec4 *garbage;
+    for (int i=0;i<numOfSides+1;i++)
+    {
+        garbage = v[i];
+        v[i] = ow->prod(v[i]);
+        delete garbage;
+        garbage = v[numOfSides+i];
+        v[numOfSides+i] = ow->prod(v[numOfSides+i]);
+        delete garbage;
+    }
+
+    double x = v[0]->getX();
+    double y = v[0]->getY();
+    double z = v[0]->getZ();
+
+    for (int i=1;i<2*numOfSides;i++)
+    {
+        if (x < v[i]->getX()) x = v[i]->getX();
+        if (y < v[i]->getY()) y = v[i]->getY();
+        if (z < v[i]->getZ()) z = v[i]->getZ();
     }
 
     //limpeza de memoria:
 
-        for(int i=0; i<numOfSides; i++)
-            delete v[i];
-        delete v;
+    for(int i=0; i<2*numOfSides; i++)
+        delete v[i];
+    delete v;
 
     //memoria limpa...
 
@@ -97,6 +113,49 @@ Vec3* RBPrism::getMaximumCoords()
 
 Vec3* RBPrism::getMinimumCoords()
 {
+    Vec4 **v = new Vec4*[2*numOfSides];
 
+    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
+
+    v[0] = new Vec4(0,0,1,1);
+    v[numOfSides] = new Vec4(0,1,1,1);
+
+    for (int i=1;i<numOfSides;i++)
+    {
+        v[i] = rot->prod(v[i-1]);
+        v[numOfSides+i] = rot->prod(v[numOfSides+i-1]);
+    }
+
+    Vec4 *garbage;
+    for (int i=0;i<numOfSides+1;i++)
+    {
+        garbage = v[i];
+        v[i] = ow->prod(v[i]);
+        delete garbage;
+        garbage = v[numOfSides+i];
+        v[numOfSides+i] = ow->prod(v[numOfSides+i]);
+        delete garbage;
+    }
+
+    double x = v[0]->getX();
+    double y = v[0]->getY();
+    double z = v[0]->getZ();
+
+    for (int i=1;i<2*numOfSides;i++)
+    {
+        if (x > v[i]->getX()) x = v[i]->getX();
+        if (y > v[i]->getY()) y = v[i]->getY();
+        if (z > v[i]->getZ()) z = v[i]->getZ();
+    }
+
+    //limpeza de memoria:
+
+    for(int i=0; i<2*numOfSides; i++)
+        delete v[i];
+    delete v;
+
+    //memoria limpa...
+
+    return new Vec3(x,y,z);
 }
 

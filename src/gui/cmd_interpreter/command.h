@@ -14,7 +14,7 @@ public:
     QString getCommand() const;
     QString getShortcut() const;
 
-private:
+protected:
     QString command;
     QString shortcut;
 

@@ -1,6 +1,7 @@
 #ifndef VEC4_H
 #define VEC4_H
 
+#include "vec3.h"
 #include "vecn.h"
 
 class Vec4 : public VecN
@@ -8,6 +9,7 @@ class Vec4 : public VecN
 public:
     Vec4(double value=0);
     Vec4(double x, double y, double z, double w);
+    Vec4(Vec3 *vec, double w);
     ~Vec4();
 
     double getX();

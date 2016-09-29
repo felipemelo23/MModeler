@@ -38,7 +38,7 @@ Mtx3x3 *Mtx3x3::sub(Mtx3x3 *mtx)
 
 Mtx3x3 *Mtx3x3::prod(Mtx3x3 *mtx)
 {
-    return (Mtx3x3*)::prod(mtx);
+    return (Mtx3x3*) MtxNxN::prod(mtx);
 }
 
 Vec3 *Mtx3x3::prod(Vec3 *vec)

@@ -8,7 +8,7 @@
 #include <objects/object.h>
 #include <algebra/vec3.h>
 
-class BoundingBox : public Object
+class BoundingBox
 {
 private:
     Vec3 *maxCoords;
@@ -21,6 +21,8 @@ public:
 
     Object* getContent() const;
     void setContent(Object* content);
+    Vec3 *getMaximumCoords();
+    Vec3 *getMinimumCoords();
 };
 
 #endif // BOUNDINGBOX_H
