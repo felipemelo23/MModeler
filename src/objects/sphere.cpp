@@ -1,7 +1,8 @@
 #include <objects/sphere.h>
 
-Sphere::Sphere() {
+Sphere::Sphere() : Object() {
     type = Object::SPHERE;
+    name = "Sphere";
 }
 
 Sphere::~Sphere()

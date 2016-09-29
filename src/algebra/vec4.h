@@ -22,6 +22,8 @@ public:
     void setZ(double value);
     void setW(double value);
 
+    Vec3 *getVec3();
+
     Vec4 *sum(Vec4 *vec);
     Vec4 *sub(Vec4 *vec);
     Vec4 *prod(double lambda);

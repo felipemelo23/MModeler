@@ -48,6 +48,11 @@ void Vec4::setW(double value)
     VecN::setValue(3,value);
 }
 
+Vec3 *Vec4::getVec3()
+{
+    return new Vec3(getX(),getY(),getZ());
+}
+
 Vec4 *Vec4::sum(Vec4 *vec)
 {
     Vec4 *result = (Vec4*) VecN::sum(vec);

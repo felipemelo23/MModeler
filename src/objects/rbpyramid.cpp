@@ -4,10 +4,41 @@
 #include <algebra/mtx3x3.h>
 #include <algebra/vec2.h>
 
-RBPyramid::RBPyramid(int numOfSides)
+int RBPyramid::getNumOfSides() const
+{
+    return numOfSides;
+}
+
+Vec4 **RBPyramid::getVertices()
+{
+    Vec4 **v = new Vec4*[numOfSides + 1];
+
+    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
+
+    v[0] = new Vec4(0,1,0,1);
+    v[1] = new Vec4(0,0,0.5,1);
+
+    for (int i=2;i<numOfSides+1;i++)
+    {
+        v[i] = rot->prod(v[i-1]);
+    }
+
+    Vec4 *trash;
+    for (int i=0;i<numOfSides+1;i++)
+    {
+        trash = v[i];
+        v[i] = ow->prod(v[i]);
+        delete trash;
+    }
+
+    return v;
+}
+
+RBPyramid::RBPyramid(int numOfSides) : Object()
 {
     this->numOfSides = numOfSides;
     this->type = Object::RBPYRAMID;
+    this->name = "Pyramid";
 }
 
 RBPyramid::~RBPyramid()
@@ -72,7 +103,7 @@ Vec3* RBPyramid::getMaximumCoords()
     Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
     v[0] = new Vec4(0,1,0,1);
-    v[1] = new Vec4(0,0,1,1);
+    v[1] = new Vec4(0,0,0.5,1);
 
     for (int i=2;i<numOfSides;i++)
     {
@@ -116,7 +147,7 @@ Vec3 *RBPyramid::getMinimumCoords()
     Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
     v[0] = new Vec4(0,1,0,1);
-    v[1] = new Vec4(0,0,1,1);
+    v[1] = new Vec4(0,0,0.5,1);
 
     for (int i=2;i<numOfSides;i++)
     {

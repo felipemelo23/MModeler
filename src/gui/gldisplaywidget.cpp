@@ -1,6 +1,11 @@
 #include "gldisplaywidget.h"
 
 #include <iostream>
+
+#include <visualization/glrbprismadapter.h>
+#include <visualization/glrbpyramidadapter.h>
+
+#include <objects/rbpyramid.h>
 using namespace std;
 
 glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
@@ -147,7 +152,7 @@ void glDisplayWidget::mouseMoveEvent(QMouseEvent *event)
     }
 
     if (lmbPressed) {
-        rotZ += ((double)(event->x() - mouseX))/5;
+        rotY += ((double)(event->x() - mouseX))/5;
         rotX += ((double)(event->y() - mouseY))/5;
         mouseX = event->x();
         mouseY = event->y();
@@ -261,30 +266,30 @@ void glDisplayWidget::drawGrid()
     glLineWidth(2);
     for (int i=0;i<11;i++) {
         glBegin(GL_LINES);
-        glVertex3d(-5+i*(10.0/10),-5,0);
-        glVertex3d(-5+i*(10.0/10),5,0);
+        glVertex3d(-5+i*(10.0/10),0,-5);
+        glVertex3d(-5+i*(10.0/10),0,5);
         glEnd();
     }
 
     for (int i=0;i<11;i++) {
         glBegin(GL_LINES);
-        glVertex3d(-5,-5+i*(10.0/10),0);
-        glVertex3d(5,-5+i*(10.0/10),0);
+        glVertex3d(-5,0,-5+i*(10.0/10));
+        glVertex3d(5,0,-5+i*(10.0/10));
         glEnd();
     }
 
     glLineWidth(0.5);
     for (int i=0;i<51;i++) {
         glBegin(GL_LINES);
-        glVertex3d(-5+i*(10.0/50),-5,0);
-        glVertex3d(-5+i*(10.0/50),5,0);
+        glVertex3d(-5+i*(10.0/50),0,-5);
+        glVertex3d(-5+i*(10.0/50),0,5);
         glEnd();
     }
 
     for (int i=0;i<51;i++) {
         glBegin(GL_LINES);
-        glVertex3d(-5,-5+i*(10.0/50),0);
-        glVertex3d(5,-5+i*(10.0/50),0);
+        glVertex3d(-5,0,-5+i*(10.0/50));
+        glVertex3d(5,0,-5+i*(10.0/50));
         glEnd();
     }
 
@@ -292,23 +297,32 @@ void glDisplayWidget::drawGrid()
 }
 
 void glDisplayWidget::initDisplay() {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
+    glEnable(GL_LIGHT3);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_COLOR_MATERIAL);
+
     GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
     GLfloat mat_ambient[] = { 0.6, 0.6, 0.6, 1.0};
     GLfloat mat_shininess[] = { 15.0 };
-    GLfloat light_position[] = { 10.0, 10.0, 10.0, 0.0 };
+    GLfloat light1_position[] = { 10.0, 10.0, 10.0, 0.0 };
+    GLfloat light2_position[] = { 10.0, 10.0, -10.0, 0.0 };
+    GLfloat light3_position[] = { -10.0, 10.0, 10.0, 0.0 };
+    GLfloat light4_position[] = { -10.0, 10.0, -10.0, 0.0 };
     glShadeModel (GL_SMOOTH);
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
+    glLightfv(GL_LIGHT0, GL_POSITION, light1_position);
+    glLightfv(GL_LIGHT1, GL_POSITION, light2_position);
+    glLightfv(GL_LIGHT2, GL_POSITION, light3_position);
+    glLightfv(GL_LIGHT3, GL_POSITION, light4_position);
 }
 
 void glDisplayWidget::drawScene() {
@@ -334,10 +348,10 @@ void glDisplayWidget::checkDirts() {
                 //TO DO
                 break;
             case Object::RBPRISM:
-                //TO DO
+                newObj = glRBPrismAdapter::adapt(((RBPrism*)objects->getObject(i)));
                 break;
             case Object::RBPYRAMID:
-                //TO DO
+                newObj = glRBPyramidAdapter::adapt(((RBPyramid*)objects->getObject(i)));
                 break;
             case Object::OCTREE:
                 //TO DO
@@ -350,6 +364,8 @@ void glDisplayWidget::checkDirts() {
                 scene->setObject(i,newObj);
             }
         }
+
+        updateGL();
     }
 }
 

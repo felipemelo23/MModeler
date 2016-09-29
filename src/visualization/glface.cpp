@@ -1,5 +1,14 @@
 #include "glface.h"
 
+glFace::glFace(int sides, int *v)
+{
+    this->sides = sides;
+    this->vertices = new int[sides];
+
+    for (int i=0;i<sides;i++)
+        vertices[i] = v[i];
+}
+
 glFace::glFace(int sides, int v1, int v2, int v3, ...)
 {
     this->sides = sides;

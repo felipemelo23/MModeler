@@ -5,6 +5,8 @@
 #include <algebra/vec3.h>
 #include <algebra/vec2.h>
 
+#include <QString>
+
 /*A classe object servira apenas como interface para
 facilitar implementacao e para fazer passagem de parametross*/
 
@@ -14,9 +16,14 @@ protected:
     Mtx4x4 *wo;
     Mtx4x4 *ow;
     int type;
+    QString name;
 
 public:
+    Object();
+
     Vec3 *getOrigin();
+    QString getName();
+    void setName(QString name);
     int getType();
 
     void translate(double x, double y, double z);
@@ -28,7 +35,7 @@ public:
     virtual Vec3 *getMinimumCoords()=0;
     virtual Vec3 *getMaximumCoords()=0;
 
-    virtual void section(Vec2 **v, double radius=0.5)=0;
+    virtual void section(Vec2 **v, double radius=0.5);
 
 
     static const int SPHERE = 0;

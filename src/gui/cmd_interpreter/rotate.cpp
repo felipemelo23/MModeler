@@ -14,11 +14,11 @@ void Rotate::execute(QStringList params, ObjectsManager *objects)
                 int objId = objects->getSelected(i);
 
                 if (params.at(2) == "x") {
-                    objects->getObject(objId)->rotate(params.at(1).toDouble(),1,0,0);
+                    objects->getObject(objId)->rotate(params.at(1).toDouble(),true,false,false);
                 } else if (params.at(2) == "y") {
-                    objects->getObject(objId)->rotate(params.at(1).toDouble(),0,1,0);
+                    objects->getObject(objId)->rotate(params.at(1).toDouble(),false,true,false);
                 } else if (params.at(2) == "z") {
-                    objects->getObject(objId)->rotate(params.at(1).toDouble(),0,0,1);
+                    objects->getObject(objId)->rotate(params.at(1).toDouble(),false,false,true);
                 }
 
                 objects->pushDirt(objId,0);

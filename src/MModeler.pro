@@ -44,7 +44,9 @@ SOURCES += main.cpp\
     objects/boundingbox.cpp \
     algebra/mtx2x2.cpp \
     algebra/mtx3x3.cpp \
-    gui/cmd_interpreter/insertcmd.cpp
+    gui/cmd_interpreter/insertcmd.cpp \
+    visualization/glrbprismadapter.cpp \
+    visualization/glrbpyramidadapter.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -76,6 +78,8 @@ HEADERS  += gui/mainwindow.h \
     objects/boundingbox.h \
     algebra/mtx2x2.h \
     algebra/mtx3x3.h \
-    gui/cmd_interpreter/insertcmd.h
+    gui/cmd_interpreter/insertcmd.h \
+    visualization/glrbprismadapter.h \
+    visualization/glrbpyramidadapter.h
 
 FORMS    += gui/mainwindow.ui

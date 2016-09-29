@@ -2,10 +2,49 @@
 
 #include <algebra/mtx2x2.h>
 
-RBPrism::RBPrism(int numOfSides)
+#include <iostream>
+
+using namespace std;
+
+int RBPrism::getNumOfSides() const
+{
+    return numOfSides;
+}
+
+Vec4 **RBPrism::getVertices()
+{
+    Vec4 **v = new Vec4*[2*numOfSides];
+
+    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
+
+    v[0] = new Vec4(0,0,0.5,1);
+    v[numOfSides] = new Vec4(0,1,0.5,1);
+
+    for (int i=1;i<numOfSides;i++)
+    {
+        v[i] = rot->prod(v[i-1]);
+        v[numOfSides+i] = rot->prod(v[numOfSides+i-1]);
+    }
+
+    Vec4 *garbage;
+    for (int i=0;i<numOfSides;i++)
+    {
+        garbage = v[i];
+        v[i] = ow->prod(v[i]);
+        delete garbage;
+        garbage = v[numOfSides+i];
+        v[numOfSides+i] = ow->prod(v[numOfSides+i]);
+        delete garbage;
+    }
+
+    return v;
+}
+
+RBPrism::RBPrism(int numOfSides) : Object()
 {
     this->numOfSides = numOfSides;
     this->type = Object::RBPRISM;
+    this->name = "Prism";
 }
 
 RBPrism::~RBPrism()
@@ -69,8 +108,8 @@ Vec3* RBPrism::getMaximumCoords()
 
     Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
-    v[0] = new Vec4(0,0,1,1);
-    v[numOfSides] = new Vec4(0,1,1,1);
+    v[0] = new Vec4(0,0,0.5,1);
+    v[numOfSides] = new Vec4(0,1,0.5,1);
 
     for (int i=1;i<numOfSides;i++)
     {
@@ -79,7 +118,7 @@ Vec3* RBPrism::getMaximumCoords()
     }
 
     Vec4 *garbage;
-    for (int i=0;i<numOfSides+1;i++)
+    for (int i=0;i<numOfSides;i++)
     {
         garbage = v[i];
         v[i] = ow->prod(v[i]);
@@ -117,8 +156,8 @@ Vec3* RBPrism::getMinimumCoords()
 
     Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
-    v[0] = new Vec4(0,0,1,1);
-    v[numOfSides] = new Vec4(0,1,1,1);
+    v[0] = new Vec4(0,0,0.5,1);
+    v[numOfSides] = new Vec4(0,1,0.5,1);
 
     for (int i=1;i<numOfSides;i++)
     {
@@ -127,7 +166,7 @@ Vec3* RBPrism::getMinimumCoords()
     }
 
     Vec4 *garbage;
-    for (int i=0;i<numOfSides+1;i++)
+    for (int i=0;i<numOfSides;i++)
     {
         garbage = v[i];
         v[i] = ow->prod(v[i]);

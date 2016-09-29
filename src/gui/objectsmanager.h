@@ -26,6 +26,7 @@ public:
     void removeSelected(int objId);
     int getSelected(int index);
     int numOfSelected();
+    bool isSelected(int index);
 
     bool hasDirts();
     pair<int, int> popDirt();

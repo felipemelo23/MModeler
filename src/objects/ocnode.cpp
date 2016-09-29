@@ -1,8 +1,9 @@
 #include <objects/ocnode.h>
 
-Ocnode::Ocnode()
+Ocnode::Ocnode() : Object()
 {
-
+    this->type = Object::OCTREE;
+    this->name = "Octree";
 }
 
 short Ocnode::getState() const
@@ -53,6 +54,11 @@ vector<Ocnode *> Ocnode::getChild() const
 void Ocnode::setChild(const vector<Ocnode *> &value)
 {
     child = value;
+}
+
+void Ocnode::classify(Object *src, int maxDepth)
+{
+
 }
 
 bool Ocnode::isInside(Vec4 *pos)

@@ -21,6 +21,7 @@ private:
     CommandInterpreter *interpreter;
     ObjectsManager *objects;
 
+    void updateObjectsTree();
 private slots:
     void feedCommand();
 };

@@ -12,6 +12,7 @@ public:
     Vec3 *getMinimumCoords();
     Vec3 *getMaximumCoords();
     bool isInside(Vec4 *pos);
+
 };
 
 #endif // SPHERE_H

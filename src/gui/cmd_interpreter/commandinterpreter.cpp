@@ -1,10 +1,15 @@
 #include "commandinterpreter.h"
+#include "insertcmd.h"
+#include <iostream>
+
+using namespace std;
 
 CommandInterpreter::CommandInterpreter(ObjectsManager *objects)
 {
     this->objects = objects;
     this->acceptableCommand = vector<Command*>();
 
+    this->acceptableCommand.push_back(new InsertCmd());
     this->acceptableCommand.push_back(new Delete());
     this->acceptableCommand.push_back(new Select());
     this->acceptableCommand.push_back(new Deselect());

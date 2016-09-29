@@ -29,6 +29,7 @@ Object *ObjectsManager::getObject(int index)
 
 void ObjectsManager::removeObject(int index)
 {
+    removeSelected(index);
     objects->erase(objects->begin()+index);
 }
 
@@ -39,7 +40,16 @@ int ObjectsManager::numOfObjects()
 
 void ObjectsManager::addSelected(int objId)
 {
-    selecteds->push_back(objId);
+    bool contains = false;
+    if ((objects->size() > objId)&&(objId >= 0)) {
+        if (selecteds->size() > 0) {
+            for (int i=0;i<selecteds->size();i++) {
+                contains = contains || selecteds->at(i) == objId;
+            }
+        }
+
+        if (!contains) selecteds->push_back(objId);
+    }
 }
 
 void ObjectsManager::removeSelected(int objId)
@@ -54,7 +64,7 @@ void ObjectsManager::removeSelected(int objId)
             }
         }
 
-    if (index > 0) objects->erase(objects->begin() + index);
+    if (index >= 0) selecteds->erase(selecteds->begin() + index);
 }
 
 int ObjectsManager::getSelected(int index)
@@ -65,6 +75,16 @@ int ObjectsManager::getSelected(int index)
 int ObjectsManager::numOfSelected()
 {
     return selecteds->size();
+}
+
+bool ObjectsManager::isSelected(int index)
+{
+    if (selecteds->size() > 0) {
+        for (int i=0;i<selecteds->size();i++)
+            if (selecteds->at(i) == index) return true;
+    }
+
+    return false;
 }
 
 bool ObjectsManager::hasDirts()

@@ -16,6 +16,9 @@ public:
     bool isInside(Vec4 *pos);
     Vec3 *getMaximumCoords();
     Vec3 *getMinimumCoords();
+    int getNumOfSides() const;
+
+    Vec4 **getVertices();
 };
 
 #endif // RBPRISM_H

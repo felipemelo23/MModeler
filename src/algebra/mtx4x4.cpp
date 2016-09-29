@@ -84,18 +84,18 @@ Mtx4x4 *Mtx4x4::getRotateMtx(double degree, bool x, bool y, bool z)
 
     if (x) {
         R->setValue(1,1,cos(degree));
-        R->setValue(1,2,sin(degree));
-        R->setValue(2,1,-sin(degree));
+        R->setValue(1,2,-sin(degree));
+        R->setValue(2,1,sin(degree));
         R->setValue(2,2,cos(degree));
     } else if (y) {
         R->setValue(0,0,cos(degree));
-        R->setValue(0,2,-sin(degree));
-        R->setValue(2,0,sin(degree));
+        R->setValue(0,2,sin(degree));
+        R->setValue(2,0,-sin(degree));
         R->setValue(2,2,cos(degree));
     } else if (z) {
         R->setValue(0,0,cos(degree));
-        R->setValue(0,1,sin(degree));
-        R->setValue(1,0,-sin(degree));
+        R->setValue(0,1,-sin(degree));
+        R->setValue(1,0,sin(degree));
         R->setValue(1,1,cos(degree));
     }
 
