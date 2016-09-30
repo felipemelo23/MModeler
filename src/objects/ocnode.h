@@ -38,6 +38,10 @@ public:
     Vec3 *getMinimumCoords();
     Vec3 *getMaximumCoords();
     Vec4 **getVertices();
+
+    void translate(double x, double y, double z);
+    void scale(double x, double y, double z);
+    void rotate(double degree, bool x=true, bool y=false, bool z=false);
 };
 
 #endif // Ocnode_H

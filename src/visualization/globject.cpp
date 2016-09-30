@@ -157,20 +157,18 @@ void glObject::draw()
 {
     glColor3d(color[0],color[1],color[2]);
 
-    if (solid)
-        glEnable(GL_LIGHTING);
-    else
-        glDisable(GL_LIGHTING);
-
     for (int i=0;i<numOfFaces();i++) {
         int *v = faces->at(i)->getVertices();
         Vec3 *temp;
         Vec3 *normal;
 
-        if ((solid)&&(!faces->at(i)->getEmpty()))
+        if ((solid)&&(!faces->at(i)->getEmpty())) {
+            glEnable(GL_LIGHTING);
             glBegin(GL_POLYGON);
-        else
+        } else {
+            glDisable(GL_LIGHTING);
             glBegin(GL_LINE_STRIP);
+        }
 
         for (int j=0;j<faces->at(i)->getSides();j++) {
             temp = getVertex(v[j]);

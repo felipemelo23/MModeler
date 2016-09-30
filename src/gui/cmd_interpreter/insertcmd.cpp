@@ -32,7 +32,7 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
         }
         if (objType == "octree") {
             if ((params.size() > 3) && (objects->numOfObjects() > params.at(2).toInt())) {
-                Ocnode *o = new Ocnode();
+                Ocnode *o = new Ocnode(true);
                 o->classify(objects->getObject(params.at(2).toInt()),params.at(3).toInt());
                 objects->addObject(o);
                 objects->pushDirt(objects->numOfObjects()-1,+1);

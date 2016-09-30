@@ -3,6 +3,9 @@
 #include <algebra/mtx2x2.h>
 #include <algebra/mtx3x3.h>
 #include <algebra/vec2.h>
+#include <iostream>
+
+using namespace std;
 
 int RBPyramid::getNumOfSides() const
 {
@@ -15,8 +18,8 @@ Vec4 **RBPyramid::getVertices()
 
     Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
-    v[0] = new Vec4(0,1,0,1);
-    v[1] = new Vec4(0,0,0.5,1);
+    v[0] = new Vec4(0,0.5,0,1);
+    v[1] = new Vec4(0,-0.5,0.5,1);
 
     for (int i=2;i<numOfSides+1;i++)
     {
@@ -63,60 +66,47 @@ void RBPyramid::section(Vec2 **v, double radius)
 
 bool RBPyramid::isInside(Vec4 *pos)
 {
+    bool output = true;
     Vec4 *canon = wo->prod(pos);
 
-    if ((canon->getY() > 1)||(canon->getY() < 0))
+    if ((canon->getY() > 0.5)||(canon->getY() < -0.5))
         return false;
 
-    double r = (1-canon->getY())/2;
+    double r = (1-canon->getY()-0.5)/2;
 
-    Vec2 **v = new Vec2*[numOfSides];
+    if (r != 0) {
+        Vec2 **v = new Vec2*[numOfSides];
 
-    section(v,r);
+        section(v,r);
 
-    Vec2 *pos2d = new Vec2(canon->getX(),canon->getZ());
+        Vec2 *pos2d = new Vec2(canon->getX(),canon->getZ());
 
-    bool output = true;
-    int i = 0;
-    while ((output)&&(i<numOfSides)) {
-        output = v[i]->sub(pos2d)->cross(v[(i+1)%numOfSides]) >= 0;
-        i++;
+        int i = 0;
+        while ((output)&&(i<numOfSides)) {
+            output = v[i]->sub(pos2d)->cross(v[(i+1)%numOfSides]->sub(pos2d)) >= 0;
+            i++;
+        }
+
+        //limpeza de memoria:
+
+        delete canon;
+        delete pos2d;
+        for(int i=0; i<numOfSides; i++)
+            delete v[i];
+        delete v;
+
+        //memoria limpa...
+    } else {
+        if ((canon->getX() != 0)||(canon->getZ() != 0))
+            output = false;
     }
-
-    //limpeza de memoria:
-
-    delete canon;
-    delete pos2d;
-    for(int i=0; i<numOfSides; i++)
-        delete v[i];
-    delete v;
-
-    //memoria limpa...
 
     return output;
 }
 
 Vec3* RBPyramid::getMaximumCoords()
 {
-    Vec4 **v = new Vec4*[numOfSides + 1];
-
-    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
-
-    v[0] = new Vec4(0,1,0,1);
-    v[1] = new Vec4(0,0,0.5,1);
-
-    for (int i=2;i<numOfSides;i++)
-    {
-        v[i] = rot->prod(v[i-1]);
-    }
-
-    Vec4 *trash;
-    for (int i=0;i<numOfSides+1;i++)
-    {
-        trash = v[i];
-        v[i] = ow->prod(v[i]);
-        delete trash;
-    }
+    Vec4 **v = getVertices();
 
     double x = v[0]->getX();
     double y = v[0]->getY();
@@ -142,25 +132,7 @@ Vec3* RBPyramid::getMaximumCoords()
 
 Vec3 *RBPyramid::getMinimumCoords()
 {
-    Vec4 **v = new Vec4*[numOfSides + 1];
-
-    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
-
-    v[0] = new Vec4(0,1,0,1);
-    v[1] = new Vec4(0,0,0.5,1);
-
-    for (int i=2;i<numOfSides;i++)
-    {
-        v[i] = rot->prod(v[i-1]);
-    }
-
-    Vec4 *trash;
-    for (int i=0;i<numOfSides+1;i++)
-    {
-        trash = v[i];
-        v[i] = ow->prod(v[i]);
-        delete trash;
-    }
+    Vec4 **v = getVertices();
 
     double x = v[0]->getX();
     double y = v[0]->getY();

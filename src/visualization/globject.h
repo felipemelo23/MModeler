@@ -32,9 +32,9 @@ public:
     void setSmooth(bool smooth);
 
     double *getColor();
-    void setColor(double color[3]);
+    virtual void setColor(double color[3]);
 
-    void draw();
+    virtual void draw();
 
 private:
     vector<Vec3*> *vertices;

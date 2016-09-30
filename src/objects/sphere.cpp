@@ -1,5 +1,9 @@
 #include <objects/sphere.h>
 
+#include <iostream>
+
+using namespace std;
+
 Sphere::Sphere() : Object() {
     type = Object::SPHERE;
     name = "Sphere";
@@ -16,14 +20,14 @@ Vec3 *Sphere::getMinimumCoords()
     Vec4 **v = new Vec4*[8];
     Vec4 *trash;
 
-    v[0] = new Vec4(-1,-1,-1,1);
-    v[1] = new Vec4(-1,-1,1,1);
-    v[2] = new Vec4(-1,1,-1,1);
-    v[3] = new Vec4(-1,1,1,1);
-    v[4] = new Vec4(1,-1,-1,1);
-    v[5] = new Vec4(1,-1,1,1);
-    v[6] = new Vec4(1,1,-1,1);
-    v[7] = new Vec4(1,1,1,1);
+    v[0] = new Vec4(-0.5,-0.5,-0.5,1);
+    v[1] = new Vec4(-0.5,-0.5,0.5,1);
+    v[2] = new Vec4(-0.5,0.5,-0.5,1);
+    v[3] = new Vec4(-0.5,0.5,0.5,1);
+    v[4] = new Vec4(0.5,-0.5,-0.5,1);
+    v[5] = new Vec4(0.5,-0.5,0.5,1);
+    v[6] = new Vec4(0.5,0.5,-0.5,1);
+    v[7] = new Vec4(0.5,0.5,0.5,1);
 
     for (int i=0;i<8;i++) {
         trash = v[i];
@@ -36,9 +40,9 @@ Vec3 *Sphere::getMinimumCoords()
     double z = v[0]->getZ();
 
     for (int i=1;i<8;i++) {
-        if (x < v[i]->getX()) x = v[i]->getX();
-        if (y < v[i]->getY()) y = v[i]->getY();
-        if (z < v[i]->getZ()) z = v[i]->getZ();
+        if (x > v[i]->getX()) x = v[i]->getX();
+        if (y > v[i]->getY()) y = v[i]->getY();
+        if (z > v[i]->getZ()) z = v[i]->getZ();
     }
 
     for (int i=0;i<8;i++) {
@@ -54,14 +58,14 @@ Vec3 *Sphere::getMaximumCoords()
     Vec4 **v = new Vec4*[8];
     Vec4 *trash;
 
-    v[0] = new Vec4(-1,-1,-1,1);
-    v[1] = new Vec4(-1,-1,1,1);
-    v[2] = new Vec4(-1,1,-1,1);
-    v[3] = new Vec4(-1,1,1,1);
-    v[4] = new Vec4(1,-1,-1,1);
-    v[5] = new Vec4(1,-1,1,1);
-    v[6] = new Vec4(1,1,-1,1);
-    v[7] = new Vec4(1,1,1,1);
+    v[0] = new Vec4(-0.5,-0.5,-0.5,1);
+    v[1] = new Vec4(-0.5,-0.5,0.5,1);
+    v[2] = new Vec4(-0.5,0.5,-0.5,1);
+    v[3] = new Vec4(-0.5,0.5,0.5,1);
+    v[4] = new Vec4(0.5,-0.5,-0.5,1);
+    v[5] = new Vec4(0.5,-0.5,0.5,1);
+    v[6] = new Vec4(0.5,0.5,-0.5,1);
+    v[7] = new Vec4(0.5,0.5,0.5,1);
 
     for (int i=0;i<8;i++)
     {
@@ -76,9 +80,9 @@ Vec3 *Sphere::getMaximumCoords()
 
     for (int i=1;i<8;i++)
     {
-        if (x > v[i]->getX()) x = v[i]->getX();
-        if (y > v[i]->getY()) y = v[i]->getY();
-        if (z > v[i]->getZ()) z = v[i]->getZ();
+        if (x < v[i]->getX()) x = v[i]->getX();
+        if (y < v[i]->getY()) y = v[i]->getY();
+        if (z < v[i]->getZ()) z = v[i]->getZ();
     }
 
     for (int i=0;i<8;i++) {
@@ -93,11 +97,11 @@ bool Sphere::isInside(Vec4 *pos)
 {
     Vec4 *canon = wo->prod(pos);
 
-    double norm = canon->normColumn(0);
+    double norm = canon->getVec3()->normColumn(0);
 
     delete canon;
 
-    return norm <= 1;
+    return norm <= 0.5;
 }
 
 Vec4 **Sphere::getVertices(int height, int width)

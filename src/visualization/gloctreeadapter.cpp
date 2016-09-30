@@ -1,5 +1,8 @@
 #include "glcompoundobject.h"
 #include "gloctreeadapter.h"
+#include <iostream>
+
+using namespace std;
 
 glObject *glOctreeAdapter::adapt(Ocnode *octree)
 {
@@ -14,8 +17,8 @@ glObject *glOctreeAdapter::adapt(Ocnode *octree)
     faces[4] = new glFace(4,4,7,0,3);
     faces[5] = new glFace(4,6,5,2,1);
 
-    for (int i=0;i<6;i++)
-        if (octree->getState() == -1)
+    if ((octree->getChildren() != NULL) || ((octree->getChildren() == NULL)&&(octree->getState()) < 0))
+        for (int i=0;i<6;i++)
             faces[i]->setEmpty(true);
 
     glCompoundObject *obj = new glCompoundObject();

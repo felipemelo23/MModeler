@@ -17,8 +17,8 @@ Vec4 **RBPrism::getVertices()
 
     Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
 
-    v[0] = new Vec4(0,0,0.5,1);
-    v[numOfSides] = new Vec4(0,1,0.5,1);
+    v[0] = new Vec4(0,-0.5,0.5,1);
+    v[numOfSides] = new Vec4(0,0.5,0.5,1);
 
     for (int i=1;i<numOfSides;i++)
     {
@@ -57,7 +57,7 @@ void RBPrism::section(Vec2 **v, double radius)
 {
     double teta = (2*3.141592)/numOfSides;
 
-    v[0] = new Vec2(0,1); //o "raio" maximo do prisma canonico serah 1
+    v[0] = new Vec2(0,0.5); //o "raio" maximo do prisma canonico serah 1
 
     Mtx2x2 *rot = Mtx2x2::getRotateMtx(teta);
 
@@ -71,7 +71,7 @@ bool RBPrism::isInside(Vec4 *pos)
 {
     Vec4 *canon = wo->prod(pos);
 
-    if ((canon->getY() > 1)||(canon->getY() < 0))
+    if ((canon->getY() > 0.5)||(canon->getY() < -0.5))
         return false;
 
     Vec2 **v = new Vec2*[numOfSides];
@@ -83,7 +83,7 @@ bool RBPrism::isInside(Vec4 *pos)
     int i = 0;
     while ((output)&&(i<numOfSides))
     {
-        output = (v[i]->sub(pos2d)->cross(v[(i+1)%numOfSides]) >= 0); //cross nao deve ser entre dois vetores?
+        output = (v[i]->sub(pos2d)->cross(v[(i+1)%numOfSides]->sub(pos2d)) >= 0); //cross nao deve ser entre dois vetores?
         i++;
     }
 
@@ -104,29 +104,7 @@ bool RBPrism::isInside(Vec4 *pos)
 
 Vec3* RBPrism::getMaximumCoords()
 {
-    Vec4 **v = new Vec4*[2*numOfSides];
-
-    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
-
-    v[0] = new Vec4(0,0,0.5,1);
-    v[numOfSides] = new Vec4(0,1,0.5,1);
-
-    for (int i=1;i<numOfSides;i++)
-    {
-        v[i] = rot->prod(v[i-1]);
-        v[numOfSides+i] = rot->prod(v[numOfSides+i-1]);
-    }
-
-    Vec4 *garbage;
-    for (int i=0;i<numOfSides;i++)
-    {
-        garbage = v[i];
-        v[i] = ow->prod(v[i]);
-        delete garbage;
-        garbage = v[numOfSides+i];
-        v[numOfSides+i] = ow->prod(v[numOfSides+i]);
-        delete garbage;
-    }
+    Vec4 **v = getVertices();
 
     double x = v[0]->getX();
     double y = v[0]->getY();
@@ -152,29 +130,7 @@ Vec3* RBPrism::getMaximumCoords()
 
 Vec3* RBPrism::getMinimumCoords()
 {
-    Vec4 **v = new Vec4*[2*numOfSides];
-
-    Mtx4x4 *rot = Mtx4x4::getRotateMtx((2*3.141592)/numOfSides,false,true,false);
-
-    v[0] = new Vec4(0,0,0.5,1);
-    v[numOfSides] = new Vec4(0,1,0.5,1);
-
-    for (int i=1;i<numOfSides;i++)
-    {
-        v[i] = rot->prod(v[i-1]);
-        v[numOfSides+i] = rot->prod(v[numOfSides+i-1]);
-    }
-
-    Vec4 *garbage;
-    for (int i=0;i<numOfSides;i++)
-    {
-        garbage = v[i];
-        v[i] = ow->prod(v[i]);
-        delete garbage;
-        garbage = v[numOfSides+i];
-        v[numOfSides+i] = ow->prod(v[numOfSides+i]);
-        delete garbage;
-    }
+    Vec4 **v = getVertices();
 
     double x = v[0]->getX();
     double y = v[0]->getY();

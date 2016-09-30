@@ -99,6 +99,33 @@ Vec4 **Ocnode::getVertices()
     return v;
 }
 
+void Ocnode::translate(double x, double y, double z)
+{
+    Object::translate(x,y,z);
+
+    if (children != NULL)
+        for (int i=0;i<8;i++)
+            children->at(i)->translate(x,y,z);
+}
+
+void Ocnode::scale(double x, double y, double z)
+{
+    Object::scale(x,y,z);
+
+    if (children != NULL)
+        for (int i=0;i<8;i++)
+            children->at(i)->scale(x,y,z);
+}
+
+void Ocnode::rotate(double degree, bool x, bool y, bool z)
+{
+    Object::rotate(degree,x,y,z);
+
+    if (children != NULL)
+        for (int i=0;i<8;i++)
+            children->at(i)->rotate(degree,x,y,z);
+}
+
 /* Pseudo Codigo:
 
   -> Obter vertices do ocnode;
@@ -122,6 +149,7 @@ void Ocnode::classify(Object *src, int maxDepth)
     {
         Vec3 *range = src->getMaximumCoords()->sub(src->getMinimumCoords());
         size = max(max(range->getX(),range->getY()) , range->getZ());
+        translate(src->getOrigin()->getX(),src->getOrigin()->getY(),src->getOrigin()->getZ());
     }
 
     Vec4 **v = getVertices();
@@ -145,13 +173,24 @@ void Ocnode::classify(Object *src, int maxDepth)
             children->at(i)->translate(getOrigin()->getX(),getOrigin()->getY(),getOrigin()->getZ());
         }
 
+        double t = size/4;
+        children->at(0)->translate(t,t,t);
+        children->at(1)->translate(-t,t,t);
+        children->at(2)->translate(-t,-t,t);
+        children->at(3)->translate(t,-t,t);
+        children->at(4)->translate(t,t,-t);
+        children->at(5)->translate(-t,t,-t);
+        children->at(6)->translate(-t,-t,-t);
+        children->at(7)->translate(t,-t,-t);
 
+        for (int i=0;i<8;i++)
+            children->at(i)->classify(src,maxDepth);
     }
     else if (count == 0)    //branco
     {
         state = -1;
     }
-    else    //preto
+    else if (count == 8)    //preto
     {
         state = 1;
     }

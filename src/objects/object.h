@@ -26,9 +26,9 @@ public:
     void setName(QString name);
     int getType();
 
-    void translate(double x, double y, double z);
-    void scale(double x, double y, double z);
-    void rotate(double degree, bool x=true, bool y=false, bool z=false);
+    virtual void translate(double x, double y, double z);
+    virtual void scale(double x, double y, double z);
+    virtual void rotate(double degree, bool x=true, bool y=false, bool z=false);
 
     virtual bool isInside(Vec4 *pos)=0;
 

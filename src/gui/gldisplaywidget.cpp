@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <visualization/gloctreeadapter.h>
 #include <visualization/glrbprismadapter.h>
 #include <visualization/glrbpyramidadapter.h>
 #include <visualization/glsphereadapter.h>
@@ -354,7 +355,7 @@ void glDisplayWidget::checkDirts() {
                 newObj = glRBPyramidAdapter::adapt(((RBPyramid*)objects->getObject(i)));
                 break;
             case Object::OCTREE:
-                //TO DO
+                newObj = glOctreeAdapter::adapt(((Ocnode*)objects->getObject(i)));
                 break;
             }
 
