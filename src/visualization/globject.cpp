@@ -13,6 +13,7 @@ glObject::glObject()
 
     this->solid = true;
     this->smooth = false;
+    this->opacity = 1.0;
 
     this->color = new double[3];
 
@@ -63,40 +64,12 @@ void glObject::addFace(glFace *face)
     Vec3 *v1;
     Vec3 *v2;
 
-//    if (face->getSides() <= 3) {
-        v1 = getVertex(vi[0])->sub(getVertex(vi[2]));
-        v2 = getVertex(vi[1])->sub(getVertex(vi[2]));
+    v1 = getVertex(vi[0])->sub(getVertex(vi[2]));
+    v2 = getVertex(vi[1])->sub(getVertex(vi[2]));
 
-        trash = faceNormal;
-        faceNormal = v1->cross(v2);
-        delete trash;
-//    }
-//    else {
-//        Vec3 *center = new Vec3();
-
-//        for (int i=0;i<face->getSides();i++) {
-//            trash = center;
-//            center = center->sum(getVertex(vi[i]));
-//            delete trash;
-//        }
-
-//        trash = center;
-//        center = center->prod(1/face->getSides());
-//        delete trash;
-
-//        for (int i=0;i<face->getSides();i++) {
-//            v1 = getVertex(vi[i])->sub(center);
-//            v2 = getVertex(vi[(i+1)%face->getSides()])->sub(center);
-
-//            Vec3 *normal = v1->cross(v2);
-//            normal->normalize();
-
-//            trash = faceNormal;
-//            faceNormal = faceNormal->sum(normal);
-//            faceNormal->normalize();
-//            delete trash;
-//        }
-//    }
+    trash = faceNormal;
+    faceNormal = v1->cross(v2);
+    delete trash;
 
     faceNormal->normalize();
     faceNormals->push_back(faceNormal);
@@ -155,17 +128,17 @@ void glObject::setColor(double color[])
 
 void glObject::draw()
 {
-    glColor3d(color[0],color[1],color[2]);
-
     for (int i=0;i<numOfFaces();i++) {
         int *v = faces->at(i)->getVertices();
         Vec3 *temp;
         Vec3 *normal;
 
         if ((solid)&&(!faces->at(i)->getEmpty())) {
+            glColor4d(color[0],color[1],color[2],opacity);
             glEnable(GL_LIGHTING);
             glBegin(GL_POLYGON);
         } else {
+            glColor4d(color[0],color[1],color[2],1);
             glDisable(GL_LIGHTING);
             glBegin(GL_LINE_STRIP);
         }
@@ -197,4 +170,9 @@ void glObject::draw()
 
         glEnd();
     }
+}
+
+void glObject::setOpacity(double value)
+{
+    opacity = value;
 }

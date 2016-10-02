@@ -51,7 +51,9 @@ SOURCES += main.cpp\
     visualization/glrbpyramidadapter.cpp \
     visualization/glsphereadapter.cpp \
     visualization/glcompoundobject.cpp \
-    util/octreefilemanager.cpp
+    util/octreefilemanager.cpp \
+    util/objectquery.cpp \
+    gui/cmd_interpreter/octreecmd.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -89,6 +91,8 @@ HEADERS  += gui/mainwindow.h \
     visualization/glsphereadapter.h \
     visualization/glcompoundobject.h \
     util/filemanager.h \
-    util/octreefilemanager.h
+    util/octreefilemanager.h \
+    util/objectquery.h \
+    gui/cmd_interpreter/octreecmd.h
 
 FORMS    += gui/mainwindow.ui

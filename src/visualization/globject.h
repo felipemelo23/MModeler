@@ -36,6 +36,8 @@ public:
 
     virtual void draw();
 
+    void setOpacity(double value);
+
 private:
     vector<Vec3*> *vertices;
     vector<glFace*> *faces;
@@ -43,6 +45,7 @@ private:
     vector<Vec3*> *vertexNormals;
     vector<Vec3*> *faceNormals;
 
+    double opacity;
     bool solid;
     bool smooth;
 

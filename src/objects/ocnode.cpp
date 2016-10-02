@@ -9,6 +9,17 @@ Ocnode::Ocnode(bool isRoot) : Object()
     this->isRoot = isRoot;
 }
 
+Ocnode::~Ocnode()
+{
+    delete ow;
+    delete wo;
+    if (children != NULL) {
+        for (int i=0;i<8;i++)
+            delete getChild(i);
+        delete children;
+    }
+}
+
 short Ocnode::getState() const
 {
     return state;
@@ -39,19 +50,16 @@ void Ocnode::setSize(double value)
     size = value;
 }
 
-Ocnode *Ocnode::getParent() const
-{
-    return parent;
-}
-
-void Ocnode::setParent(Ocnode *value)
-{
-    parent = value;
-}
-
 vector<Ocnode *> *Ocnode::getChildren() const
 {
     return children;
+}
+
+void Ocnode::setChildren(vector<Ocnode *> *children)
+{
+    if (this->children != NULL) delete this->children;
+
+    this->children = children;
 }
 
 void Ocnode::addChild(Ocnode *child)
@@ -151,10 +159,10 @@ void Ocnode::rotate(double degree, bool x, bool y, bool z)
 
 */
 
-void Ocnode::classify(Object *src, int maxDepth)
+void Ocnode::classify(Object *src, int maxDepth,bool hasBoundingBox)
 {
     //define a boundingbox do objeto
-    if(isRoot)
+    if((isRoot)&&(!hasBoundingBox))
     {
         Vec3 *range = src->getMaximumCoords()->sub(src->getMinimumCoords());
         Vec3 *p = src->getMaximumCoords()->sum(src->getMinimumCoords())->prod(0.5);
@@ -207,3 +215,69 @@ void Ocnode::classify(Object *src, int maxDepth)
         state = 1;
     }
 }
+
+Ocnode* Ocnode::intersection(Ocnode *A, Ocnode *B)
+{
+    Ocnode *octree = new Ocnode(true);
+
+    octree->setSize(A->getSize());
+    octree->setState(0);
+    octree->translate(A->getOrigin()->getX(),A->getOrigin()->getY(),A->getOrigin()->getY());
+    octree->setChildren(getCommonChildren(A,B));
+
+    return octree;
+}
+
+vector<Ocnode*> *Ocnode::getCommonChildren(Ocnode* A, Ocnode *B) {
+    vector<Ocnode*> *commonChildren = new vector<Ocnode*>();
+
+    Ocnode *child;
+    if ((A->getChildren() != NULL)&&(B->getChildren() != NULL)) {
+        for (int i=0;i<8;i++) {
+            child = new Ocnode();
+            child->setDepth(A->getChild(i)->getDepth());
+            child->setSize(A->getChild(i)->getSize());
+            child->translate(A->getChild(i)->getOrigin()->getX(),
+                             A->getChild(i)->getOrigin()->getY(),
+                             A->getChild(i)->getOrigin()->getZ());
+
+            if ((A->getChild(i)->getState() == B->getChild(i)->getState())&&
+                (A->getChild(i)->getState() == 1)){
+                child->setState(1);
+            } else if ((A->getChild(i)->getState() == B->getChild(i)->getState())&&
+                       (A->getChild(i)->getState() == 0)) {
+                child->setState(0);
+                child->setChildren(getCommonChildren(A->getChild(i),B->getChild(i)));
+            } else {
+                child->setState(-1);
+            }
+
+            commonChildren->push_back(child);
+        }
+    }
+
+    return commonChildren;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

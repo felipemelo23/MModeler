@@ -14,12 +14,13 @@ private:
     short state;
     int depth=0;
     double size;
-    Ocnode* parent;
     vector<Ocnode*> *children;
     bool isRoot;
 
+    static vector<Ocnode *> *getCommonChildren(Ocnode *A, Ocnode *B);
 public:
     Ocnode(bool isRoot=false);
+    ~Ocnode();
 
     short getState() const;
     void setState(short value);
@@ -27,13 +28,13 @@ public:
     void setDepth(int value);
     double getSize() const;
     void setSize(double value);
-    Ocnode *getParent() const;
-    void setParent(Ocnode *value);
     vector<Ocnode *> *getChildren() const;
+    void setChildren(vector<Ocnode*> *children);
     void addChild(Ocnode *child);
     Ocnode *getChild(int index);
 
-    void classify(Object* src, int maxDepth);
+    void classify(Object *src, int maxDepth, bool hasBoundingBox=false);
+    static Ocnode *intersection(Ocnode *A, Ocnode *B);
 
     bool isInside(Vec4 *pos);
     Vec3 *getMinimumCoords();

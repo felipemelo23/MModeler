@@ -309,6 +309,9 @@ void glDisplayWidget::initDisplay() {
     glEnable(GL_LIGHT3);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
+    glEnable (GL_BLEND);
+
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
     GLfloat mat_ambient[] = { 0.6, 0.6, 0.6, 1.0};

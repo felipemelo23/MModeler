@@ -23,6 +23,8 @@ glObject *glOctreeAdapter::adapt(Ocnode *octree)
 
     glCompoundObject *obj = new glCompoundObject();
 
+    obj->setOpacity(0.8);
+
     for (int i=0;i<8;i++)
         obj->addVertex(v[i]->getVec3());
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <objects/rbprism.h>
 #include <objects/rbpyramid.h>
+#include <util/objectquery.h>
 #include <util/octreefilemanager.h>
 
 using namespace std;
@@ -105,6 +106,9 @@ void MainWindow::updateObjectsTree() {
             }
 
             if (obj->getType() == Object::OCTREE) {
+                subItem = new QTreeWidgetItem();
+                subItem->setText(0, "Volume: " + QString::number(ObjectQuery::getVolume(obj,4)) + " uv");
+                item->addChild(subItem);
                 subItem = new QTreeWidgetItem();
                 subItem->setText(0,"ROOT");
                 createOctreeRep(subItem,(Ocnode*)obj);
