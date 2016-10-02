@@ -53,7 +53,9 @@ SOURCES += main.cpp\
     visualization/glcompoundobject.cpp \
     util/octreefilemanager.cpp \
     util/objectquery.cpp \
-    gui/cmd_interpreter/octreecmd.cpp
+    gui/cmd_interpreter/octreecmd.cpp \
+    gui/cmd_interpreter/selfscale.cpp \
+    gui/cmd_interpreter/selfrotate.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -93,6 +95,8 @@ HEADERS  += gui/mainwindow.h \
     util/filemanager.h \
     util/octreefilemanager.h \
     util/objectquery.h \
-    gui/cmd_interpreter/octreecmd.h
+    gui/cmd_interpreter/octreecmd.h \
+    gui/cmd_interpreter/selfscale.h \
+    gui/cmd_interpreter/selfrotate.h
 
 FORMS    += gui/mainwindow.ui

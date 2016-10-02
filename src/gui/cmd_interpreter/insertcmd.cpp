@@ -17,12 +17,12 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
         if (objType == "sphere") {
             objects->addObject(new Sphere());
         }
-        if (objType == "rbprism") {
+        if (objType == "prism") {
             if ((params.size() > 2) && (params.at(2).toInt() > 2)){
                 objects->addObject(new RBPrism(params.at(2).toInt()));
             }
         }
-        if (objType == "rbpyramid") {
+        if (objType == "pyramid") {
             if ((params.size() > 2) && (params.at(2).toInt() > 2)) {
                 objects->addObject(new RBPyramid(params.at(2).toInt()));
             }

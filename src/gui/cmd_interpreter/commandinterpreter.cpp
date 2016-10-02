@@ -1,6 +1,8 @@
 #include "commandinterpreter.h"
 #include "insertcmd.h"
 #include "octreecmd.h"
+#include "selfrotate.h"
+#include "selfscale.h"
 #include <iostream>
 
 using namespace std;
@@ -18,6 +20,8 @@ CommandInterpreter::CommandInterpreter(ObjectsManager *objects)
     this->acceptableCommand.push_back(new Rotate());
     this->acceptableCommand.push_back(new Scale());
     this->acceptableCommand.push_back(new OctreeCMD());
+    this->acceptableCommand.push_back(new SelfRotate());
+    this->acceptableCommand.push_back(new SelfScale());
 }
 
 void CommandInterpreter::interpretCommand(QString command)
