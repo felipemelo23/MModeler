@@ -54,6 +54,15 @@ vector<Ocnode *> *Ocnode::getChildren() const
     return children;
 }
 
+void Ocnode::addChild(Ocnode *child)
+{
+    if (children == NULL)
+        children = new vector<Ocnode*>();
+
+    if (children->size() < 8)
+        children->push_back(child);
+}
+
 Ocnode *Ocnode::getChild(int index)
 {
     if (index < 8) return children->at(index);
@@ -148,8 +157,9 @@ void Ocnode::classify(Object *src, int maxDepth)
     if(isRoot)
     {
         Vec3 *range = src->getMaximumCoords()->sub(src->getMinimumCoords());
+        Vec3 *p = src->getMaximumCoords()->sum(src->getMinimumCoords())->prod(0.5);
         size = max(max(range->getX(),range->getY()) , range->getZ());
-        translate(src->getOrigin()->getX(),src->getOrigin()->getY(),src->getOrigin()->getZ());
+        translate(p->getX(),p->getY(),p->getZ());
     }
 
     Vec4 **v = getVertices();
@@ -185,6 +195,8 @@ void Ocnode::classify(Object *src, int maxDepth)
 
         for (int i=0;i<8;i++)
             children->at(i)->classify(src,maxDepth);
+    } else if ((count < 8) && (count > 0) && (depth >= maxDepth)) {
+        state = 1;
     }
     else if (count == 0)    //branco
     {

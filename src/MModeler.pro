@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MModeler
 TEMPLATE = app
 
-LIBS = -lopengl32 -lglut32
+#LIBS = -lopengl32 -lglut32
 
 CONFIG += c++11
 
@@ -51,7 +51,6 @@ SOURCES += main.cpp\
     visualization/glrbpyramidadapter.cpp \
     visualization/glsphereadapter.cpp \
     visualization/glcompoundobject.cpp \
-    util/filemanager.cpp \
     util/octreefilemanager.cpp
 
 HEADERS  += gui/mainwindow.h \

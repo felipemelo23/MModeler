@@ -3,14 +3,33 @@
 
 #include <util/filemanager.h>
 #include <objects/ocnode.h>
+#include <fstream>
+#include <queue>
 
-class OctreeFileManager : protected FileManager
+class OctreeFileManager : public FileManager
 {
 public:
-    static bool saveOctree(int pos=0, Ocnode *object, string *line, string file_name);
-    static bool saveScene(Ocnode **objects, string file_name);
-    static Ocnode *getOctreeFromFile(Ocnode *object, string file_name, int position=0);
-    static Ocnode **getSceneFromFile(Ocnode **object, string file_name);
+    OctreeFileManager(QString filename);
+
+    vector<Ocnode*> getOctrees();
+    void setOctrees(vector<Ocnode*> octrees);
+    void addOctree(Ocnode *octree);
+    QString getFilename();
+    void setFilename(QString filename);
+
+    void save();
+    void load();
+
+private:
+    vector<Ocnode*> octrees;
+    QString filename;
+
+    QString saveOctree(Ocnode *octree);
+    QString octreeRepresetation(Ocnode *octree);
+    Ocnode *loadOctree(QString position, QString representation);
+    queue<char> *makeRepresentationQueue(QString representation);
+    void loadChildren(Ocnode *parent, queue<char> *repQueue);
+    void reposition(Ocnode *node, int index);
 };
 
 #endif // OCTREEFILEMANAGER_H

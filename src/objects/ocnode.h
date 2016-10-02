@@ -30,6 +30,7 @@ public:
     Ocnode *getParent() const;
     void setParent(Ocnode *value);
     vector<Ocnode *> *getChildren() const;
+    void addChild(Ocnode *child);
     Ocnode *getChild(int index);
 
     void classify(Object* src, int maxDepth);
