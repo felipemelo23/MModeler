@@ -19,10 +19,6 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
     setMinimumHeight(300);
     setMinimumWidth(400);
 
-    backgroundColor[0] = 46/255.0;
-    backgroundColor[1] = 48/255.0;
-    backgroundColor[2] = 55/255.0;
-
     backgroundColor[0] = 1;
     backgroundColor[1] = 1;
     backgroundColor[2] = 1;

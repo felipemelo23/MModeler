@@ -60,6 +60,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="animated">
+         <bool>true</bool>
+        </property>
         <column>
          <property name="text">
           <string>Objects</string>
@@ -70,6 +73,13 @@
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Command Line</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLineEdit" name="cmdFeed">
@@ -78,6 +88,20 @@
           <width>0</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Courier</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string/>
         </property>
         <property name="clearButtonEnabled">
          <bool>true</bool>
@@ -145,7 +169,6 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenOF">
    <property name="text">
     <string>Octrees File</string>
