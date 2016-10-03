@@ -5,6 +5,7 @@
 #include <qtreewidget.h>
 #include <gui/cmd_interpreter/commandinterpreter.h>
 #include <objects/ocnode.h>
+#include <QThread>
 
 namespace Ui {
 class MainWindow;
@@ -23,12 +24,16 @@ private:
     CommandInterpreter *interpreter;
     ObjectsManager *objects;
 
+    vector<QString> commandList;
+
     void updateObjectsTree();
     void createOctreeRep(QTreeWidgetItem *item, Ocnode *node);
 private slots:
     void feedCommand();
     void openOctreeFile();
     void saveOctreeFile();
+    void openSceneFile();
+    void saveSceneFile();
 };
 
 #endif // MAINWINDOW_H

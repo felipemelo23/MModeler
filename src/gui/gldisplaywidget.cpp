@@ -363,13 +363,12 @@ void glDisplayWidget::checkDirts() {
             }
 
             if (mode == 1) {
-                srand(time(NULL));
                 double *color = new double[3];
 
                 do {
-                    color[0] = (rand()%256)/255.0;
-                    color[1] = (rand()%256)/255.0;
-                    color[2] = (rand()%256)/255.0;
+                    color[0] = (qrand()%256)/255.0;
+                    color[1] = (qrand()%256)/255.0;
+                    color[2] = (qrand()%256)/255.0;
                 } while (color[0] + color[1] + color[2] > 2);
 
                 newObj->setColor(color);

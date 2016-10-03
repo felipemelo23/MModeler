@@ -126,12 +126,14 @@
      <property name="title">
       <string>Open</string>
      </property>
+     <addaction name="actionOpenSF"/>
      <addaction name="actionOpenOF"/>
     </widget>
     <widget class="QMenu" name="menuSave">
      <property name="title">
       <string>Save</string>
      </property>
+     <addaction name="actionSaveSF"/>
      <addaction name="actionSaveOF"/>
     </widget>
     <addaction name="menuOpen"/>
@@ -148,6 +150,16 @@
   <action name="actionSaveOF">
    <property name="text">
     <string>Octrees File</string>
+   </property>
+  </action>
+  <action name="actionOpenSF">
+   <property name="text">
+    <string>Scene File</string>
+   </property>
+  </action>
+  <action name="actionSaveSF">
+   <property name="text">
+    <string>Scene File</string>
    </property>
   </action>
  </widget>

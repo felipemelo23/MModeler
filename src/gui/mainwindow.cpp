@@ -6,6 +6,7 @@
 #include <objects/rbpyramid.h>
 #include <util/objectquery.h>
 #include <util/octreefilemanager.h>
+#include <util/scenefilemanager.h>
 
 using namespace std;
 
@@ -17,10 +18,13 @@ MainWindow::MainWindow(QWidget *parent) :
     objects = new ObjectsManager();
     ui->display->setObjects(objects);
     interpreter = new CommandInterpreter(objects);
+    commandList = vector<QString>();
 
     connect(ui->feedBtn,SIGNAL(clicked(bool)),this,SLOT(feedCommand()));
     connect(ui->actionOpenOF,SIGNAL(triggered(bool)),this,SLOT(openOctreeFile()));
     connect(ui->actionSaveOF,SIGNAL(triggered(bool)),this,SLOT(saveOctreeFile()));
+    connect(ui->actionOpenSF,SIGNAL(triggered(bool)),this,SLOT(openSceneFile()));
+    connect(ui->actionSaveSF,SIGNAL(triggered(bool)),this,SLOT(saveSceneFile()));
 }
 
 MainWindow::~MainWindow()
@@ -30,7 +34,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::feedCommand()
 {
-    interpreter->interpretCommand(ui->cmdFeed->text());
+
+    if (ui->cmdFeed->text() == "reset") {
+        for (int i=objects->numOfObjects()-1;i>=0;--i)
+            interpreter->interpretCommand("del " + QString::number(i));
+        commandList.clear();
+    } else {
+        commandList.push_back(ui->cmdFeed->text());
+        interpreter->interpretCommand(ui->cmdFeed->text());
+    }
     updateObjectsTree();
     ui->cmdFeed->clear();
 }
@@ -72,6 +84,41 @@ void MainWindow::saveOctreeFile()
         OctreeFileManager ofm(filename);
         ofm.setOctrees(octrees);
         ofm.save();
+    }
+}
+
+void MainWindow::openSceneFile()
+{
+    QFileDialog *openDialog = new QFileDialog(this);
+
+    QString filename = openDialog->getOpenFileName(this,tr("Carregar Cena"),"",tr("Arquivo de Cena (*.scn)"));
+
+    if (!filename.isEmpty()) {
+        SceneFileManager sfm(filename);
+
+        sfm.load();
+
+        for (int i=0;i<sfm.getCommandList().size();i++) {
+            interpreter->interpretCommand(sfm.getCommandList().at(i));
+            commandList.push_back(sfm.getCommandList().at(i));
+        }
+
+        updateObjectsTree();
+    }
+}
+
+void MainWindow::saveSceneFile()
+{
+    QFileDialog *saveDialog = new QFileDialog(this);
+
+    QString filename = saveDialog->getSaveFileName(this,tr("Salvar Cena"),"",tr("Arquivo de Cena (*.scn)"));
+
+    if (!filename.isEmpty()) {
+        SceneFileManager sfm(filename);
+
+        sfm.setCommandList(commandList);
+
+        sfm.save();
     }
 }
 

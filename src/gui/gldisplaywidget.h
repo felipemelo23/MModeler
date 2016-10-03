@@ -6,6 +6,7 @@
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QThread>
 
 #include <visualization/glscene.h>
 

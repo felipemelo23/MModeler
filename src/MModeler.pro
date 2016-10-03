@@ -55,7 +55,8 @@ SOURCES += main.cpp\
     util/objectquery.cpp \
     gui/cmd_interpreter/octreecmd.cpp \
     gui/cmd_interpreter/selfscale.cpp \
-    gui/cmd_interpreter/selfrotate.cpp
+    gui/cmd_interpreter/selfrotate.cpp \
+    util/scenefilemanager.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -97,6 +98,7 @@ HEADERS  += gui/mainwindow.h \
     util/objectquery.h \
     gui/cmd_interpreter/octreecmd.h \
     gui/cmd_interpreter/selfscale.h \
-    gui/cmd_interpreter/selfrotate.h
+    gui/cmd_interpreter/selfrotate.h \
+    util/scenefilemanager.h
 
 FORMS    += gui/mainwindow.ui

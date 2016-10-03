@@ -21,6 +21,8 @@ void ObjectsManager::addObject(Object *object)
 {
     objects->push_back(object);
     pushDirt(objects->size()-1,+1);
+    selecteds->clear();
+    addSelected(objects->size()-1);
 }
 
 Object *ObjectsManager::getObject(int index)
