@@ -10,7 +10,7 @@ OctreeCMD::OctreeCMD()
 
 void OctreeCMD::execute(QStringList params, ObjectsManager *objects)
 {
-    if ((params.size() > 4)&&(params.at(1) == "classify")) {
+    if ((params.size() == 5)&&(params.at(1) == "classify")) {
         if ((params.at(2).toInt() < objects->numOfObjects()) && (params.at(3).toInt() < objects->numOfObjects())) {
             if ((objects->getObject(params.at(2).toInt())->getType() == Object::OCTREE)&&
                 (objects->getObject(params.at(3).toInt())->getType() != Object::OCTREE)) {
@@ -18,7 +18,7 @@ void OctreeCMD::execute(QStringList params, ObjectsManager *objects)
                 objects->pushDirt(params.at(2).toInt(),0);
             }
         }
-    } else if ((params.size() > 3)&&(params.at(1) == "intersect")) {
+    } else if ((params.size() == 4)&&(params.at(1) == "intersect")) {
         if ((params.at(2).toInt() < objects->numOfObjects()) && (params.at(3).toInt() < objects->numOfObjects())) {
             if ((objects->getObject(params.at(2).toInt())->getType() == Object::OCTREE)&&
                 (objects->getObject(params.at(3).toInt())->getType() == Object::OCTREE)) {

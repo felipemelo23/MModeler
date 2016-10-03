@@ -21,7 +21,7 @@ protected:
 public:
     Object();
 
-    Vec3 *getOrigin();
+    virtual Vec3 *getOrigin();
     QString getName();
     void setName(QString name);
     int getType();
@@ -44,6 +44,7 @@ public:
     static const int OCTREE = 3;
     static const int CONE = 4;
     static const int CYLINDER = 5;
+    static const int COMPOUND = 6;
 
 };
 

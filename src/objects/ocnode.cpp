@@ -216,6 +216,60 @@ void Ocnode::classify(Object *src, int maxDepth,bool hasBoundingBox)
     }
 }
 
+void Ocnode::classify(vector<Object *> src, int maxDepth,bool hasBoundingBox)
+{
+    int count=0;
+    Vec4 **v = getVertices();
+
+    for (int i=0;i<src.size();i++) {
+        int countObj = 0;
+
+        for(int j=0; j<8; j++)
+            if(src.at(j)->isInside(v[i])) countObj++;
+
+        if (countObj > count) count = countObj;
+    }
+
+    if(((count < 8) && (count > 0) && (depth < maxDepth)) || (isRoot))  //cinza
+    {
+        state = 0;
+
+        children = new vector<Ocnode*>();
+
+        for(int i=0; i<8; i++)
+        {
+            children->push_back(new Ocnode());
+            children->at(i)->setDepth(depth+1);
+            children->at(i)->setSize(size/2);
+
+            children->at(i)->translate(getOrigin()->getX(),getOrigin()->getY(),getOrigin()->getZ());
+        }
+
+        double t = size/4;
+        children->at(0)->translate(t,t,t);
+        children->at(1)->translate(-t,t,t);
+        children->at(2)->translate(-t,-t,t);
+        children->at(3)->translate(t,-t,t);
+        children->at(4)->translate(t,t,-t);
+        children->at(5)->translate(-t,t,-t);
+        children->at(6)->translate(-t,-t,-t);
+        children->at(7)->translate(t,-t,-t);
+
+        for (int i=0;i<8;i++)
+            children->at(i)->classify(src,maxDepth);
+    } else if ((count < 8) && (count > 0) && (depth >= maxDepth)) {
+        state = 1;
+    }
+    else if (count == 0)    //branco
+    {
+        state = -1;
+    }
+    else if (count == 8)    //preto
+    {
+        state = 1;
+    }
+}
+
 Ocnode* Ocnode::intersection(Ocnode *A, Ocnode *B)
 {
     Ocnode *octree = new Ocnode(true);

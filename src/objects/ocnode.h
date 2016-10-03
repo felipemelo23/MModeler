@@ -34,6 +34,7 @@ public:
     Ocnode *getChild(int index);
 
     void classify(Object *src, int maxDepth, bool hasBoundingBox=false);
+    void classify(vector<Object *> src, int maxDepth,bool hasBoundingBox=false);
     static Ocnode *intersection(Ocnode *A, Ocnode *B);
 
     bool isInside(Vec4 *pos);

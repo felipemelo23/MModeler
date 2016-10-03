@@ -1,5 +1,6 @@
 #include "insertcmd.h"
 #include <iostream>
+#include <objects/compoundobject.h>
 
 using namespace std;
 
@@ -37,6 +38,15 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
                 Ocnode *o = new Ocnode(true);
                 o->classify(objects->getObject(params.at(2).toInt()),params.at(3).toInt());
                 objects->addObject(o);
+            }
+        }
+        if (objType == "compound") {
+            if ((params.size() == 4)&&
+                (params.at(2).toInt() < objects->numOfObjects())&&
+                (params.at(3).toInt() < objects->numOfObjects())) {
+                CompoundObject *co = new CompoundObject(objects->getObject(params.at(2).toInt()),
+                                                        objects->getObject(params.at(3).toInt()));
+                objects->addObject(co);
             }
         }
     }

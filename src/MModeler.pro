@@ -56,7 +56,9 @@ SOURCES += main.cpp\
     gui/cmd_interpreter/octreecmd.cpp \
     gui/cmd_interpreter/selfscale.cpp \
     gui/cmd_interpreter/selfrotate.cpp \
-    util/scenefilemanager.cpp
+    util/scenefilemanager.cpp \
+    objects/compoundobject.cpp \
+    visualization/glcompoundobjectadapter.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -99,6 +101,11 @@ HEADERS  += gui/mainwindow.h \
     gui/cmd_interpreter/octreecmd.h \
     gui/cmd_interpreter/selfscale.h \
     gui/cmd_interpreter/selfrotate.h \
-    util/scenefilemanager.h
+    util/scenefilemanager.h \
+    objects/compoundobject.h \
+    visualization/glcompoundobjectadapter.h
 
 FORMS    += gui/mainwindow.ui
+
+RESOURCES += \
+    assets.qrc

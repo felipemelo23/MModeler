@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <visualization/glcompoundobjectadapter.h>
 #include <visualization/gloctreeadapter.h>
 #include <visualization/glrbprismadapter.h>
 #include <visualization/glrbpyramidadapter.h>
@@ -18,9 +19,13 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
     setMinimumHeight(300);
     setMinimumWidth(400);
 
-    backgroundColor[0] = 0.1;
-    backgroundColor[1] = 0.1;
-    backgroundColor[2] = 0.2;
+    backgroundColor[0] = 46/255.0;
+    backgroundColor[1] = 48/255.0;
+    backgroundColor[2] = 55/255.0;
+
+    backgroundColor[0] = 1;
+    backgroundColor[1] = 1;
+    backgroundColor[2] = 1;
 
     lmbPressed = false;
     mmbPressed = false;
@@ -359,6 +364,9 @@ void glDisplayWidget::checkDirts() {
                 break;
             case Object::OCTREE:
                 newObj = glOctreeAdapter::adapt(((Ocnode*)objects->getObject(i)));
+                break;
+            case Object::COMPOUND:
+                newObj = glCompoundObjectAdapter::adapt((CompoundObject*)objects->getObject(i));
                 break;
             }
 
