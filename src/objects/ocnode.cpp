@@ -215,14 +215,14 @@ void Ocnode::classify(Object *src, int maxDepth,bool hasBoundingBox)
         }
 
         double t = size/4;
-        children->at(0)->translate(t,t,t);
-        children->at(1)->translate(-t,t,t);
-        children->at(2)->translate(-t,-t,t);
-        children->at(3)->translate(t,-t,t);
-        children->at(4)->translate(t,t,-t);
-        children->at(5)->translate(-t,t,-t);
-        children->at(6)->translate(-t,-t,-t);
-        children->at(7)->translate(t,-t,-t);
+        children->at(0)->translate(-t,-t,t);
+        children->at(1)->translate(t,-t,t);
+        children->at(2)->translate(-t,-t,-t);
+        children->at(3)->translate(t,-t,-t);
+        children->at(4)->translate(-t,t,t);
+        children->at(5)->translate(t,t,t);
+        children->at(6)->translate(-t,t,-t);
+        children->at(7)->translate(t,t,-t);
 
         for (int i=0;i<8;i++)
             children->at(i)->classify(src,maxDepth);
@@ -269,14 +269,14 @@ void Ocnode::classify(vector<Object *> src, int maxDepth,bool hasBoundingBox)
         }
 
         double t = size/4;
-        children->at(0)->translate(t,t,t);
-        children->at(1)->translate(-t,t,t);
-        children->at(2)->translate(-t,-t,t);
-        children->at(3)->translate(t,-t,t);
-        children->at(4)->translate(t,t,-t);
-        children->at(5)->translate(-t,t,-t);
-        children->at(6)->translate(-t,-t,-t);
-        children->at(7)->translate(t,-t,-t);
+        children->at(0)->translate(-t,-t,t);
+        children->at(1)->translate(t,-t,t);
+        children->at(2)->translate(-t,-t,-t);
+        children->at(3)->translate(t,-t,-t);
+        children->at(4)->translate(-t,t,t);
+        children->at(5)->translate(t,t,t);
+        children->at(6)->translate(-t,t,-t);
+        children->at(7)->translate(t,t,-t);
 
         for (int i=0;i<8;i++)
             children->at(i)->classify(src,maxDepth);

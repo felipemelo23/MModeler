@@ -160,43 +160,43 @@ void OctreeFileManager::reposition(Ocnode *node, int index) {
 
     switch (index) {
     case 0:
-        x = amount;
-        y = amount;
+        x = -amount;
+        y = -amount;
         z = amount;
         break;
     case 1:
-        x = -amount;
-        y = amount;
+        x = amount;
+        y = -amount;
         z = amount;
         break;
     case 2:
         x = -amount;
         y = -amount;
-        z = amount;
+        z = -amount;
         break;
     case 3:
         x = amount;
         y = -amount;
-        z = amount;
+        z = -amount;
         break;
     case 4:
-        x = amount;
-        y = amount;
-        z = -amount;
-        break;
-    case 5:
         x = -amount;
         y = amount;
-        z = -amount;
+        z = amount;
+        break;
+    case 5:
+        x = amount;
+        y = amount;
+        z = amount;
         break;
     case 6:
         x = -amount;
-        y = -amount;
+        y = amount;
         z = -amount;
         break;
     case 7:
         x = amount;
-        y = -amount;
+        y = amount;
         z = -amount;
         break;
     }
