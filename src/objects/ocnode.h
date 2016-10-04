@@ -29,6 +29,7 @@ public:
     double getSize() const;
     void setSize(double value);
     vector<Ocnode *> *getChildren() const;
+    vector<Ocnode *> *getChildrenCopy();
     void setChildren(vector<Ocnode*> *children);
     void addChild(Ocnode *child);
     Ocnode *getChild(int index);

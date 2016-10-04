@@ -55,6 +55,29 @@ vector<Ocnode *> *Ocnode::getChildren() const
     return children;
 }
 
+vector<Ocnode *> *Ocnode::getChildrenCopy()
+{
+    if (children == NULL)
+        return NULL;
+
+    vector<Ocnode *> *copy = new vector<Ocnode *>();
+
+    Ocnode *child;
+    for (int i=0;i<8;i++) {
+        child = new Ocnode();
+        child->setSize(getChild(i)->getSize());
+        child->setState(getChild(i)->getState());
+        child->setDepth(getChild(i)->getDepth());
+        child->translate(getChild(i)->getOrigin()->getX(),
+                         getChild(i)->getOrigin()->getY(),
+                         getChild(i)->getOrigin()->getZ());
+        child->setChildren(getChild(i)->getChildrenCopy());
+        copy->push_back(child);
+    }
+
+    return copy;
+}
+
 void Ocnode::setChildren(vector<Ocnode *> *children)
 {
     if (this->children != NULL) delete this->children;
@@ -302,6 +325,12 @@ vector<Ocnode*> *Ocnode::getCommonChildren(Ocnode* A, Ocnode *B) {
                        (A->getChild(i)->getState() == 0)) {
                 child->setState(0);
                 child->setChildren(getCommonChildren(A->getChild(i),B->getChild(i)));
+            } else if ((A->getChild(i)->getState() == 0)&&(B->getChild(i)->getState() == 1)){
+                child->setState(0);
+                child->setChildren(A->getChildrenCopy());
+            } else if ((A->getChild(i)->getState() == 1)&&(B->getChild(i)->getState() == 0)){
+                child->setState(0);
+                child->setChildren(B->getChildrenCopy());
             } else {
                 child->setState(-1);
             }
