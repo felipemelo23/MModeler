@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MModeler
 TEMPLATE = app
 
-#LIBS = -lopengl32 -lglut32
+LIBS = -lopengl32 -lglut32
 
 CONFIG += c++11
 
@@ -58,7 +58,8 @@ SOURCES += main.cpp\
     gui/cmd_interpreter/selfrotate.cpp \
     util/scenefilemanager.cpp \
     objects/compoundobject.cpp \
-    visualization/glcompoundobjectadapter.cpp
+    visualization/glcompoundobjectadapter.cpp \
+    objects/csgnode.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -103,7 +104,8 @@ HEADERS  += gui/mainwindow.h \
     gui/cmd_interpreter/selfrotate.h \
     util/scenefilemanager.h \
     objects/compoundobject.h \
-    visualization/glcompoundobjectadapter.h
+    visualization/glcompoundobjectadapter.h \
+    objects/csgnode.h
 
 FORMS    += gui/mainwindow.ui
 

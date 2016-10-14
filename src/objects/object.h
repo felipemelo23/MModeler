@@ -45,6 +45,7 @@ public:
     static const int CONE = 4;
     static const int CYLINDER = 5;
     static const int COMPOUND = 6;
+    static const int CSGTREE = 7;
 
 };
 
