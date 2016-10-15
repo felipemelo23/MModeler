@@ -125,6 +125,8 @@ bool CSGNode::isInside(Vec4 *pos)
     return false;
 }
 
+//Provavelmente estes metodos nao serao necessarios
+
 Vec3 *CSGNode::getMaximumCoords()
 {
     if(this->type == PRIMITIVE)
@@ -133,10 +135,51 @@ Vec3 *CSGNode::getMaximumCoords()
     }
     else if(this->type != NEW)
     {
-        //TO DO: Nao sei como achar o ponto para a composicao de objetos
-    }
+        int max_x, max_y, max_z;
+        Vec3 *max = new Vec3();
 
-    return false;
+        Vec3 *max_child_0 = this->getChild(0)->getMaximumCoords();
+
+        int max_x_0 = max_child_0->getX();
+        int max_y_0 = max_child_0->getY();
+        int max_z_0 = max_child_0->getZ();
+
+        Vec3 *max_child_1 = this->getChild(1)->getMaximumCoords();
+
+        int max_x_1 = max_child_1->getX();
+        int max_y_1 = max_child_1->getY();
+        int max_z_1 = max_child_1->getZ();
+
+        switch (this->type)
+        {
+        case OP_UNION:
+            if(max_x_0 > max_x_1) max_x = max_x_0; else max_x = max_x_1;
+            if(max_y_0 > max_y_1) max_y = max_y_0; else max_y = max_y_1;
+            if(max_z_0 > max_z_1) max_z = max_z_0; else max_z = max_z_1;
+
+        break;
+
+        case OP_INTERSECTION:
+            if(max_x_0 < max_x_1) max_x = max_x_0; else max_x = max_x_1;
+            if(max_y_0 < max_y_1) max_y = max_y_0; else max_y = max_y_1;
+            if(max_z_0 < max_z_1) max_z = max_z_0; else max_z = max_z_1;
+
+        break;
+
+        case OP_DIFERENCE:
+            max_x = max_x_0;
+            max_y = max_y_0;
+            max_z = max_z_0;
+
+        break;
+        }
+
+        return new Vec3(max_x, max_y, max_z);
+    }
+    else
+    {
+        return new Vec3(-999999);
+    }
 }
 
 Vec3 *CSGNode::getMinimumCoords()
@@ -147,8 +190,49 @@ Vec3 *CSGNode::getMinimumCoords()
     }
     else if(this->type != NEW)
     {
-        //TO DO: Nao sei como achar o ponto para a composicao de objetos
-    }
+        int min_x, min_y, min_z;
+        Vec3 *min = new Vec3();
 
-    return false;
+        Vec3 *min_child_0 = this->getChild(0)->getMinimumCoords();
+
+        int min_x_0 = min_child_0->getX();
+        int min_y_0 = min_child_0->getY();
+        int min_z_0 = min_child_0->getZ();
+
+        Vec3 *min_child_1 = this->getChild(1)->getMinimumCoords();
+
+        int min_x_1 = min_child_1->getX();
+        int min_y_1 = min_child_1->getY();
+        int min_z_1 = min_child_1->getZ();
+
+        switch (this->type)
+        {
+        case OP_UNION:
+            if(min_x_0 < min_x_1) min_x = min_x_0; else min_x = min_x_1;
+            if(min_y_0 < min_y_1) min_y = min_y_0; else min_y = min_y_1;
+            if(min_z_0 < min_z_1) min_z = min_z_0; else min_z = min_z_1;
+
+        break;
+
+        case OP_INTERSECTION:
+            if(min_x_0 > min_x_1) min_x = min_x_0; else min_x = min_x_1;
+            if(min_y_0 > min_y_1) min_y = min_y_0; else min_y = min_y_1;
+            if(min_z_0 > min_z_1) min_z = min_z_0; else min_z = min_z_1;
+
+        break;
+
+        case OP_DIFERENCE:
+            min_x = min_x_0;
+            min_y = min_y_0;
+            min_z = min_z_0;
+
+        break;
+        }
+
+        return new Vec3(min_x, min_y, min_z);
+    }
+    else
+    {
+        return new Vec3(-999999);
+    }
 }
