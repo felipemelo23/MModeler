@@ -4,6 +4,12 @@
 #include <algebra/vec3.h>
 #include <algebra/vec4.h>
 #include <iostream>
+#include <objects/sphere.h>
+#include <rendering/camera.h>
+#include <rendering/ray.h>
+#include <rendering/raycaster.h>
+#include <rendering/render.h>
+#include <rendering/scene.h>
 
 using namespace std;
 

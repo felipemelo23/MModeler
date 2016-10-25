@@ -139,6 +139,50 @@ Vec4 **Sphere::getVertices(int height, int width)
     return v;
 }
 
+std::pair<RCResult, RCResult> Sphere::checkIntersection(Ray *ray)
+{
+    Ray *tRay = ray->transform(wo);
+
+    double a = pow(tRay->getDir()->getX(),2) +
+               pow(tRay->getDir()->getY(),2) +
+               pow(tRay->getDir()->getZ(),2);
+    double b = 2*(tRay->getOrigin()->getX()*tRay->getDir()->getX() +
+                  tRay->getOrigin()->getY()*tRay->getDir()->getY() +
+                  tRay->getOrigin()->getZ()*tRay->getDir()->getZ());
+    double c = pow(tRay->getOrigin()->getX(),2) +
+               pow(tRay->getOrigin()->getY(),2) +
+               pow(tRay->getOrigin()->getZ(),2) - pow(0.5,2);
+
+    double delta = (b*b) - (4*a*c);
+
+    if (delta < 0) return std::make_pair(RCResult(),RCResult());
+
+    if (delta == 0) {
+        double t = -b/(2*a);
+        Vec3 *point = ow->prod(tRay->getPoint(t),1);
+        Vec3 *normal = point->sub(getOrigin());
+        normal->normalize();
+
+        delete tRay;
+        return std::make_pair(RCResult(true,t,point,normal,material),RCResult());
+    }
+
+    double t1 = (-b + sqrt(delta))/(2*a);
+    double t2 = (-b - sqrt(delta))/(2*a);
+
+    Vec3 *nearestPoint = ow->prod(tRay->getPoint(min(t1,t2)),1);
+    Vec3 *nearestNormal = nearestPoint->sub(getOrigin());
+    nearestNormal->normalize();
+
+    Vec3 *farthestPoint = ow->prod(tRay->getPoint(max(t1,t2)),1);
+    Vec3 *farthestNormal = farthestPoint->sub(getOrigin());
+    farthestNormal->normalize();
+
+    return std::make_pair(RCResult(true,min(t1,t2),nearestPoint,nearestNormal,material),
+                          RCResult(true,max(t1,t2),farthestPoint,farthestNormal,material));
+
+}
+
 
 
 

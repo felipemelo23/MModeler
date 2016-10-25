@@ -1,9 +1,20 @@
 #include <objects/object.h>
 
+Material *Object::getMaterial() const
+{
+    return material;
+}
+
+void Object::setMaterial(Material *value)
+{
+    material = value;
+}
+
 Object::Object()
 {
     ow = Mtx4x4::getIdentity();
     wo = Mtx4x4::getIdentity();
+    material = new Material();
 }
 
 Vec3 *Object::getOrigin()
@@ -38,6 +49,9 @@ void Object::rotate(double degree, bool x, bool y, bool z)
     wo = wo->prod(Mtx4x4::getRotateMtx(-degree,x,y,z));
     delete trash;
 }
+
+std::pair<RCResult, RCResult> Object::checkIntersection(Ray *ray)
+{}
 
 void Object::section(Vec2 **v, double radius) {}
 

@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MModeler
 TEMPLATE = app
 
-LIBS = -lopengl32 -lglut32
+#LIBS = -lopengl32 -lglut32
 
 CONFIG += c++11
 
@@ -59,7 +59,17 @@ SOURCES += main.cpp\
     util/scenefilemanager.cpp \
     objects/compoundobject.cpp \
     visualization/glcompoundobjectadapter.cpp \
-    objects/csgnode.cpp
+    objects/csgnode.cpp \
+    rendering/camera.cpp \
+    rendering/ray.cpp \
+    rendering/raycaster.cpp \
+    rendering/rcresult.cpp \
+    rendering/material.cpp \
+    rendering/scene.cpp \
+    rendering/ambientlight.cpp \
+    rendering/color.cpp \
+    rendering/light.cpp \
+    rendering/render.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -105,7 +115,17 @@ HEADERS  += gui/mainwindow.h \
     util/scenefilemanager.h \
     objects/compoundobject.h \
     visualization/glcompoundobjectadapter.h \
-    objects/csgnode.h
+    objects/csgnode.h \
+    rendering/camera.h \
+    rendering/ray.h \
+    rendering/raycaster.h \
+    rendering/rcresult.h \
+    rendering/material.h \
+    rendering/scene.h \
+    rendering/ambientlight.h \
+    rendering/color.h \
+    rendering/light.h \
+    rendering/render.h
 
 FORMS    += gui/mainwindow.ui
 

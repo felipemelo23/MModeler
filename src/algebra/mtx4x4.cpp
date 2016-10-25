@@ -46,6 +46,17 @@ Vec4 *Mtx4x4::prod(Vec4 *vec)
     return (Vec4*) MtxNxN::prod(vec);
 }
 
+Vec3 *Mtx4x4::prod(Vec3 *vec, double w)
+{
+    Vec4 *temp = new Vec4(vec,w);
+
+    Vec3 *result = prod(temp)->getVec3();
+
+    delete temp;
+
+    return result;
+}
+
 Mtx4x4 *Mtx4x4::prod(double lambda)
 {
     return (Mtx4x4*) MtxNxN::prod(lambda);

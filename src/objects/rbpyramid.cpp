@@ -12,6 +12,11 @@ int RBPyramid::getNumOfSides() const
     return numOfSides;
 }
 
+std::pair<RCResult, RCResult> RBPyramid::checkIntersection(Ray *ray)
+{
+
+}
+
 Vec4 **RBPyramid::getVertices()
 {
     Vec4 **v = new Vec4*[numOfSides + 1];

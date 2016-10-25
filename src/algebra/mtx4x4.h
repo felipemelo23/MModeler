@@ -23,6 +23,7 @@ public:
     Mtx4x4 *sub(Mtx4x4 *mtx);
     Mtx4x4 *prod(Mtx4x4 *mtx);
     Vec4 *prod(Vec4 *vec);
+    Vec3 *prod(Vec3 *vec, double w);
     Mtx4x4 *prod(double lambda);
     Mtx4x4 *inverse();
 

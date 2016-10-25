@@ -11,6 +11,11 @@ int RBPrism::getNumOfSides() const
     return numOfSides;
 }
 
+std::pair<RCResult, RCResult> RBPrism::checkIntersection(Ray *ray)
+{
+
+}
+
 Vec4 **RBPrism::getVertices()
 {
     Vec4 **v = new Vec4*[2*numOfSides];

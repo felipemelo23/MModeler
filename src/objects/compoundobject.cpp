@@ -3,12 +3,13 @@
 #include "rbpyramid.h"
 #include "sphere.h"
 
-CompoundObject::CompoundObject(Object *a, Object *b)
+CompoundObject::CompoundObject(Object *a, Object *b, , int op)
 {
     this->a = a;
     this->b = b;
     this->name = "Compound Object";
     this->type = Object::COMPOUND;
+    this->operation = op;
 }
 
 CompoundObject::~CompoundObject()
@@ -19,7 +20,20 @@ CompoundObject::~CompoundObject()
 
 bool CompoundObject::isInside(Vec4 *pos)
 {
-    return a->isInside(pos)||b->isInside(pos);
+    switch (operation) {
+    case UNION:
+        return a->isInside(pos)||b->isInside(pos);
+        break;
+    case INTERSECT:
+        return a->isInside(pos)&&b->isInside(pos);
+        break;
+    case DIFFERENCE:
+        return a->isInside(pos)&&(!b->isInside(pos));
+        break;
+    default:
+        return false;
+        break;
+    }
 }
 
 Vec3 *CompoundObject::getMaximumCoords()

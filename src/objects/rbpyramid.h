@@ -17,6 +17,8 @@ public:
     Vec3 *getMinimumCoords();
     int getNumOfSides() const;
 
+    std::pair<RCResult,RCResult> checkIntersection(Ray *ray);
+
     Vec4 **getVertices();
 };
 

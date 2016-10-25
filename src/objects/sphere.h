@@ -15,6 +15,8 @@ public:
 
     Vec4 **getVertices(int height, int width);
 
+    std::pair<RCResult,RCResult> checkIntersection(Ray *ray);
+
 };
 
 #endif // SPHERE_H

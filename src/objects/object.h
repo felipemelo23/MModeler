@@ -7,6 +7,9 @@
 
 #include <QString>
 
+#include <rendering/ray.h>
+#include <rendering/rcresult.h>
+
 /*A classe object servira apenas como interface para
 facilitar implementacao e para fazer passagem de parametross*/
 
@@ -17,6 +20,7 @@ protected:
     Mtx4x4 *ow;
     int type;
     QString name;
+    Material *material;
 
 public:
     Object();
@@ -31,6 +35,7 @@ public:
     virtual void rotate(double degree, bool x=true, bool y=false, bool z=false);
 
     virtual bool isInside(Vec4 *pos)=0;
+    virtual std::pair<RCResult,RCResult> checkIntersection(Ray *ray);
 
     virtual Vec3 *getMinimumCoords()=0;
     virtual Vec3 *getMaximumCoords()=0;
@@ -47,6 +52,8 @@ public:
     static const int COMPOUND = 6;
     static const int CSGTREE = 7;
 
+    Material *getMaterial() const;
+    void setMaterial(Material *value);
 };
 
 #endif // OBJECT_H

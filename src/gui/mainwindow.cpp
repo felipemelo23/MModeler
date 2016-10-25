@@ -4,6 +4,11 @@
 #include <iostream>
 #include <objects/rbprism.h>
 #include <objects/rbpyramid.h>
+#include <objects/sphere.h>
+#include <rendering/camera.h>
+#include <rendering/light.h>
+#include <rendering/render.h>
+#include <rendering/scene.h>
 #include <util/objectquery.h>
 #include <util/octreefilemanager.h>
 #include <util/scenefilemanager.h>
@@ -25,6 +30,35 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSaveOF,SIGNAL(triggered(bool)),this,SLOT(saveOctreeFile()));
     connect(ui->actionOpenSF,SIGNAL(triggered(bool)),this,SLOT(openSceneFile()));
     connect(ui->actionSaveSF,SIGNAL(triggered(bool)),this,SLOT(saveSceneFile()));
+
+    Object *sphere1 = new Sphere();
+    sphere1->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),0.5));
+    sphere1->scale(2,2,2);
+    sphere1->rotate(90,false,true,false);
+
+    Object *sphere2 = new Sphere();
+    sphere2->setMaterial(new Material(new Color(0,0.3,0),new Color(0,0.6,0),new Color(0.8,0.9,0.8),1));
+    sphere2->translate(-1,0,0);
+
+    Light *light1 = new Light(new Vec3(10,10,10),new Color(1,1,1),0.8);
+
+    Scene *scene = new Scene();
+
+    scene->addObject(sphere1);
+    scene->addObject(sphere2);
+    scene->addLight(light1);
+
+    Camera *camera = new Camera(new Vec3(0,0,5),new Vec3(0,0,0),new Vec3(0,1,0));
+
+    QImage *image = new QImage(200,200,QImage().Format_RGB32);
+
+    Render *r = new Render(scene,camera,image);
+
+    r->render();
+
+    ui->canvas->setPixmap(QPixmap::fromImage(*image));
+
+
 }
 
 MainWindow::~MainWindow()

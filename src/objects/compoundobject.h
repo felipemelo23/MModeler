@@ -10,7 +10,7 @@ using std::min;
 class CompoundObject : public Object
 {
 public:
-    CompoundObject(Object *a, Object *b);
+    CompoundObject(Object *a, Object *b, int op);
     ~CompoundObject();
 
     bool isInside(Vec4 *pos);
@@ -26,7 +26,12 @@ public:
     void scale(double x, double y, double z);
     void rotate(double degree, bool x=true, bool y=false, bool z=false);
 
+    static const int UNION = 0;
+    static const int INTERSECT = 1;
+    static const int DIFFERENCE = 2;
+
 private:
+    int operation;
     Object *a;
     Object *b;
 };
