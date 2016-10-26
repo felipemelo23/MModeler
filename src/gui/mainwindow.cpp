@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
+#include <QInputDialog>
 #include <iostream>
 #include <objects/compoundobject.h>
 #include <objects/rbprism.h>
@@ -26,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
     interpreter = new CommandInterpreter(objects);
     commandList = vector<QString>();
 
-    connect(ui->feedBtn,SIGNAL(clicked(bool)),this,SLOT(feedCommand()));
     connect(ui->actionOpenOF,SIGNAL(triggered(bool)),this,SLOT(openOctreeFile()));
     connect(ui->actionSaveOF,SIGNAL(triggered(bool)),this,SLOT(saveOctreeFile()));
     connect(ui->actionOpenSF,SIGNAL(triggered(bool)),this,SLOT(openSceneFile()));
@@ -34,37 +34,40 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Object *sphere1 = new Sphere();
     sphere1->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
-    sphere1->translate(0.25,0,0);
+    sphere1->translate(0,0,0);
 
     Object *sphere2 = new Sphere();
     sphere2->setMaterial(new Material(new Color(0,0.3,0),new Color(0,0.6,0),new Color(0.8,0.9,0.8),1));
-    sphere2->translate(-0.25,0,0);
+    sphere2->translate(0,0,0);
 
-    Object *sphere3 = new Sphere();
-    sphere3->setMaterial(new Material(new Color(0,0,0.3),new Color(0,0,0.6),new Color(0.8,0.8,0.9),1));
-    sphere3->translate(0,0.5,0);
+    Object *pyramid = new RBPyramid(6);
+    pyramid->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
+    pyramid->translate(0.5,0,0);
 
-    Object *unionSphere = new CompoundObject(sphere1,sphere2,CompoundObject::INTERSECT);
-    Object *dUnionSphere = new CompoundObject(sphere3,unionSphere,CompoundObject::INTERSECT);
+    Object *prism = new RBPrism(3);
+    prism->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
+    prism->translate(-0.5,0,0);
+
+    Object *unionSphere = new CompoundObject(sphere2,pyramid,CompoundObject::DIFFERENCE);
 
     Light *light1 = new Light(new Vec3(10,10,10),new Color(1,1,1),0.8);
 
     Scene *scene = new Scene();
 
-    scene->addObject(unionSphere);
+    //scene->addObject(unionSphere);
+    scene->addObject(prism);
+    scene->addObject(pyramid);
     scene->addLight(light1);
 
-    Camera *camera = new Camera(new Vec3(-0.5,0,2),new Vec3(0,0,0),new Vec3(0,1,0));
+    Camera *camera = new Camera(new Vec3(0,0,2),new Vec3(0,0,0),new Vec3(0,1,0));
 
     QImage *image = new QImage(200,200,QImage().Format_RGB32);
 
     Render *r = new Render(scene,camera,image);
 
-    r->render();
+    //r->render();
 
     ui->canvas->setPixmap(QPixmap::fromImage(*image));
-
-
 }
 
 MainWindow::~MainWindow()
@@ -74,7 +77,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::feedCommand()
 {
-
     if (ui->cmdFeed->text() == "reset") {
         for (int i=objects->numOfObjects()-1;i>=0;--i)
             interpreter->interpretCommand("del " + QString::number(i));
@@ -227,5 +229,49 @@ void MainWindow::createOctreeRep(QTreeWidgetItem *item,Ocnode *node) {
 
             item->addChild(subItem);
         }
+    }
+}
+
+void MainWindow::on_objectsTree_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    cout << item->text(0).toStdString() << endl;
+}
+
+void MainWindow::on_insertSphereBtn_clicked()
+{
+    ui->cmdFeed->setText("insert sphere");
+    feedCommand();
+}
+
+void MainWindow::on_insertPrismBtn_clicked()
+{
+    bool ok;
+    int sides = QInputDialog::getInt(this,tr("Insert Prism"),tr("Number of Sides"),0,3,50,1,&ok);
+
+    if (ok) {
+        ui->cmdFeed->setText("insert prism " + QString::number(sides));
+        feedCommand();
+    }
+}
+
+void MainWindow::on_insertPyramidBtn_clicked()
+{
+    bool ok;
+    int sides = QInputDialog::getInt(this,tr("Insert Pyramid"),tr("Number of Sides"),0,3,50,1,&ok);
+
+    if (ok) {
+        ui->cmdFeed->setText("insert pyramid " + QString::number(sides));
+        feedCommand();
+    }
+}
+
+void MainWindow::on_delBtn_clicked()
+{
+    bool ok;
+    int id = QInputDialog::getInt(this,tr("Deleting Object"),tr("Object Id"),0,0,100,1,&ok);
+
+    if (ok) {
+        ui->cmdFeed->setText("del " + QString::number(id));
+        feedCommand();
     }
 }

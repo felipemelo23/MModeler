@@ -34,6 +34,11 @@ private slots:
     void saveOctreeFile();
     void openSceneFile();
     void saveSceneFile();
+    void on_objectsTree_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    void on_insertSphereBtn_clicked();
+    void on_insertPrismBtn_clicked();
+    void on_insertPyramidBtn_clicked();
+    void on_delBtn_clicked();
 };
 
 #endif // MAINWINDOW_H

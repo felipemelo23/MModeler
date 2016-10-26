@@ -9,6 +9,7 @@ class RBPrism : public Object
 private:
     int numOfSides;
 
+    vector<RCResult> sort(vector<RCResult> results);
 public:
     RBPrism(int numOfSides=3);
     ~RBPrism();

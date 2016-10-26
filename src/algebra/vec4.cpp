@@ -61,6 +61,14 @@ Vec4 *Vec4::sum(Vec4 *vec)
     return result;
 }
 
+Vec4 *Vec4::sum_(Vec4 *vec)
+{
+    setX(getX()+vec->getX());
+    setY(getY()+vec->getY());
+    setZ(getZ()+vec->getZ());
+    setW(0);
+}
+
 Vec4 *Vec4::sub(Vec4 *vec)
 {
     Vec4 *result = (Vec4*) VecN::sub(vec);

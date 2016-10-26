@@ -1,3 +1,5 @@
+#include "face.h"
+
 #include <objects/rbpyramid.h>
 
 #include <algebra/mtx2x2.h>
@@ -14,7 +16,49 @@ int RBPyramid::getNumOfSides() const
 
 vector<RCResult> RBPyramid::checkIntersection(Ray *ray)
 {
+    vector<RCResult> results = vector<RCResult>();
+    Vec4 **v = getVertices();
 
+    Face **faces = new Face*[numOfSides+1];
+
+    int *bottomVertices = new int[numOfSides];
+    Vec4 **bottomInv = new Vec4*[numOfSides];
+
+    for (int i=0;i<numOfSides;i++) {
+        bottomVertices[i] = i+1;
+        bottomInv[numOfSides-1-i] = v[i+1];
+    }
+
+    faces[0] = new Face(numOfSides,bottomInv,material);
+
+    for (int i=0;i<numOfSides;i++) {
+        faces[i+1] = new Face(3,material,v[0],v[bottomVertices[i]],v[bottomVertices[(i+1)%numOfSides]]);
+    }
+
+    for (int i=0;i<numOfSides+1;i++) {
+        RCResult result = faces[i]->checkIntersection(ray);
+        if (result.getIntersected()) results.push_back(result);
+    }
+
+    results = sort(results);
+
+    return results;
+}
+
+vector<RCResult> RBPyramid::sort(vector<RCResult> results) {
+    if (results.size() > 0) {
+        for (int i=0;i<results.size()-1;i++) {
+            for (int j=i;j<results.size();j++) {
+                if (results.at(i).getT() > results.at(j).getT()) {
+                    RCResult aux = results.at(i);
+                    results.at(i) = results.at(j);
+                    results.at(j) = aux;
+                }
+            }
+        }
+    }
+
+    return results;
 }
 
 Vec4 **RBPyramid::getVertices()
@@ -72,9 +116,10 @@ void RBPyramid::section(Vec2 **v, double radius)
 int RBPyramid::isInside(Vec4 *pos)
 {
     bool output = true;
+    int on = 1;
     Vec4 *canon = wo->prod(pos);
 
-    if ((canon->getY() > 0.5)||(canon->getY() < -0.5))
+    if ((canon->getY() > 0.50001)||(canon->getY() < -0.50001))
         return false;
 
     double r = (1-canon->getY()-0.5)/2;
@@ -88,7 +133,15 @@ int RBPyramid::isInside(Vec4 *pos)
 
         int i = 0;
         while ((output)&&(i<numOfSides)) {
-            output = v[i]->sub(pos2d)->cross(v[(i+1)%numOfSides]->sub(pos2d)) >= 0;
+            double lambda = v[i]->sub(pos2d)->cross(v[(i+1)%numOfSides]->sub(pos2d));
+
+            if (fabs(lambda) <= 0.00001)
+                output *= -1;
+            else if (lambda > 0)
+                output *= 1;
+            else
+                output *= 0;
+
             i++;
         }
 
@@ -102,10 +155,11 @@ int RBPyramid::isInside(Vec4 *pos)
 
         //memoria limpa...
     } else {
-        if ((canon->getX() != 0)||(canon->getZ() != 0))
+        if ((fabs(canon->getX()) > 0)||(fabs(canon->getZ()) > 0))
             output = false;
     }
 
+    if (output < 0) cout << output << endl;
     return output;
 }
 

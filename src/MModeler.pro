@@ -69,7 +69,8 @@ SOURCES += main.cpp\
     rendering/ambientlight.cpp \
     rendering/color.cpp \
     rendering/light.cpp \
-    rendering/render.cpp
+    rendering/render.cpp \
+    objects/face.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -125,7 +126,8 @@ HEADERS  += gui/mainwindow.h \
     rendering/ambientlight.h \
     rendering/color.h \
     rendering/light.h \
-    rendering/render.h
+    rendering/render.h \
+    objects/face.h
 
 FORMS    += gui/mainwindow.ui
 

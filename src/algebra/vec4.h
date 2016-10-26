@@ -25,6 +25,7 @@ public:
     Vec3 *getVec3();
 
     Vec4 *sum(Vec4 *vec);
+    Vec4 *sum_(Vec4 *vec);
     Vec4 *sub(Vec4 *vec);
     Vec4 *prod(double lambda);
     double dot(Vec4 *vec);

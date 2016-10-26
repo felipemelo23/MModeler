@@ -8,6 +8,7 @@ class RBPyramid : public Object
 private:
     int numOfSides;
 
+    vector<RCResult> sort(vector<RCResult> results);
 public:
     RBPyramid(int numOfSides=3);
     ~RBPyramid();

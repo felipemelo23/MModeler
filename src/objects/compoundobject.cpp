@@ -34,7 +34,7 @@ int CompoundObject::isInside(Vec4 *pos)
         value = a->isInside(pos)&&b->isInside(pos);
         break;
     case DIFFERENCE:
-        value = a->isInside(pos)&&(!b->isInside(pos));
+        value = a->isInside(pos)&&(b->isInside(pos) <= 0);
         break;
     }
 
@@ -75,7 +75,9 @@ vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
         int i = 0;
 
         if (sortedResults.size() > 0) {
-            while ((i < sortedResults.size())&&!((a->isInside(new Vec4(sortedResults.at(i).getPoint(),1)))&&(b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)))))
+            while ((i < sortedResults.size())&&
+                   !((a->isInside(new Vec4(sortedResults.at(i).getPoint(),1)))&&
+                     (b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)))))
                 i++;
 
             if (i < sortedResults.size()) {
@@ -87,10 +89,24 @@ vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
 
         break;
     }
-    case DIFFERENCE: {
+    case DIFFERENCE:
+    {
+        vector<RCResult> sortedResults = merge(aResults,bResults);
+        int i = 0;
 
+        while ((i < sortedResults.size())&&
+               (!a->isInside(new Vec4(sortedResults.at(i).getPoint(),1))||
+                !(b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)) <= 0)))
+            i++;
 
-    break;
+        if (i < sortedResults.size()) {
+            RCResult result = sortedResults.at(i);
+            result.setMaterial(material);
+            if (b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)) == -1)
+                result.setNormal(result.getNormal()->prod(-1));
+            results.push_back(result);
+        }
+        break;
     }
     }
 
