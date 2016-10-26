@@ -44,7 +44,7 @@ public:
 
     bool hasChildren();
 
-    bool isInside(Vec4 *pos);
+    int isInside(Vec4 *pos);
     Vec3 *getMinimumCoords();
     Vec3 *getMaximumCoords();
 };

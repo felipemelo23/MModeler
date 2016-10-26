@@ -34,8 +34,8 @@ public:
     virtual void scale(double x, double y, double z);
     virtual void rotate(double degree, bool x=true, bool y=false, bool z=false);
 
-    virtual bool isInside(Vec4 *pos)=0;
-    virtual std::pair<RCResult,RCResult> checkIntersection(Ray *ray);
+    virtual int isInside(Vec4 *pos)=0;
+    virtual vector<RCResult> checkIntersection(Ray *ray);
 
     virtual Vec3 *getMinimumCoords()=0;
     virtual Vec3 *getMaximumCoords()=0;

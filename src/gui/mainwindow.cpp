@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <iostream>
+#include <objects/compoundobject.h>
 #include <objects/rbprism.h>
 #include <objects/rbpyramid.h>
 #include <objects/sphere.h>
@@ -32,23 +33,28 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSaveSF,SIGNAL(triggered(bool)),this,SLOT(saveSceneFile()));
 
     Object *sphere1 = new Sphere();
-    sphere1->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),0.5));
-    sphere1->scale(2,2,2);
-    sphere1->rotate(90,false,true,false);
+    sphere1->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
+    sphere1->translate(0.25,0,0);
 
     Object *sphere2 = new Sphere();
     sphere2->setMaterial(new Material(new Color(0,0.3,0),new Color(0,0.6,0),new Color(0.8,0.9,0.8),1));
-    sphere2->translate(-1,0,0);
+    sphere2->translate(-0.25,0,0);
+
+    Object *sphere3 = new Sphere();
+    sphere3->setMaterial(new Material(new Color(0,0,0.3),new Color(0,0,0.6),new Color(0.8,0.8,0.9),1));
+    sphere3->translate(0,0.5,0);
+
+    Object *unionSphere = new CompoundObject(sphere1,sphere2,CompoundObject::INTERSECT);
+    Object *dUnionSphere = new CompoundObject(sphere3,unionSphere,CompoundObject::INTERSECT);
 
     Light *light1 = new Light(new Vec3(10,10,10),new Color(1,1,1),0.8);
 
     Scene *scene = new Scene();
 
-    scene->addObject(sphere1);
-    scene->addObject(sphere2);
+    scene->addObject(unionSphere);
     scene->addLight(light1);
 
-    Camera *camera = new Camera(new Vec3(0,0,5),new Vec3(0,0,0),new Vec3(0,1,0));
+    Camera *camera = new Camera(new Vec3(-0.5,0,2),new Vec3(0,0,0),new Vec3(0,1,0));
 
     QImage *image = new QImage(200,200,QImage().Format_RGB32);
 

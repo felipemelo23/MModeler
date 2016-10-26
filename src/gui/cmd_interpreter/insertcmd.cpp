@@ -45,7 +45,7 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
                 (params.at(2).toInt() < objects->numOfObjects())&&
                 (params.at(3).toInt() < objects->numOfObjects())) {
                 CompoundObject *co = new CompoundObject(objects->getObject(params.at(2).toInt()),
-                                                        objects->getObject(params.at(3).toInt()));
+                                                        objects->getObject(params.at(3).toInt()),CompoundObject::UNION);
                 objects->addObject(co);
             }
         }

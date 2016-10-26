@@ -11,7 +11,7 @@ int RBPrism::getNumOfSides() const
     return numOfSides;
 }
 
-std::pair<RCResult, RCResult> RBPrism::checkIntersection(Ray *ray)
+vector<RCResult> RBPrism::checkIntersection(Ray *ray)
 {
 
 }
@@ -72,7 +72,7 @@ void RBPrism::section(Vec2 **v, double radius)
     }
 }
 
-bool RBPrism::isInside(Vec4 *pos)
+int RBPrism::isInside(Vec4 *pos)
 {
     Vec4 *canon = wo->prod(pos);
 

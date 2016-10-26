@@ -10,7 +10,7 @@ class RayCaster
 public:
     static RCResult cast(Ray *ray, Scene *scene);
 private:
-    static RCResult getNearestIntersection(vector<std::pair<RCResult, RCResult> > results);
+    static RCResult getNearestIntersection(vector<RCResult> results);
 };
 
 #endif // RAYCASTER_H

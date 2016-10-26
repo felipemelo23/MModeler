@@ -17,6 +17,10 @@ public:
     Vec3 *getNormal() const;
     Material *getMaterial() const;
 
+    void setMaterial(Material *value);
+
+    void setNormal(Vec3 *value);
+
 private:
     bool intersected;
     double t;

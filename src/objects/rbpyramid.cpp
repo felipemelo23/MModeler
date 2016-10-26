@@ -12,7 +12,7 @@ int RBPyramid::getNumOfSides() const
     return numOfSides;
 }
 
-std::pair<RCResult, RCResult> RBPyramid::checkIntersection(Ray *ray)
+vector<RCResult> RBPyramid::checkIntersection(Ray *ray)
 {
 
 }
@@ -69,7 +69,7 @@ void RBPyramid::section(Vec2 **v, double radius)
     }
 }
 
-bool RBPyramid::isInside(Vec4 *pos)
+int RBPyramid::isInside(Vec4 *pos)
 {
     bool output = true;
     Vec4 *canon = wo->prod(pos);

@@ -50,7 +50,7 @@ void Object::rotate(double degree, bool x, bool y, bool z)
     delete trash;
 }
 
-std::pair<RCResult, RCResult> Object::checkIntersection(Ray *ray)
+vector<RCResult> Object::checkIntersection(Ray *ray)
 {}
 
 void Object::section(Vec2 **v, double radius) {}

@@ -100,7 +100,7 @@ Ocnode *Ocnode::getChild(int index)
     return NULL;
 }
 
-bool Ocnode::isInside(Vec4 *pos)
+int Ocnode::isInside(Vec4 *pos)
 {
 
 }

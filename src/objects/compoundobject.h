@@ -13,7 +13,8 @@ public:
     CompoundObject(Object *a, Object *b, int op);
     ~CompoundObject();
 
-    bool isInside(Vec4 *pos);
+    int isInside(Vec4 *pos);
+    vector<RCResult> checkIntersection(Ray *ray);
     Vec3 *getMaximumCoords();
     Vec3 *getMinimumCoords();
 
@@ -34,6 +35,8 @@ private:
     int operation;
     Object *a;
     Object *b;
+
+    vector<RCResult> merge(vector<RCResult> aResult,vector<RCResult> bResult);
 };
 
 #endif // COMPOUNDOBJECT_H

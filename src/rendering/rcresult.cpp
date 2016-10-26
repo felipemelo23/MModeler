@@ -51,3 +51,13 @@ Material *RCResult::getMaterial() const
 {
     return material;
 }
+
+void RCResult::setMaterial(Material *value)
+{
+    material = value;
+}
+
+void RCResult::setNormal(Vec3 *value)
+{
+    normal = value;
+}

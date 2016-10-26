@@ -38,7 +38,7 @@ public:
     void classify(vector<Object *> src, int maxDepth,bool hasBoundingBox=false);
     static Ocnode *intersection(Ocnode *A, Ocnode *B);
 
-    bool isInside(Vec4 *pos);
+    int isInside(Vec4 *pos);
     Vec3 *getMinimumCoords();
     Vec3 *getMaximumCoords();
     Vec4 **getVertices();

@@ -92,7 +92,7 @@ bool CSGNode::put(Object *obj, short type, short direction)
     return false;
 }
 
-bool CSGNode::isInside(Vec4 *pos)
+int CSGNode::isInside(Vec4 *pos)
 {
     if(this->type == PRIMITIVE)
     {

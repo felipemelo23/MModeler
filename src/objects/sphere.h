@@ -11,11 +11,11 @@ public:
 
     Vec3 *getMinimumCoords();
     Vec3 *getMaximumCoords();
-    bool isInside(Vec4 *pos);
+    int isInside(Vec4 *pos);
 
     Vec4 **getVertices(int height, int width);
 
-    std::pair<RCResult,RCResult> checkIntersection(Ray *ray);
+    vector<RCResult> checkIntersection(Ray *ray);
 
 };
 

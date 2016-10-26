@@ -93,7 +93,7 @@ Vec3 *Sphere::getMaximumCoords()
     return new Vec3(x,y,z);
 }
 
-bool Sphere::isInside(Vec4 *pos)
+int Sphere::isInside(Vec4 *pos)
 {
     Vec4 *canon = wo->prod(pos);
 
@@ -101,7 +101,10 @@ bool Sphere::isInside(Vec4 *pos)
 
     delete canon;
 
-    return norm <= 0.5;
+    if (fabs(norm - 0.5) <= 0.00001)
+        return -1;
+
+    return (norm - 0.5) <= 0.00001;
 }
 
 Vec4 **Sphere::getVertices(int height, int width)
@@ -139,9 +142,10 @@ Vec4 **Sphere::getVertices(int height, int width)
     return v;
 }
 
-std::pair<RCResult, RCResult> Sphere::checkIntersection(Ray *ray)
+vector<RCResult> Sphere::checkIntersection(Ray *ray)
 {
     Ray *tRay = ray->transform(wo);
+    vector<RCResult> results = vector<RCResult>();
 
     double a = pow(tRay->getDir()->getX(),2) +
                pow(tRay->getDir()->getY(),2) +
@@ -155,7 +159,7 @@ std::pair<RCResult, RCResult> Sphere::checkIntersection(Ray *ray)
 
     double delta = (b*b) - (4*a*c);
 
-    if (delta < 0) return std::make_pair(RCResult(),RCResult());
+    if (delta < 0) return results;
 
     if (delta == 0) {
         double t = -b/(2*a);
@@ -164,23 +168,28 @@ std::pair<RCResult, RCResult> Sphere::checkIntersection(Ray *ray)
         normal->normalize();
 
         delete tRay;
-        return std::make_pair(RCResult(true,t,point,normal,material),RCResult());
+        results.push_back(RCResult(true,t,point,normal,material));
+        return results;
     }
 
-    double t1 = (-b + sqrt(delta))/(2*a);
-    double t2 = (-b - sqrt(delta))/(2*a);
+    double t1 = min((-b + sqrt(delta))/(2*a),(-b - sqrt(delta))/(2*a));
+    double t2 = max((-b + sqrt(delta))/(2*a),(-b - sqrt(delta))/(2*a));
 
-    Vec3 *nearestPoint = ow->prod(tRay->getPoint(min(t1,t2)),1);
+
+    Vec3 *nearestPoint = ow->prod(tRay->getPoint(t1),1);
     Vec3 *nearestNormal = nearestPoint->sub(getOrigin());
+    t1 = ray->getOrigin()->getVec3()->sub(nearestPoint)->getNorm();
     nearestNormal->normalize();
 
-    Vec3 *farthestPoint = ow->prod(tRay->getPoint(max(t1,t2)),1);
+    Vec3 *farthestPoint = ow->prod(tRay->getPoint(t2),1);
     Vec3 *farthestNormal = farthestPoint->sub(getOrigin());
+    t2 = ray->getOrigin()->getVec3()->sub(farthestPoint)->getNorm();
     farthestNormal->normalize();
 
-    return std::make_pair(RCResult(true,min(t1,t2),nearestPoint,nearestNormal,material),
-                          RCResult(true,max(t1,t2),farthestPoint,farthestNormal,material));
+    results.push_back(RCResult(true,t1,nearestPoint,nearestNormal,material));
+    results.push_back(RCResult(true,t2,farthestPoint,farthestNormal,material));
 
+    return results;
 }
 
 

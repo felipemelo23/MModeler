@@ -4,12 +4,15 @@
 RCResult RayCaster::cast(Ray *ray, Scene *scene)
 {
     if (scene->numOfObjects() > 0) {
-        vector<std::pair<RCResult,RCResult> > results = vector<std::pair<RCResult,RCResult> >();
+        vector<RCResult> results = vector<RCResult>();
 
         for (int i=0;i<scene->numOfObjects();i++) {
-            std::pair<RCResult,RCResult> result = scene->getObject(i)->checkIntersection(ray);
+            vector<RCResult> result = scene->getObject(i)->checkIntersection(ray);
 
-            if (result.first.getIntersected()&&(result.first.getT() > 0)) results.push_back(result);
+            if ((result.size() > 0) && (result.at(0).getT() > 0)) {
+                for (int j=0;j<result.size();j++)
+                    results.push_back(result.at(j));
+            }
         }
 
         return getNearestIntersection(results);
@@ -18,13 +21,12 @@ RCResult RayCaster::cast(Ray *ray, Scene *scene)
     return RCResult();
 }
 
-RCResult RayCaster::getNearestIntersection(vector<std::pair<RCResult,RCResult> > results) {
+RCResult RayCaster::getNearestIntersection(vector<RCResult> results) {
     if (results.size() > 0) {
-        RCResult result = results.at(0).first;
-
+        RCResult result = results.at(0);
 
         for (int i=1;i<results.size();i++) {
-            if (results.at(i).first.getT() < result.getT()) result = results.at(i).first;
+            if (results.at(i).getT() < result.getT()) result = results.at(i);
         }
 
         return result;
