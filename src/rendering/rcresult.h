@@ -10,6 +10,7 @@ public:
     RCResult();
     RCResult(double t);
     RCResult(bool intersected, double t, Vec3 *point, Vec3 *normal, Material *material);
+    ~RCResult();
 
     bool getIntersected() const;
     double getT() const;

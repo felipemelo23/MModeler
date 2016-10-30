@@ -305,6 +305,11 @@ Ocnode* Ocnode::intersection(Ocnode *A, Ocnode *B)
     return octree;
 }
 
+bool Ocnode::getIsRoot() const
+{
+    return isRoot;
+}
+
 vector<Ocnode*> *Ocnode::getCommonChildren(Ocnode* A, Ocnode *B) {
     vector<Ocnode*> *commonChildren = new vector<Ocnode*>();
 

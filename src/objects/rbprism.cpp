@@ -45,6 +45,17 @@ vector<RCResult> RBPrism::checkIntersection(Ray *ray)
 
     results = sort(results);
 
+    for (int i=0;i<numOfSides*2;i++)
+        delete v[i];
+    delete v;
+
+    for (int i=0;i<numOfSides+2;i++)
+        delete faces[i];
+    delete faces;
+    delete bottomVertices;
+    delete topVertices;
+    delete bottomInv;
+
     return results;
 }
 

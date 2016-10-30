@@ -116,14 +116,19 @@ vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
 Vec3 *CompoundObject::getMaximumCoords()
 {
     Vec3 *maxA = a->getMaximumCoords();
-    Vec3 *maxB = b->getMaximumCoords();
+    Vec3 *maxCoords;
+    if (operation != DIFFERENCE) {
+        Vec3 *maxB = b->getMaximumCoords();
 
-    Vec3 *maxCoords = new Vec3(max(maxA->getX(),maxB->getX()),
-                               max(maxA->getY(),maxB->getY()),
-                               max(maxA->getZ(),maxB->getZ()));
+        maxCoords = new Vec3(max(maxA->getX(),maxB->getX()),
+                                 max(maxA->getY(),maxB->getY()),
+                                 max(maxA->getZ(),maxB->getZ()));
 
-    delete maxA;
-    delete maxB;
+        delete maxA;
+        delete maxB;
+    } else {
+        maxCoords = maxA;
+    }
 
     return maxCoords;
 }
@@ -131,14 +136,20 @@ Vec3 *CompoundObject::getMaximumCoords()
 Vec3 *CompoundObject::getMinimumCoords()
 {
     Vec3 *minA = a->getMinimumCoords();
-    Vec3 *minB = b->getMinimumCoords();
+    Vec3 *minCoords;
 
-    Vec3 *minCoords = new Vec3(min(minA->getX(),minB->getX()),
-                               min(minA->getY(),minB->getY()),
-                               min(minA->getZ(),minB->getZ()));
+    if (operation != DIFFERENCE) {
+        Vec3 *minB = b->getMinimumCoords();
 
-    delete minA;
-    delete minB;
+        minCoords = new Vec3(min(minA->getX(),minB->getX()),
+                                 min(minA->getY(),minB->getY()),
+                                 min(minA->getZ(),minB->getZ()));
+
+        delete minA;
+        delete minB;
+    } else {
+        minCoords = minA;
+    }
 
     return minCoords;
 }

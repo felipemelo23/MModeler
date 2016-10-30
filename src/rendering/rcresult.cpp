@@ -27,6 +27,9 @@ RCResult::RCResult(bool intersected, double t, Vec3 *point, Vec3 *normal, Materi
     this->material = material;
 }
 
+RCResult::~RCResult()
+{}
+
 bool RCResult::getIntersected() const
 {
     return intersected;

@@ -1,5 +1,7 @@
+#include "glboxadapter.h"
 #include "glcompoundobject.h"
 #include "glcompoundobjectadapter.h"
+#include "glcylinderadapter.h"
 #include "glrbprismadapter.h"
 #include "glrbpyramidadapter.h"
 #include "glsphereadapter.h"
@@ -35,7 +37,11 @@ glObject *glCompoundObjectAdapter::adaptSubObject(Object *obj)
     case Object::COMPOUND:
         o = glCompoundObjectAdapter::adapt((CompoundObject*)obj);
         break;
-    default:
+    case Object::BOX:
+        o = glBoxAdapter::adapt((Box*)obj);
+        break;
+    case Object::CYLINDER:
+        o = glCylinderAdapter::adapt((Cylinder*)obj);
         break;
     }
 

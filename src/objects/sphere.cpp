@@ -104,7 +104,7 @@ int Sphere::isInside(Vec4 *pos)
     if (fabs(norm - 0.5) <= 0.00001)
         return -1;
 
-    return (norm - 0.5) <= 0.00001;
+    return norm < 0.5;
 }
 
 Vec4 **Sphere::getVertices(int height, int width)
@@ -175,7 +175,6 @@ vector<RCResult> Sphere::checkIntersection(Ray *ray)
     double t1 = min((-b + sqrt(delta))/(2*a),(-b - sqrt(delta))/(2*a));
     double t2 = max((-b + sqrt(delta))/(2*a),(-b - sqrt(delta))/(2*a));
 
-
     Vec3 *nearestPoint = ow->prod(tRay->getPoint(t1),1);
     Vec3 *nearestNormal = nearestPoint->sub(getOrigin());
     t1 = ray->getOrigin()->getVec3()->sub(nearestPoint)->getNorm();
@@ -188,6 +187,8 @@ vector<RCResult> Sphere::checkIntersection(Ray *ray)
 
     results.push_back(RCResult(true,t1,nearestPoint,nearestNormal,material));
     results.push_back(RCResult(true,t2,farthestPoint,farthestNormal,material));
+
+    delete tRay;
 
     return results;
 }

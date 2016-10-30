@@ -31,7 +31,6 @@ public:
     bool hasDirts();
     pair<int, int> popDirt();
     void pushDirt(int value, int mode);
-
 private:
     vector<Object*> *objects;
     vector<int> *selecteds;

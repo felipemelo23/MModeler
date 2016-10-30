@@ -24,10 +24,23 @@ RCResult RayCaster::cast(Ray *ray, Scene *scene)
 RCResult RayCaster::getNearestIntersection(vector<RCResult> results) {
     if (results.size() > 0) {
         RCResult result = results.at(0);
+        int iNearest = 0;
 
         for (int i=1;i<results.size();i++) {
-            if (results.at(i).getT() < result.getT()) result = results.at(i);
+            if (results.at(i).getT() < result.getT()) {
+                result = results.at(i);
+                iNearest = i;
+            }
         }
+
+        for (int i=0;i<results.size();i++) {
+            if (i!=iNearest) {
+                delete results.at(i).getPoint();
+                delete results.at(i).getNormal();
+            }
+        }
+
+
 
         return result;
     }

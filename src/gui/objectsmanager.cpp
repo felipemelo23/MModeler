@@ -34,8 +34,10 @@ void ObjectsManager::removeObject(int index)
 {
     if (objects->size() > 0) {
         removeSelected(index);
-        if (index < objects->size())
+        if (index < objects->size()) {
             objects->erase(objects->begin()+index);
+            pushDirt(index,-1);
+        }
     }
 }
 

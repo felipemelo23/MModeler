@@ -42,7 +42,6 @@ public:
 
     virtual void section(Vec2 **v, double radius=0.5);
 
-
     static const int SPHERE = 0;
     static const int RBPRISM = 1;
     static const int RBPYRAMID = 2;
@@ -51,6 +50,7 @@ public:
     static const int CYLINDER = 5;
     static const int COMPOUND = 6;
     static const int CSGTREE = 7;
+    static const int BOX = 8;
 
     Material *getMaterial() const;
     void setMaterial(Material *value);

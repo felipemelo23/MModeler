@@ -2,7 +2,9 @@
 
 #include <iostream>
 
+#include <visualization/glboxadapter.h>
 #include <visualization/glcompoundobjectadapter.h>
+#include <visualization/glcylinderadapter.h>
 #include <visualization/gloctreeadapter.h>
 #include <visualization/glrbprismadapter.h>
 #include <visualization/glrbpyramidadapter.h>
@@ -310,9 +312,9 @@ void glDisplayWidget::initDisplay() {
     glEnable(GL_LIGHT3);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
-    glEnable (GL_BLEND);
+//    glEnable (GL_BLEND);
 
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
     GLfloat mat_ambient[] = { 0.6, 0.6, 0.6, 1.0};
@@ -364,6 +366,12 @@ void glDisplayWidget::checkDirts() {
             case Object::COMPOUND:
                 newObj = glCompoundObjectAdapter::adapt((CompoundObject*)objects->getObject(i));
                 break;
+            case Object::BOX:
+                newObj = glBoxAdapter::adapt((Box*)objects->getObject(i));
+                break;
+            case Object::CYLINDER:
+                newObj = glCylinderAdapter::adapt((Cylinder*)objects->getObject(i));
+                break;
             }
 
             if (mode == 1) {
@@ -376,6 +384,11 @@ void glDisplayWidget::checkDirts() {
                 } while (color[0] + color[1] + color[2] > 2);
 
                 newObj->setColor(color);
+                Color *c = new Color(color[0],color[1],color[2]);
+                objects->getObject(i)->setMaterial(new Material(c->prod(0.4),
+                                                                c->prod(0.6),
+                                                                c->prod(0.0),5));
+                delete c;
                 scene->addObject(newObj);
             } else {
                 newObj->setColor(scene->getObject(i)->getColor());

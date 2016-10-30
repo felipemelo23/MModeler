@@ -15,7 +15,6 @@ void Delete::execute(QStringList params, ObjectsManager *objects)
                 if ((objects->numOfObjects() > 0)&&(objId < objects->numOfObjects())) {
                     objects->removeSelected(objId);
                     objects->removeObject(objId);
-                    objects->pushDirt(objId,-1);
                 }
 
             }
@@ -24,7 +23,6 @@ void Delete::execute(QStringList params, ObjectsManager *objects)
             if ((objects->numOfObjects() > 0)&&(params.at(i).toInt() < objects->numOfObjects())) {
                 objects->removeSelected(params.at(i).toInt());
                 objects->removeObject(params.at(i).toInt());
-                objects->pushDirt(params.at(i).toInt(),-1);
             }
         }
     }

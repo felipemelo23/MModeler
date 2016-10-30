@@ -70,7 +70,15 @@ SOURCES += main.cpp\
     rendering/color.cpp \
     rendering/light.cpp \
     rendering/render.cpp \
-    objects/face.cpp
+    objects/face.cpp \
+    gui/octreedialog.cpp \
+    gui/translatedialog.cpp \
+    gui/rotatedialog.cpp \
+    gui/csgdialog.cpp \
+    objects/box.cpp \
+    visualization/glboxadapter.cpp \
+    objects/cylinder.cpp \
+    visualization/glcylinderadapter.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -127,9 +135,21 @@ HEADERS  += gui/mainwindow.h \
     rendering/color.h \
     rendering/light.h \
     rendering/render.h \
-    objects/face.h
+    objects/face.h \
+    gui/octreedialog.h \
+    gui/translatedialog.h \
+    gui/rotatedialog.h \
+    gui/csgdialog.h \
+    objects/box.h \
+    visualization/glboxadapter.h \
+    objects/cylinder.h \
+    visualization/glcylinderadapter.h
 
-FORMS    += gui/mainwindow.ui
+FORMS    += gui/mainwindow.ui \
+    gui/octreedialog.ui \
+    gui/translatedialog.ui \
+    gui/rotatedialog.ui \
+    gui/csgdialog.ui
 
 RESOURCES += \
     assets.qrc

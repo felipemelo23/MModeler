@@ -7,6 +7,7 @@ Face::Face(int sides, Vec4 **v, Material *material)
 {
     this->sides = sides;
     this->vertices = v;
+    this->material = material;
 }
 
 Face::Face(int sides, Material *material, Vec4 *v1, Vec4 *v2, Vec4 *v3, ...)
@@ -34,6 +35,11 @@ Face::Face(int sides, Material *material, Vec4 *v1, Vec4 *v2, Vec4 *v3, ...)
     }
 }
 
+Face::~Face()
+{
+    //delete vertices;
+}
+
 int Face::getSides() const
 {
     return sides;
@@ -56,6 +62,7 @@ RCResult Face::checkIntersection(Ray *ray)
 
         if (isInside(point))
             return RCResult(true,t,point->getVec3(),normal,material);
+
     }
 
     return RCResult();

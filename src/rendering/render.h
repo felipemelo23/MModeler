@@ -18,6 +18,8 @@ public:
     QColor getBackgroundColor() const;
     void setBackgroundColor(const QColor &value);
 
+    void setScene(Scene *value);
+
 private:
     Scene *scene;
     Camera *camera;

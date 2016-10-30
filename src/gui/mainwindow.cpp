@@ -1,4 +1,8 @@
+#include "csgdialog.h"
 #include "mainwindow.h"
+#include "octreedialog.h"
+#include "rotatedialog.h"
+#include "translatedialog.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QInputDialog>
@@ -32,42 +36,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpenSF,SIGNAL(triggered(bool)),this,SLOT(openSceneFile()));
     connect(ui->actionSaveSF,SIGNAL(triggered(bool)),this,SLOT(saveSceneFile()));
 
-    Object *sphere1 = new Sphere();
-    sphere1->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
-    sphere1->translate(0,0,0);
+    camera = NULL;
 
-    Object *sphere2 = new Sphere();
-    sphere2->setMaterial(new Material(new Color(0,0.3,0),new Color(0,0.6,0),new Color(0.8,0.9,0.8),1));
-    sphere2->translate(0,0,0);
+    image = new QImage(200,200,QImage::Format_RGB32);
 
-    Object *pyramid = new RBPyramid(6);
-    pyramid->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
-    pyramid->translate(0.5,0,0);
+    render = new Render(NULL,camera,image);
 
-    Object *prism = new RBPrism(3);
-    prism->setMaterial(new Material(new Color(0.3,0,0),new Color(0.6,0,0),new Color(0.9,0.8,0.8),10));
-    prism->translate(-0.5,0,0);
-
-    Object *unionSphere = new CompoundObject(sphere2,pyramid,CompoundObject::DIFFERENCE);
-
-    Light *light1 = new Light(new Vec3(10,10,10),new Color(1,1,1),0.8);
-
-    Scene *scene = new Scene();
-
-    //scene->addObject(unionSphere);
-    scene->addObject(prism);
-    scene->addObject(pyramid);
-    scene->addLight(light1);
-
-    Camera *camera = new Camera(new Vec3(0,0,2),new Vec3(0,0,0),new Vec3(0,1,0));
-
-    QImage *image = new QImage(200,200,QImage().Format_RGB32);
-
-    Render *r = new Render(scene,camera,image);
-
-    //r->render();
-
-    ui->canvas->setPixmap(QPixmap::fromImage(*image));
+    ambLight = NULL;
+    light = NULL;
 }
 
 MainWindow::~MainWindow()
@@ -234,35 +210,13 @@ void MainWindow::createOctreeRep(QTreeWidgetItem *item,Ocnode *node) {
 
 void MainWindow::on_objectsTree_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-    cout << item->text(0).toStdString() << endl;
+
 }
 
 void MainWindow::on_insertSphereBtn_clicked()
 {
     ui->cmdFeed->setText("insert sphere");
     feedCommand();
-}
-
-void MainWindow::on_insertPrismBtn_clicked()
-{
-    bool ok;
-    int sides = QInputDialog::getInt(this,tr("Insert Prism"),tr("Number of Sides"),0,3,50,1,&ok);
-
-    if (ok) {
-        ui->cmdFeed->setText("insert prism " + QString::number(sides));
-        feedCommand();
-    }
-}
-
-void MainWindow::on_insertPyramidBtn_clicked()
-{
-    bool ok;
-    int sides = QInputDialog::getInt(this,tr("Insert Pyramid"),tr("Number of Sides"),0,3,50,1,&ok);
-
-    if (ok) {
-        ui->cmdFeed->setText("insert pyramid " + QString::number(sides));
-        feedCommand();
-    }
 }
 
 void MainWindow::on_delBtn_clicked()
@@ -274,4 +228,171 @@ void MainWindow::on_delBtn_clicked()
         ui->cmdFeed->setText("del " + QString::number(id));
         feedCommand();
     }
+}
+
+void MainWindow::on_renderBtn_clicked()
+{
+    Scene *scene = new Scene();
+
+    if (objects->numOfObjects() > 0) {
+        for (int i=0;i<objects->numOfObjects();i++) {
+            if ((objects->getObject(i)->getType() == Object::SPHERE)||
+                (objects->getObject(i)->getType() == Object::RBPRISM)||
+                (objects->getObject(i)->getType() == Object::RBPYRAMID)||
+                (objects->getObject(i)->getType() == Object::COMPOUND)||
+                (objects->getObject(i)->getType() == Object::BOX)||
+                (objects->getObject(i)->getType() == Object::CYLINDER))
+                scene->addObject(objects->getObject(i));
+        }
+    }
+
+    if (ambLight != NULL) delete ambLight;
+    ambLight = new AmbientLight(new Color(ui->ambLightRed->value(),ui->ambLightGreen->value(),ui->ambLightBlue->value()),1);
+
+    if (light != NULL) delete light;
+    light = new Light(new Vec3(ui->xLightPos->value(),ui->yLightPos->value(),ui->zLightPos->value()),
+                      new Color(ui->pontualLightRed->value(),ui->pontualLightGreen->value(),ui->pontualLightBlue->value()),1);
+
+    scene->setAmbLight(ambLight);
+    scene->addLight(light);
+
+    camera = new Camera(new Vec3(ui->xCamPos->value(),ui->yCamPos->value(),ui->zCamPos->value()),
+                        new Vec3(ui->xCamLookAt->value(),ui->yCamLookAt->value(),ui->zCamLookAt->value()),
+                        new Vec3(ui->xCamVUp->value(),ui->yCamVUp->value(),ui->zCamVUp->value()));
+
+    render = new Render(scene,camera,image);
+
+    render->render();
+
+    ui->canvas->setPixmap(QPixmap::fromImage(*image));
+}
+
+void MainWindow::on_insertOctreeBtn_clicked()
+{
+    int targetId;
+    int octreeDepth;
+    OctreeDialog *od = new OctreeDialog(this,&targetId,&octreeDepth);
+
+    od->exec();
+
+    if (od->getOk()) {
+        switch (od->getOperation()) {
+        case OctreeDialog::OCTREE:
+            ui->cmdFeed->setText("insert octree " + QString::number(targetId) + " " + QString::number(octreeDepth));
+            break;
+        case OctreeDialog::EMPTY_OCTREE:
+            ui->cmdFeed->setText("insert octree " + QString::number(od->getOctreeSize()));
+            break;
+        }
+
+        feedCommand();
+    }
+
+    delete od;
+}
+
+void MainWindow::on_objectsTree_itemClicked(QTreeWidgetItem *item, int column)
+{
+    if (item->parent() == 0) {
+        QStringList test = item->text(0).split(" ");
+        int id = ((QString) test.last()).toInt();
+
+        if (!objects->isSelected(id))
+            ui->cmdFeed->setText("select " + QString::number(id));
+        else
+            ui->cmdFeed->setText("deselect " + QString::number(id));
+
+        feedCommand();
+    }
+}
+
+void MainWindow::on_translBtn_clicked()
+{
+    double x,y,z;
+
+    TranslateDialog *td = new TranslateDialog(this,&x,&y,&z);
+
+    td->exec();
+
+    if (td->getOk()) {
+        ui->cmdFeed->setText("translate " + QString::number(x) + " "
+                             + QString::number(y) + " " + QString::number(z));
+        feedCommand();
+    }
+
+    delete td;
+}
+
+void MainWindow::on_sclBtn_clicked()
+{
+    double x,y,z;
+
+    TranslateDialog *sd = new TranslateDialog(this,&x,&y,&z);
+
+    sd->setScaleDialog();
+
+    sd->exec();
+
+    if (sd->getOk()) {
+        ui->cmdFeed->setText("scale " + QString::number(x) + " "
+                             + QString::number(y) + " " + QString::number(z));
+        feedCommand();
+    }
+
+    delete sd;
+}
+
+void MainWindow::on_rotBtn_clicked()
+{
+    double amount;
+    QString axis;
+
+    RotateDialog *rd = new RotateDialog(this,&amount,&axis);
+
+    rd->exec();
+
+    if (rd->getOk()) {
+        ui->cmdFeed->setText("rotate " + QString::number(amount) + " " + axis);
+        feedCommand();
+    }
+
+    delete rd;
+}
+
+void MainWindow::on_insertCSGBtn_clicked()
+{
+    int objA, objB, op;
+
+    CsgDialog *cd = new CsgDialog(this,&objA,&objB,&op);
+
+    cd->exec();
+
+    if (cd->getOk()) {
+        QString mode;
+
+        if (op == CompoundObject::INTERSECT)
+            mode = "i";
+        else if (op == CompoundObject::DIFFERENCE)
+            mode = "d";
+        else
+            mode = "u";
+
+        ui->cmdFeed->setText("insert csg " + QString::number(objA) + " " + QString::number(objB) + " " + mode);
+
+        feedCommand();
+    }
+
+    delete cd;
+}
+
+void MainWindow::on_insertBoxBtn_clicked()
+{
+    ui->cmdFeed->setText("insert box");
+    feedCommand();
+}
+
+void MainWindow::on_insertCylinderBtn_clicked()
+{
+    ui->cmdFeed->setText("insert cylinder");
+    feedCommand();
 }

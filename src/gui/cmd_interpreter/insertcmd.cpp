@@ -1,6 +1,8 @@
 #include "insertcmd.h"
 #include <iostream>
+#include <objects/box.h>
 #include <objects/compoundobject.h>
+#include <objects/cylinder.h>
 
 using namespace std;
 
@@ -40,14 +42,36 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
                 objects->addObject(o);
             }
         }
-        if (objType == "compound") {
-            if ((params.size() == 4)&&
+        if (objType == "csg") {
+            if ((params.size() == 5)&&
                 (params.at(2).toInt() < objects->numOfObjects())&&
                 (params.at(3).toInt() < objects->numOfObjects())) {
+                int mode;
+
+                if (params.at(4).toStdString() == "i")
+                    mode = CompoundObject::INTERSECT;
+                else if (params.at(4).toStdString() == "d")
+                    mode = CompoundObject::DIFFERENCE;
+                else
+                    mode = CompoundObject::UNION;
+
                 CompoundObject *co = new CompoundObject(objects->getObject(params.at(2).toInt()),
-                                                        objects->getObject(params.at(3).toInt()),CompoundObject::UNION);
+                                                        objects->getObject(params.at(3).toInt()),mode);
+
+                int last = max(params.at(2).toInt(),params.at(3).toInt());
+                int front = min(params.at(2).toInt(),params.at(3).toInt());
+
+                objects->removeObject(last);
+                objects->removeObject(front);
+
                 objects->addObject(co);
             }
+        }
+        if (objType == "box") {
+            objects->addObject(new Box());
+        }
+        if (objType == "cylinder") {
+            objects->addObject(new Cylinder());
         }
     }
 }

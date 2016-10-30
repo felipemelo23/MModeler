@@ -82,10 +82,21 @@ QColor Render::calculatePhong(RCResult income)
 
             Id->sum_(light->getColor()->prod(income.getMaterial()->getDiffuse())->prod(max(income.getNormal()->dot(lightDir),0.0))->prod(light->getIntensity()));
             Is->sum_(light->getColor()->prod(income.getMaterial()->getSpecular())->prod(pow(max(reflect->dot(eye),0.0),income.getMaterial()->getShininess()))->prod(light->getIntensity()));
+
+            delete lightDir;
+            delete reflect;
         }
     }
 
     I = Ia->sum(Id)->sum(Is);
+
+    delete eye;
+    delete Ia;
+    delete Id;
+    delete Is;
+
+    delete income.getNormal();
+    delete income.getPoint();
 
     return QColor(255*min(I->getRed(),1.0),255*min(I->getGreen(),1.0),255*min(I->getBlue(),1.0));
 }
@@ -98,6 +109,11 @@ QColor Render::getBackgroundColor() const
 void Render::setBackgroundColor(const QColor &value)
 {
     backgroundColor = value;
+}
+
+void Render::setScene(Scene *value)
+{
+    scene = value;
 }
 
 
