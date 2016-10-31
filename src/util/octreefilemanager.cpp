@@ -1,11 +1,5 @@
 #include "octreefilemanager.h"
 
-#include <QStringList>
-
-#include <iostream>
-
-using namespace std;
-
 OctreeFileManager::OctreeFileManager(QString filename)
 {
     this->filename = filename;

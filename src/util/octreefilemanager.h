@@ -3,8 +3,6 @@
 
 #include <util/filemanager.h>
 #include <objects/ocnode.h>
-#include <fstream>
-#include <queue>
 
 class OctreeFileManager : public FileManager
 {
