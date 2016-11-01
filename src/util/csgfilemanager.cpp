@@ -23,9 +23,11 @@ void CSGFileManager::load()
 
     getline(file,line);
     do {
-        QStringList tokens = QString::fromStdString(line).split(" ");
-        if (tokens.size() > 0) parseCSGTree(tokens);
-        getline(file,line);
+        if (line[0] != '#') {
+            QStringList tokens = QString::fromStdString(line).split(" ");
+            if (tokens.size() > 0) parseCSGTree(tokens);
+            getline(file,line);
+        }
     } while (!file.eof());
 
     file.close();
@@ -86,7 +88,18 @@ void CSGFileManager::parseCSGTree(QStringList tokens)
             objects.top()->scale(2*r,h,2*r);
             objects.top()->translate(x,0.5+y,z);
         } else if (tokens.at(0) == "O") {
+            double x = tokens.at(1).toDouble();
+            double y = tokens.at(2).toDouble();
+            double z = tokens.at(3).toDouble();
+            double s = tokens.at(4).toDouble();
 
+            for (int i=0;i<5;i++) {
+                tokens.erase(tokens.begin());
+            }
+
+            objects.push(new Box());
+            objects.top()->scale(s,s,s);
+            objects.top()->translate(x,y,z);
         } else if (tokens.at(0) == "u") {
             Object *A = objects.top();
             objects.pop();

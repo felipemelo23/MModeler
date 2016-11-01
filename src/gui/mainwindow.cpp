@@ -212,7 +212,6 @@ void MainWindow::updateObjectsTree() {
 }
 
 void MainWindow::createCSGRep(QTreeWidgetItem *item,Object *obj) {
-    //item = new QTreeWidgetItem();
     item->setText(0,obj->getName());
 
     if (obj->getType() == Object::COMPOUND) {
