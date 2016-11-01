@@ -149,48 +149,60 @@ vector<RCResult> Box::checkIntersection(Ray *ray)
 
     if (tRay->getDir()->getX() != 0) {
         double t = (0.5 - tRay->getOrigin()->getX())/tRay->getDir()->getX();
-        Vec3 *pT = ow->prod(tRay->getPoint(t),1);
-        if ((pT->getY() >= -0.5)&&(pT->getY() <= 0.5)&&
-            (pT->getZ() >= -0.5)&&(pT->getZ() <= 0.5)) {
+        Vec3 *pT = tRay->getPoint(t);
+        if ((fabs(pT->getY()) <= 0.5)&&(fabs(pT->getZ()) <= 0.5)) {
+            Vec3 *trash = pT;
+            pT = ow->prod(pT,1);
+            delete trash;
             results.push_back(RCResult(true,ray->getOrigin()->getVec3()->sub(pT)->getNorm(),pT,ow->prod(new Vec3(1,0,0),0),material));
         }
 
         t = (-0.5 - tRay->getOrigin()->getX())/tRay->getDir()->getX();
-        pT = ow->prod(tRay->getPoint(t),1);
-        if ((pT->getY() >= -0.5)&&(pT->getY() <= 0.5)&&
-            (pT->getZ() >= -0.5)&&(pT->getZ() <= 0.5)) {
+        pT = tRay->getPoint(t);
+        if ((fabs(pT->getY()) <= 0.5)&&(fabs(pT->getZ()) <= 0.5)) {
+            Vec3 *trash = pT;
+            pT = ow->prod(pT,1);
+            delete trash;
             results.push_back(RCResult(true,ray->getOrigin()->getVec3()->sub(pT)->getNorm(),pT,ow->prod(new Vec3(-1,0,0),0),material));
         }
     }
 
     if (tRay->getDir()->getY() != 0) {
         double t = (0.5 - tRay->getOrigin()->getY())/tRay->getDir()->getY();
-        Vec3 *pT = ow->prod(tRay->getPoint(t),1);
-        if ((pT->getX() >= -0.5)&&(pT->getX() <= 0.5)&&
-            (pT->getZ() >= -0.5)&&(pT->getZ() <= 0.5)) {
+        Vec3 *pT = tRay->getPoint(t);
+        if ((fabs(pT->getX()) <= 0.5)&&(fabs(pT->getZ()) <= 0.5)) {
+            Vec3 *trash = pT;
+            pT = ow->prod(pT,1);
+            delete trash;
             results.push_back(RCResult(true,ray->getOrigin()->getVec3()->sub(pT)->getNorm(),pT,ow->prod(new Vec3(0,1,0),0),material));
         }
 
         t = (-0.5 - tRay->getOrigin()->getY())/tRay->getDir()->getY();
-        pT = ow->prod(tRay->getPoint(t),1);
-        if ((pT->getX() >= -0.5)&&(pT->getX() <= 0.5)&&
-            (pT->getZ() >= -0.5)&&(pT->getZ() <= 0.5)) {
+        pT = tRay->getPoint(t);
+        if ((fabs(pT->getX()) <= 0.5)&&(fabs(pT->getZ()) <= 0.5)) {
+            Vec3 *trash = pT;
+            pT = ow->prod(pT,1);
+            delete trash;
             results.push_back(RCResult(true,ray->getOrigin()->getVec3()->sub(pT)->getNorm(),pT,ow->prod(new Vec3(0,-1,0),0),material));
         }
     }
 
     if (tRay->getDir()->getZ() != 0) {
         double t = (0.5 - tRay->getOrigin()->getZ())/tRay->getDir()->getZ();
-        Vec3 *pT = ow->prod(tRay->getPoint(t),1);
-        if ((pT->getX() >= -0.5)&&(pT->getX() <= 0.5)&&
-            (pT->getY() >= -0.5)&&(pT->getY() <= 0.5)) {
+        Vec3 *pT = tRay->getPoint(t);
+        if ((fabs(pT->getX()) <= 0.5)&&(fabs(pT->getY()) <= 0.5)) {
+            Vec3 *trash = pT;
+            pT = ow->prod(pT,1);
+            delete trash;
             results.push_back(RCResult(true,ray->getOrigin()->getVec3()->sub(pT)->getNorm(),pT,ow->prod(new Vec3(0,0,1),0),material));
         }
 
         t = (-0.5 - tRay->getOrigin()->getZ())/tRay->getDir()->getZ();
-        pT = ow->prod(tRay->getPoint(t),1);
-        if ((pT->getX() >= -0.5)&&(pT->getX() <= 0.5)&&
-            (pT->getY() >= -0.5)&&(pT->getY() <= 0.5)) {
+        pT = tRay->getPoint(t);
+        if ((fabs(pT->getX()) <= 0.5)&&(fabs(pT->getY()) <= 0.5)) {
+            Vec3 *trash = pT;
+            pT = ow->prod(pT,1);
+            delete trash;
             results.push_back(RCResult(true,ray->getOrigin()->getVec3()->sub(pT)->getNorm(),pT,ow->prod(new Vec3(0,0,-1),0),material));
         }
     }

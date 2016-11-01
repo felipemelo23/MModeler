@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     camera = NULL;
 
-    image = new QImage(200,200,QImage::Format_RGB32);
+    image = new QImage(250,250,QImage::Format_RGB32);
 
     render = new Render(NULL,camera,image);
 
