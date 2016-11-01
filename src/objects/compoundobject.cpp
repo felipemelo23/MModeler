@@ -187,6 +187,11 @@ void CompoundObject::rotate(double degree, bool x, bool y, bool z)
     b->rotate(degree,x,y,z);
 }
 
+int CompoundObject::getOperation() const
+{
+    return operation;
+}
+
 vector<RCResult> CompoundObject::merge(vector<RCResult> aResult, vector<RCResult> bResult)
 {
     vector<RCResult> sortedResults = vector<RCResult>();

@@ -31,6 +31,8 @@ public:
     static const int INTERSECT = 1;
     static const int DIFFERENCE = 2;
 
+    int getOperation() const;
+
 private:
     int operation;
     Object *a;

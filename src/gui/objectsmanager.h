@@ -34,7 +34,7 @@ public:
 private:
     vector<Object*> *objects;
     vector<int> *selecteds;
-    queue<pair<int,int> > *dirts;
+    vector<pair<int,int> > *dirts;
 
 };
 

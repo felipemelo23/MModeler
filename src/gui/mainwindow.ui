@@ -192,7 +192,7 @@
           <item>
            <widget class="QLineEdit" name="cmdFeed">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="minimumSize">
              <size>
@@ -730,6 +730,7 @@
      </property>
      <addaction name="actionOpenSF"/>
      <addaction name="actionOpenOF"/>
+     <addaction name="actionOpenCF"/>
     </widget>
     <widget class="QMenu" name="menuSave">
      <property name="title">
@@ -761,6 +762,11 @@
   <action name="actionSaveSF">
    <property name="text">
     <string>Scene File</string>
+   </property>
+  </action>
+  <action name="actionOpenCF">
+   <property name="text">
+    <string>CSG File</string>
    </property>
   </action>
  </widget>

@@ -35,12 +35,14 @@ private:
 
     void updateObjectsTree();
     void createOctreeRep(QTreeWidgetItem *item, Ocnode *node);
+    void createCSGRep(QTreeWidgetItem *item, Object *obj);
 private slots:
     void feedCommand();
     void openOctreeFile();
     void saveOctreeFile();
     void openSceneFile();
     void saveSceneFile();
+    void openCSGFile();
     void on_objectsTree_itemDoubleClicked(QTreeWidgetItem *item, int column);
     void on_insertSphereBtn_clicked();
     void on_delBtn_clicked();
@@ -53,6 +55,7 @@ private slots:
     void on_insertCSGBtn_clicked();
     void on_insertBoxBtn_clicked();
     void on_insertCylinderBtn_clicked();
+    void on_cmdFeed_returnPressed();
 };
 
 #endif // MAINWINDOW_H

@@ -1,10 +1,12 @@
 #include "objectsmanager.h"
 
+#include <QThread>
+
 ObjectsManager::ObjectsManager()
 {
     objects = new vector<Object*>();
     selecteds = new vector<int>();
-    dirts = new queue<pair<int,int> >();
+    dirts = new vector<pair<int,int> >();
 }
 
 ObjectsManager::~ObjectsManager()
@@ -36,6 +38,10 @@ void ObjectsManager::removeObject(int index)
         removeSelected(index);
         if (index < objects->size()) {
             objects->erase(objects->begin()+index);
+            for (int i=0;i<dirts->size();i++) {
+                if ((dirts->at(i).first == index)&&(dirts->at(i).second > -1))
+                    dirts->erase(dirts->begin()+i);
+            }
             pushDirt(index,-1);
         }
     }
@@ -103,7 +109,7 @@ bool ObjectsManager::hasDirts()
 pair<int,int> ObjectsManager::popDirt()
 {
     pair<int,int> front = dirts->front();
-    dirts->pop();
+    dirts->erase(dirts->begin());
     return front;
 }
 
@@ -113,5 +119,5 @@ pair<int,int> ObjectsManager::popDirt()
 */
 void ObjectsManager::pushDirt(int value, int mode)
 {
-    dirts->push(std::make_pair(value,mode));
+    dirts->push_back(std::make_pair(value,mode));
 }

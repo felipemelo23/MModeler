@@ -3,6 +3,7 @@
 #include "octreecmd.h"
 #include "selfrotate.h"
 #include "selfscale.h"
+#include <QThread>
 #include <iostream>
 
 using namespace std;

@@ -15,6 +15,7 @@
 #include <rendering/light.h>
 #include <rendering/render.h>
 #include <rendering/scene.h>
+#include <util/csgfilemanager.h>
 #include <util/objectquery.h>
 #include <util/octreefilemanager.h>
 #include <util/scenefilemanager.h>
@@ -35,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSaveOF,SIGNAL(triggered(bool)),this,SLOT(saveOctreeFile()));
     connect(ui->actionOpenSF,SIGNAL(triggered(bool)),this,SLOT(openSceneFile()));
     connect(ui->actionSaveSF,SIGNAL(triggered(bool)),this,SLOT(saveSceneFile()));
+    connect(ui->actionOpenCF,SIGNAL(triggered(bool)),this,SLOT(openCSGFile()));
 
     camera = NULL;
 
@@ -140,6 +142,25 @@ void MainWindow::saveSceneFile()
     }
 }
 
+void MainWindow::openCSGFile()
+{
+    QFileDialog *openDialog = new QFileDialog(this);
+
+    QString filename = openDialog->getOpenFileName(this,tr("Carregar CSG"),"",tr("Arquivo de CSG (*.csg)"));
+
+    if (!filename.isEmpty()) {
+        CSGFileManager sfm(filename);
+
+        sfm.load();
+
+        for (int i=0;i<sfm.getCompoundObjs().size();i++) {
+            objects->addObject(sfm.getCompoundObjs().at(i));
+        }
+
+        updateObjectsTree();
+    }
+}
+
 void MainWindow::updateObjectsTree() {
     ui->objectsTree->clear();
     if (objects->numOfObjects() > 0) {
@@ -180,9 +201,41 @@ void MainWindow::updateObjectsTree() {
                 item->addChild(subItem);
             }
 
+            if (obj->getType() == Object::COMPOUND) {
+                createCSGRep(subItem,obj);
+                item->addChild(subItem);
+            }
+
             ui->objectsTree->addTopLevelItem(item);
         }
     }   
+}
+
+void MainWindow::createCSGRep(QTreeWidgetItem *item,Object *obj) {
+    //item = new QTreeWidgetItem();
+    item->setText(0,obj->getName());
+
+    if (obj->getType() == Object::COMPOUND) {
+        QTreeWidgetItem *subItem = new QTreeWidgetItem();
+        createCSGRep(subItem,((CompoundObject*)obj)->getObjectA());
+        item->addChild(subItem);
+
+        subItem = new QTreeWidgetItem();
+        QString operation;
+        if (((CompoundObject*)obj)->getOperation() == CompoundObject::INTERSECT) {
+            operation = "INTERSECTION";
+        } else if (((CompoundObject*)obj)->getOperation() == CompoundObject::DIFFERENCE) {
+            operation = "DIFFERENCE";
+        } else {
+            operation = "UNION";
+        }
+        subItem->setText(0, operation);
+        item->addChild(subItem);
+
+        subItem = new QTreeWidgetItem();
+        createCSGRep(subItem,((CompoundObject*)obj)->getObjectB());
+        item->addChild(subItem);
+    }
 }
 
 void MainWindow::createOctreeRep(QTreeWidgetItem *item,Ocnode *node) {
@@ -394,5 +447,10 @@ void MainWindow::on_insertBoxBtn_clicked()
 void MainWindow::on_insertCylinderBtn_clicked()
 {
     ui->cmdFeed->setText("insert cylinder");
+    feedCommand();
+}
+
+void MainWindow::on_cmdFeed_returnPressed()
+{
     feedCommand();
 }

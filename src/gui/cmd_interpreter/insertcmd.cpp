@@ -46,6 +46,7 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
             if ((params.size() == 5)&&
                 (params.at(2).toInt() < objects->numOfObjects())&&
                 (params.at(3).toInt() < objects->numOfObjects())) {
+
                 int mode;
 
                 if (params.at(4).toStdString() == "i")

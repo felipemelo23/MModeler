@@ -79,7 +79,7 @@ SOURCES += main.cpp\
     visualization/glboxadapter.cpp \
     objects/cylinder.cpp \
     visualization/glcylinderadapter.cpp \
-    #util/csgfilemanager.cpp
+    util/csgfilemanager.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -145,7 +145,7 @@ HEADERS  += gui/mainwindow.h \
     visualization/glboxadapter.h \
     objects/cylinder.h \
     visualization/glcylinderadapter.h \
-    #util/csgfilemanager.h
+    util/csgfilemanager.h
 
 FORMS    += gui/mainwindow.ui \
     gui/octreedialog.ui \
