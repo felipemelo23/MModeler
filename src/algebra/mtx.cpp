@@ -47,7 +47,7 @@ Mtx::Mtx(unsigned int lines, unsigned int columns, double v1, double v2, ...)
 
 Mtx::~Mtx()
 {
-    delete values;
+    //delete values;
 }
 
 unsigned int Mtx::getLines() const
@@ -63,7 +63,7 @@ unsigned int Mtx::getColumns() const
 double Mtx::getValue(unsigned int line, unsigned int column)
 {
     if ((line < lines)&&(column < columns))
-        return values->at(column+(line*columns));
+        return values.at(column+(line*columns));
 
     mtxIndexOutOfBoundError(line,column);
     return INFINITY;
@@ -72,7 +72,7 @@ double Mtx::getValue(unsigned int line, unsigned int column)
 void Mtx::setValue(unsigned int line, unsigned int column, double value)
 {
     if ((line < lines)&&(column < columns)) {
-        values->at(column+(line*columns)) = value;
+        values.at(column+(line*columns)) = value;
     } else {
         mtxIndexOutOfBoundError(line,column);
     }
@@ -115,6 +115,43 @@ void Mtx::setSubMatrix(unsigned int startLine, unsigned int startColumn, Mtx *su
     }
 }
 
+Mtx Mtx::getSubMatrix_(unsigned int startLine, unsigned int endLine, unsigned int startColumn, unsigned int endColumn)
+{
+    if (((endLine < startLine)||(endColumn < startColumn))||((endLine >= lines)||(endColumn >= columns))) {
+        inconsistentSubMatrixError("get",startLine,endLine,startColumn,endColumn);
+        return NULL;
+    }
+
+    double subMatrixLines = endLine-startLine+1;
+    double subMatrixColumns = endColumn-startColumn+1;
+
+    Mtx subMatrix = Mtx(subMatrixLines,subMatrixColumns);
+
+    for (int line=0;line<subMatrixLines;line++) {
+        for (int column=0;column<subMatrixColumns;column++) {
+            subMatrix.setValue(line,column,getValue(startLine+line,startColumn+column));
+        }
+    }
+
+    return subMatrix;
+}
+
+void Mtx::setSubMatrix_(unsigned int startLine, unsigned int startColumn, Mtx subMatrix)
+{
+    unsigned int endLine = startLine+subMatrix.getLines()-1;
+    unsigned int endColumn = startColumn+subMatrix.getColumns()-1;
+
+    if (((endLine < startLine)||(endColumn < startColumn))||((endLine >= lines)||(endColumn >= columns))) {
+        inconsistentSubMatrixError("set",startLine,endLine,startColumn,endColumn);
+    } else {
+        for (unsigned int line=0;line<subMatrix.getLines();line++) {
+            for (unsigned int column=0;column<subMatrix.getColumns();column++) {
+                setValue(startLine+line,startColumn+column,subMatrix.getValue(line,column));
+            }
+        }
+    }
+}
+
 Mtx *Mtx::getLine(unsigned int line)
 {
     if (line < lines)
@@ -136,6 +173,27 @@ void Mtx::setLine(unsigned int line, Mtx *value)
     }
 }
 
+Mtx Mtx::getLine_(unsigned int line)
+{
+    if (line < lines)
+        return getSubMatrix_(line,line,0,columns-1);
+
+    lineOutOfBoundError(line);
+
+    return NULL;
+}
+
+void Mtx::setLine_(unsigned int line, Mtx value)
+{
+    if ((line < lines)&&(value.getColumns() <= columns)) {
+        setSubMatrix_(line,0,value);
+    } else if (line >= lines) {
+        lineOutOfBoundError(line);
+    } else {
+        inconsistentLineSizeError(&value);
+    }
+}
+
 Mtx *Mtx::getColumn(unsigned int column)
 {
     if (column < columns)
@@ -154,6 +212,27 @@ void Mtx::setColumn(unsigned int column, Mtx *value)
         columnOutOfBoundError(column);
     } else {
         inconsistentColumnSizeError(value);
+    }
+}
+
+Mtx Mtx::getColumn_(unsigned int column)
+{
+    if (column < columns)
+        return getSubMatrix_(0,lines-1,column,column);
+
+    columnOutOfBoundError(column);
+
+    return NULL;
+}
+
+void Mtx::setColumn_(unsigned int column, Mtx value)
+{
+    if ((column < columns)&&(value.getLines() <= lines)) {
+        setSubMatrix_(0,column,value);
+    } else if (column >= columns) {
+        columnOutOfBoundError(column);
+    } else {
+        inconsistentColumnSizeError(&value);
     }
 }
 
@@ -235,13 +314,91 @@ Mtx *Mtx::prod(double lambda)
     return result;
 }
 
+Mtx Mtx::operator+(Mtx mtx)
+{
+    if ((lines==mtx.getLines()) && (columns==mtx.getColumns())) {
+        Mtx result = Mtx(lines,columns);
+
+        for (unsigned int line=0;line<lines;line++) {
+            for (unsigned int column=0;column<columns;column++) {
+                result.setValue(line,column,getValue(line,column)+mtx.getValue(line,column));
+            }
+        }
+
+        return result;
+    }
+
+    mtxSizeError(&mtx);
+
+    return NULL;
+}
+
+Mtx Mtx::operator-(Mtx mtx)
+{
+    if ((lines==mtx.getLines()) && (columns==mtx.getColumns())) {
+        Mtx result = Mtx(lines,columns);
+
+        for (unsigned int line=0;line<lines;line++) {
+            for (unsigned int column=0;column<columns;column++) {
+                result.setValue(line,column,getValue(line,column)-mtx.getValue(line,column));
+            }
+        }
+
+        return result;
+    }
+
+    mtxSizeError(&mtx);
+
+    return NULL;
+}
+
+Mtx Mtx::operator*(Mtx mtx)
+{
+    if (columns==mtx.getLines()) {
+        Mtx result = Mtx(lines,mtx.getColumns());
+
+        if ((lines == 1) && (mtx.getColumns() == 1)) {
+            double resultValue = 0;
+            for (unsigned int i=0;i<columns;i++) {
+                resultValue += mtx.getValue(i,0)*getValue(0,i);
+            }
+            result.setValue(0,0,resultValue);
+        } else {
+            for (unsigned int line=0;line<lines;line++) {
+                for (unsigned int column=0;column<mtx.getColumns();column++) {
+                    result.setValue(line,column,(getLine_(line)*mtx.getColumn_(column)).getValue(0,0));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    mtxProdError(&mtx);
+
+    return NULL;
+}
+
+Mtx Mtx::operator*(double lambda)
+{
+    Mtx result = Mtx(lines,columns);
+
+    for (unsigned int line=0;line<lines;line++) {
+        for (unsigned int column=0;column<columns;column++) {
+            result.setValue(line,column,lambda*getValue(line,column));
+        }
+    }
+
+    return result;
+}
+
 void Mtx::transpose()
 {
-    vector<double> *newValues = new vector<double>();
+    vector<double> newValues = vector<double>();
 
     for (unsigned int column=0;column<columns;column++) {
         for (unsigned int line=0;line<lines;line++) {
-            newValues->push_back(getValue(line,column));
+            newValues.push_back(getValue(line,column));
         }
     }
 
@@ -249,7 +406,6 @@ void Mtx::transpose()
     lines = columns;
     columns = aux;
 
-    delete values;
     values = newValues;
 }
 
@@ -292,7 +448,7 @@ double Mtx::normMatrix()
     double norm = getValue(0,0);
 
     for (unsigned int i=0;i<lines*columns;i++) {
-        if (norm < values->at(i)) norm = values->at(i);
+        if (norm < values.at(i)) norm = values.at(i);
     }
 
     return norm;
@@ -400,6 +556,60 @@ Mtx *Mtx::join(int pos, Mtx *mtx)
     return result;
 }
 
+Mtx Mtx::join_(int pos, Mtx mtx)
+{
+    Mtx result;
+
+    switch (pos) {
+    case TOP:
+        if (getColumns() == mtx.getColumns()) {
+            result = Mtx(getLines()+mtx.getLines(),getColumns());
+            result.setSubMatrix_(0,0,mtx);
+            result.setSubMatrix_(mtx.getLines(),0,*this);
+        } else {
+            inconsistentColumnNumberError(getColumns(),mtx.getColumns());
+            result = NULL;
+        }
+        break;
+    case BOTTOM:
+        if (getColumns() == mtx.getColumns()) {
+            result = Mtx(getLines()+mtx.getLines(),getColumns());
+            result.setSubMatrix_(0,0,*this);
+            result.setSubMatrix_(getLines(),0,mtx);
+        } else {
+            inconsistentColumnNumberError(getColumns(),mtx.getColumns());
+            result = NULL;
+        }
+        break;
+    case LEFT:
+        if (getLines() == mtx.getLines()) {
+            result = Mtx(getLines(),getColumns()+mtx.getColumns());
+            result.setSubMatrix_(0,0,mtx);
+            result.setSubMatrix_(0,mtx.getColumns(),*this);
+        } else {
+            inconsistentLineNumberError(getLines(),mtx.getLines());
+            result = NULL;
+        }
+        break;
+    case RIGHT:
+        if (getLines() == mtx.getLines()) {
+            result = Mtx(getLines(),getColumns()+mtx.getColumns());
+            result.setSubMatrix_(0,0,*this);
+            result.setSubMatrix_(0,getColumns(),mtx);
+        } else {
+            inconsistentLineNumberError(getLines(),mtx.getLines());
+            result = NULL;
+        }
+        break;
+    default:
+        positionError();
+        result = NULL;
+        break;
+    }
+
+    return result;
+}
+
 Mtx *Mtx::resolve(Mtx *b)
 {
     Mtx *thisTemp = this->copy();
@@ -408,6 +618,16 @@ Mtx *Mtx::resolve(Mtx *b)
     Mtx *solution = thisTemp->getSubMatrix(0,thisTemp->getLines()-1,thisTemp->getColumns()-1,thisTemp->getColumns()-1);
 
     delete thisTemp;
+    return solution;
+}
+
+Mtx Mtx::resolve_(Mtx b)
+{
+    Mtx thisTemp = this->copy_();
+    thisTemp = thisTemp.join_(Mtx::RIGHT,b);
+    gaussElimination(&thisTemp);
+    Mtx solution = thisTemp.getSubMatrix_(0,thisTemp.getLines()-1,thisTemp.getColumns()-1,thisTemp.getColumns()-1);
+
     return solution;
 }
 
@@ -448,13 +668,26 @@ Mtx *Mtx::copy()
 {
     Mtx *newMatrix = new Mtx(lines,columns);
 
-        for (unsigned int line=0;line<lines;line++) {
-            for (unsigned int column=0;column<columns;column++) {
-                newMatrix->setValue(line,column,getValue(line,column));
-            }
+    for (unsigned int line=0;line<lines;line++) {
+        for (unsigned int column=0;column<columns;column++) {
+            newMatrix->setValue(line,column,getValue(line,column));
         }
+    }
 
-        return newMatrix;
+    return newMatrix;
+}
+
+Mtx Mtx::copy_()
+{
+    Mtx newMatrix = Mtx(lines,columns);
+
+    for (unsigned int line=0;line<lines;line++) {
+        for (unsigned int column=0;column<columns;column++) {
+            newMatrix.setValue(line,column,getValue(line,column));
+        }
+    }
+
+    return newMatrix;
 }
 
 void Mtx::mtxIndexOutOfBoundError(int line, int column)
@@ -528,9 +761,9 @@ void Mtx::positionError()
 
 void Mtx::initializeMatrix(double value)
 {
-    values = new vector<double>();
+    values = vector<double>();
 
     for (unsigned int i=0;i<lines*columns;i++) {
-        values->push_back(value);
+        values.push_back(value);
     }
 }

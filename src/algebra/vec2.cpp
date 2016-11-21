@@ -4,6 +4,8 @@ Vec2::Vec2(double value) : VecN(2,value) {}
 
 Vec2::Vec2(double x, double y) : VecN(2,x,y) {}
 
+Vec2::Vec2(Mtx mtx) : VecN(mtx) {}
+
 Vec2::~Vec2() {}
 
 double Vec2::getX()
@@ -51,6 +53,31 @@ double Vec2::cross(Vec2 *vec)
     return (getX()*vec->getY()) - (getY()*vec->getX());
 }
 
+Vec2 Vec2::operator+(Vec2 vec)
+{
+    return (Vec2) VecN::operator+(vec);
+}
+
+Vec2 Vec2::operator-(Vec2 vec)
+{
+    return (Vec2) VecN::operator-(vec);
+}
+
+Vec2 Vec2::operator*(double lambda)
+{
+    return (Vec2) VecN::operator*(lambda);
+}
+
+double Vec2::dot_(Vec2 vec)
+{
+    return VecN::dot_(vec);
+}
+
+double Vec2::cross_(Vec2 vec)
+{
+    return (getX()*vec.getY()) - (getY()*vec.getX());
+}
+
 bool Vec2::isColumn()
 {
     return VecN::isColumn();
@@ -69,4 +96,9 @@ double Vec2::getNorm()
 Vec2 *Vec2::copy()
 {
     return (Vec2*) VecN::copy();
+}
+
+Vec2 Vec2::copy_()
+{
+    return (Vec2) VecN::copy_();
 }

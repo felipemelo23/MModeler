@@ -8,6 +8,7 @@ class Vec2 : public VecN
 public:
     Vec2(double value=0);
     Vec2(double x, double y);
+    Vec2(Mtx mtx);
     ~Vec2();
 
     double getX();
@@ -22,11 +23,18 @@ public:
     double dot(Vec2 *vec);
     double cross(Vec2 *vec);
 
+    Vec2 operator+(Vec2 vec);
+    Vec2 operator-(Vec2 vec);
+    Vec2 operator*(double lambda);
+    double dot_(Vec2 vec);
+    double cross_(Vec2 vec);
+
     bool isColumn();
     void normalize();
     double getNorm();
 
     Vec2 *copy();
+    Vec2 copy_();
 };
 
 #endif // VEC2_H

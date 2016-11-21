@@ -6,6 +6,8 @@ Vec4::Vec4(double x, double y, double z, double w) : VecN(4,x,y,z,w) {}
 
 Vec4::Vec4(Vec3 *vec, double w) : VecN(4,vec->getX(),vec->getY(),vec->getZ(),w) {}
 
+Vec4::Vec4(Mtx mtx) : VecN(mtx) {}
+
 Vec4::~Vec4() {}
 
 double Vec4::getX()
@@ -51,6 +53,11 @@ void Vec4::setW(double value)
 Vec3 *Vec4::getVec3()
 {
     return new Vec3(getX(),getY(),getZ());
+}
+
+Vec3 Vec4::getVec3_()
+{
+    return Vec3(getX(),getY(),getZ());
 }
 
 Vec4 *Vec4::sum(Vec4 *vec)
@@ -100,6 +107,45 @@ Vec4 *Vec4::cross(Vec4 *vec)
     return new Vec4(x,y,z,w);
 }
 
+Vec4 Vec4::operator+(Vec4 vec)
+{
+    Vec4 result = (Vec4) VecN::operator+(vec);
+    result.setW(0);
+
+    return result;
+}
+
+Vec4 Vec4::operator-(Vec4 vec)
+{
+    Vec4 result = (Vec4) VecN::operator-(vec);
+    result.setW(0);
+
+    return result;
+}
+
+Vec4 Vec4::operator*(double lambda)
+{
+    Vec4 result = (Vec4) VecN::operator*(lambda);
+    if (result.getW() != 0) result.setW(1);
+
+    return result;
+}
+
+double Vec4::dot_(Vec4 vec)
+{
+    return VecN::dot_(vec);
+}
+
+Vec4 Vec4::cross_(Vec4 vec)
+{
+    double x = (getY()*vec.getZ()) - (getZ()*vec.getY());
+    double y = (getZ()*vec.getX()) - (getX()*vec.getZ());
+    double z = (getX()*vec.getY()) - (getY()*vec.getX());
+    double w = 0;
+
+    return Vec4(x,y,z,w);
+}
+
 bool Vec4::isColumn()
 {
     return VecN::isColumn();
@@ -118,5 +164,10 @@ double Vec4::getNorm()
 Vec4 *Vec4::copy()
 {
     return (Vec4*) VecN::copy();
+}
+
+Vec4 Vec4::copy_()
+{
+    return (Vec4) VecN::copy_();
 }
 

@@ -32,6 +32,20 @@ VecN::VecN(int size, double v1, double v2, ...)
     }
 }
 
+VecN::VecN(Mtx mtx)
+{
+    this->lines = mtx.getLines();
+    this->columns = mtx.getColumns();
+
+    initializeMatrix(1);
+
+    for (int column = 0; column < columns; column++) {
+        for (int line = 0; line < lines; line++) {
+            Mtx::setValue(line,column,mtx.getValue(line,column));
+        }
+    }
+}
+
 VecN::~VecN() {}
 
 int VecN::getSize()
@@ -86,6 +100,40 @@ double VecN::dot(VecN *vec)
     return Mtx::prod(vec)->getValue(0,0);
 }
 
+VecN VecN::operator+(VecN vec)
+{
+    if (columns > 1) transpose();
+    if (!vec.isColumn()) vec.transpose();
+
+    return (VecN) Mtx::operator+(vec);
+}
+
+VecN VecN::operator-(VecN vec)
+{
+    if (columns > 1) transpose();
+    if (!vec.isColumn()) vec.transpose();
+
+    return (VecN) Mtx::operator-(vec);
+}
+
+VecN VecN::operator*(double lambda)
+{
+    return (VecN) Mtx::operator*(lambda);
+}
+
+Mtx VecN::operator*(VecN vec)
+{
+    return Mtx::operator*(vec);
+}
+
+double VecN::dot_(VecN vec)
+{
+    if (isColumn()) transpose();
+    if (!vec.isColumn()) vec.transpose();
+
+    return Mtx::operator*(vec).getValue(0,0);
+}
+
 bool VecN::isColumn()
 {
     return !(columns>1);
@@ -115,6 +163,16 @@ VecN *VecN::getSubVec(int initialPos, int finalPos)
     return (VecN*)Mtx::getSubMatrix(initialPos,finalPos,0,0);
 }
 
+VecN VecN::getSubVec_(int initialPos, int finalPos)
+{
+    if (!isColumn()) transpose();
+
+    if (finalPos < 0) {
+        return (VecN)Mtx::getSubMatrix_(initialPos,getSize()-1,0,0);
+    }
+    return (VecN)Mtx::getSubMatrix_(initialPos,finalPos,0,0);
+}
+
 void VecN::setSubVec(int initialPos, VecN *vec)
 {
     if (!isColumn()) transpose();
@@ -122,7 +180,19 @@ void VecN::setSubVec(int initialPos, VecN *vec)
     Mtx::setSubMatrix(initialPos,0,vec);
 }
 
+void VecN::setSubVec_(int initialPos, VecN vec)
+{
+    if (!isColumn()) transpose();
+
+    Mtx::setSubMatrix_(initialPos,0,vec);
+}
+
 VecN *VecN::copy()
 {
     return (VecN*)Mtx::copy();
+}
+
+VecN VecN::copy_()
+{
+    return (VecN)Mtx::copy_();
 }

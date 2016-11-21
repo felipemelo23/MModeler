@@ -31,18 +31,29 @@ public:
 
     Mtx *getSubMatrix(unsigned int startLine, unsigned int endLine, unsigned int startColumn, unsigned int endColumn);
     void setSubMatrix(unsigned int startLine, unsigned int startColumn, Mtx *subMatrix);
+    Mtx getSubMatrix_(unsigned int startLine, unsigned int endLine, unsigned int startColumn, unsigned int endColumn);
+    void setSubMatrix_(unsigned int startLine, unsigned int startColumn, Mtx subMatrix);
 
     Mtx *getLine(unsigned int line);
     void setLine(unsigned int line, Mtx *value);
+    Mtx getLine_(unsigned int line);
+    void setLine_(unsigned int line, Mtx value);
 
     Mtx *getColumn(unsigned int column);
     void setColumn(unsigned int column, Mtx *value);
+    Mtx getColumn_(unsigned int column);
+    void setColumn_(unsigned int column, Mtx value);
 
     /* OPERATORS */
     Mtx *sum(Mtx *mtx);
     Mtx *sub(Mtx *mtx);
     Mtx *prod(Mtx *mtx);
     Mtx *prod(double lambda);
+
+    Mtx operator+(Mtx mtx);
+    Mtx operator-(Mtx mtx);
+    Mtx operator*(Mtx mtx);
+    Mtx operator*(double lambda);
 
     void transpose();
 
@@ -56,12 +67,15 @@ public:
     void normalizeAllColumns();
     void normalize();
 
-    Mtx *join(int position, Mtx *mtx);
+    Mtx *join(int pos, Mtx *mtx);
+    Mtx join_(int pos, Mtx mtx);
     Mtx *resolve(Mtx *b); /* B must be a column vector. */
+    Mtx resolve_(Mtx b);
 
     /* UTILITIES */
     string toStdString();
     Mtx *copy();
+    Mtx copy_();
 
     /* ERROR MESSAGES */
     void mtxIndexOutOfBoundError(int line=-1,int column=-1);
@@ -84,7 +98,7 @@ public:
 protected:
     unsigned int lines;
     unsigned int columns;
-    vector<double> *values;
+    vector<double> values;
 
     virtual void initializeMatrix(double value);
     void gaussElimination(Mtx *mtx);

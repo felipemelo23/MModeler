@@ -35,6 +35,20 @@ MtxNxN::MtxNxN(int n, double v1, double v2, ...)
     }
 }
 
+MtxNxN::MtxNxN(Mtx mtx)
+{
+    this->lines = mtx.getLines();
+    this->columns = mtx.getColumns();
+
+    initializeMatrix(1);
+
+    for (int column = 0; column < columns; column++) {
+        for (int line = 0; line < lines; line++) {
+            setValue(line,column,mtx.getValue(line,column));
+        }
+    }
+}
+
 MtxNxN::~MtxNxN() {}
 
 int MtxNxN::getN()
@@ -95,15 +109,66 @@ MtxNxN *MtxNxN::inverse()
     return result;
 }
 
+MtxNxN MtxNxN::operator+(MtxNxN mtx)
+{
+    return (MtxNxN) Mtx::operator+(mtx);
+}
+
+MtxNxN MtxNxN::operator-(MtxNxN mtx)
+{
+    return (MtxNxN) Mtx::operator-(mtx);
+}
+
+MtxNxN MtxNxN::operator*(MtxNxN mtx)
+{
+    return (MtxNxN) Mtx::operator*(mtx);
+}
+
+VecN MtxNxN::operator*(VecN vec)
+{
+    if (vec.getColumns() > 1) vec.transpose();
+
+    return (VecN) Mtx::operator*(vec);
+}
+
+MtxNxN MtxNxN::operator*(double lambda)
+{
+    return (MtxNxN) Mtx::operator*(lambda);
+}
+
+MtxNxN MtxNxN::inverse_()
+{
+    Mtx mtx = this->copy_();
+
+    mtx = mtx.join_(Mtx::RIGHT,MtxNxN::getIdentity_(getN()));
+
+    gaussElimination(&mtx);
+
+    return (MtxNxN) mtx.getSubMatrix_(0,mtx.getLines()-1,getN(),mtx.getColumns()-1);
+}
+
 MtxNxN *MtxNxN::copy()
 {
     return (MtxNxN*) Mtx::copy();
+}
+
+MtxNxN MtxNxN::copy_()
+{
+    return (MtxNxN) Mtx::copy_();
 }
 
 MtxNxN *MtxNxN::getIdentity(int n)
 {
     MtxNxN *I = new MtxNxN(n);
     I->loadIdentity();
+
+    return I;
+}
+
+MtxNxN MtxNxN::getIdentity_(int n)
+{
+    MtxNxN I = MtxNxN(n);
+    I.loadIdentity();
 
     return I;
 }

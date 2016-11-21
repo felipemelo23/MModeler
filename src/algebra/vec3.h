@@ -8,6 +8,7 @@ class Vec3 : public VecN
 public:
     Vec3(double value=0);
     Vec3(double x, double y, double z);
+    Vec3(Mtx mtx);
     ~Vec3();
 
     double getX();
@@ -24,11 +25,18 @@ public:
     double dot(Vec3 *vec);
     Vec3 *cross(Vec3 *vec);
 
+    Vec3 operator+(Vec3 vec);
+    Vec3 operator-(Vec3 vec);
+    Vec3 operator*(double lambda);
+    double dot_(Vec3 vec);
+    Vec3 cross_(Vec3 vec);
+
     bool isColumn();
     void normalize();
     double getNorm();
 
     Vec3 *copy();
+    Vec3 copy_();
 };
 
 #endif // VEC3_H
