@@ -44,8 +44,8 @@ public:
     static Mtx2x2 *getScaleMtx(double x, double y);
 
     static Mtx2x2 getIdentity_();
-    static Mtx2x2 getRotateMtx_(double degree, bool x, bool y, bool z);
-    static Mtx2x2 getScaleMtx_(double x, double y, double z);
+    static Mtx2x2 getRotateMtx_(double degree, bool x, bool y);
+    static Mtx2x2 getScaleMtx_(double x, double y);
 };
 
 #endif // MTX2X2_H

@@ -140,13 +140,13 @@ Mtx2x2 Mtx2x2::getIdentity_()
     return (Mtx2x2) MtxNxN::getIdentity_(2);
 }
 
-Mtx2x2 Mtx2x2::getRotateMtx_(double degree, bool x, bool y, bool z)
+Mtx2x2 Mtx2x2::getRotateMtx_(double degree, bool x, bool y)
 {
     return Mtx2x2(cos(degree),-sin(degree),
                   sin(degree),cos(degree));
 }
 
-Mtx2x2 Mtx2x2::getScaleMtx_(double x, double y, double z)
+Mtx2x2 Mtx2x2::getScaleMtx_(double x, double y)
 {
     return Mtx2x2(x,0,
                   0,y);
