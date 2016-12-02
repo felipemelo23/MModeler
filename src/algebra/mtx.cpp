@@ -45,11 +45,6 @@ Mtx::Mtx(unsigned int lines, unsigned int columns, double v1, double v2, ...)
     }
 }
 
-Mtx::~Mtx()
-{
-    //delete values;
-}
-
 unsigned int Mtx::getLines() const
 {
     return lines;

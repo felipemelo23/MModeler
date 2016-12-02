@@ -6,6 +6,7 @@
 class glFace
 {
 public:
+    glFace();
     glFace(int sides, int *v);
     glFace(int sides, int v1, int v2, int v3, ...);
 

@@ -7,17 +7,17 @@ class Material
 {
 public:
     Material();
-    Material(Color *ambient, Color *diffuse, Color *specular, double shininess);
+    Material(Color ambient, Color diffuse, Color specular, double shininess);
 
-    Color *getAmbient() const;
-    Color *getDiffuse() const;
-    Color *getSpecular() const;
+    Color getAmbient() const;
+    Color getDiffuse() const;
+    Color getSpecular() const;
     double getShininess() const;
 
 private:
-    Color *ambient;
-    Color *diffuse;
-    Color *specular;
+    Color ambient;
+    Color diffuse;
+    Color specular;
     double shininess;
 };
 

@@ -2,13 +2,13 @@
 
 Material::Material()
 {
-    this->ambient = new Color(1,1,1);
-    this->diffuse = new Color(1,1,1);
-    this->specular = new Color(1,1,1);
+    this->ambient = Color(1,1,1);
+    this->diffuse = Color(1,1,1);
+    this->specular = Color(1,1,1);
     this->shininess = 10;
 }
 
-Material::Material(Color *ambient, Color *diffuse, Color *specular, double shininess)
+Material::Material(Color ambient, Color diffuse, Color specular, double shininess)
 {
     this->ambient = ambient;
     this->diffuse = diffuse;
@@ -16,17 +16,17 @@ Material::Material(Color *ambient, Color *diffuse, Color *specular, double shini
     this->shininess = shininess;
 }
 
-Color *Material::getAmbient() const
+Color Material::getAmbient() const
 {
     return ambient;
 }
 
-Color *Material::getDiffuse() const
+Color Material::getDiffuse() const
 {
     return diffuse;
 }
 
-Color *Material::getSpecular() const
+Color Material::getSpecular() const
 {
     return specular;
 }

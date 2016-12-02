@@ -12,7 +12,6 @@ public:
     MtxNxN(int n, double value=0);
     MtxNxN(int n, double v1, double v2, ...);
     MtxNxN(Mtx mtx);
-    ~MtxNxN();
 
     int getN();
     void loadIdentity();

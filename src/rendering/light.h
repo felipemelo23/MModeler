@@ -8,15 +8,15 @@ class Light
 {
 public:
     Light();
-    Light(Vec3 *origin, Color *color, double intensity, double radius=0);
+    Light(Vec3 origin, Color color, double intensity, double radius=0);
 
-    Vec3 *getOrigin() const;
-    Color *getColor() const;
+    Vec3 getOrigin() const;
+    Color getColor() const;
     double getIntensity() const;
 
 private:
-    Vec3 *origin;
-    Color *color;
+    Vec3 origin;
+    Color color;
     double intensity;
     double radius;
 };

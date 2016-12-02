@@ -2,13 +2,13 @@
 
 Light::Light()
 {
-    this->origin = new Vec3();
-    this->color = new Color();
+    this->origin = Vec3();
+    this->color = Color();
     this->intensity = 1;
     this->radius = 0;
 }
 
-Light::Light(Vec3 *origin, Color *color, double intensity, double radius)
+Light::Light(Vec3 origin, Color color, double intensity, double radius)
 {
     this->origin = origin;
     this->color = color;
@@ -16,12 +16,12 @@ Light::Light(Vec3 *origin, Color *color, double intensity, double radius)
     this->radius = radius;
 }
 
-Vec3 *Light::getOrigin() const
+Vec3 Light::getOrigin() const
 {
     return origin;
 }
 
-Color *Light::getColor() const
+Color Light::getColor() const
 {
     return color;
 }

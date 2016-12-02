@@ -18,7 +18,7 @@ RCResult::RCResult(double t)
     this->material = NULL;
 }
 
-RCResult::RCResult(bool intersected, double t, Vec3 *point, Vec3 *normal, Material *material)
+RCResult::RCResult(bool intersected, double t, Vec3 point, Vec3 normal, Material *material)
 {
     this->intersected = intersected;
     this->t = t;
@@ -27,8 +27,7 @@ RCResult::RCResult(bool intersected, double t, Vec3 *point, Vec3 *normal, Materi
     this->material = material;
 }
 
-RCResult::~RCResult()
-{}
+RCResult::~RCResult() {}
 
 bool RCResult::getIntersected() const
 {
@@ -40,12 +39,12 @@ double RCResult::getT() const
     return t;
 }
 
-Vec3 *RCResult::getPoint() const
+Vec3 RCResult::getPoint() const
 {
     return point;
 }
 
-Vec3 *RCResult::getNormal() const
+Vec3 RCResult::getNormal() const
 {
     return normal;
 }
@@ -60,7 +59,7 @@ void RCResult::setMaterial(Material *value)
     material = value;
 }
 
-void RCResult::setNormal(Vec3 *value)
+void RCResult::setNormal(Vec3 value)
 {
     normal = value;
 }

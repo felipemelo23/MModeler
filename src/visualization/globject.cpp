@@ -5,11 +5,11 @@ using namespace std;
 
 glObject::glObject()
 {
-    this->vertices = new vector<Vec3*>();
-    this->faces = new vector<glFace*>();
+    this->vertices = new vector<Vec3>();
+    this->faces = new vector<glFace>();
 
-    this->vertexNormals = new vector<Vec3*>();
-    this->faceNormals = new vector<Vec3*>();
+    this->vertexNormals = new vector<Vec3>();
+    this->faceNormals = new vector<Vec3>();
 
     this->solid = true;
     this->smooth = false;
@@ -22,27 +22,31 @@ glObject::glObject()
     this->color[2] = 0.8;
 }
 
-void glObject::addVertex(Vec3 *vertex)
+glObject::~glObject()
 {
-    vertices->push_back(vertex);
-    vertexNormals->push_back(new Vec3(0,0,0));
+    delete vertices;
+    delete faces;
+    delete vertexNormals;
+    delete faceNormals;
 }
 
-Vec3 *glObject::getVertex(int index)
+void glObject::addVertex(Vec3 vertex)
+{
+    vertices->push_back(vertex);
+    vertexNormals->push_back(Vec3(0,0,0));
+}
+
+Vec3 glObject::getVertex(int index)
 {
     return vertices->at(index);
 }
 
-void glObject::setVertexNormal(int index, Vec3 *vertex)
+void glObject::setVertexNormal(int index, Vec3 vertex)
 {
-    Vec3 *last = vertexNormals->at(index);
-
     vertexNormals->at(index) = vertex;
-
-    delete last;
 }
 
-Vec3 *glObject::getVertexNormal(int index)
+Vec3 glObject::getVertexNormal(int index)
 {
     return vertexNormals->at(index);
 }
@@ -52,41 +56,37 @@ int glObject::numOfVertices()
     return vertices->size();
 }
 
-void glObject::addFace(glFace *face)
+void glObject::addFace(glFace face)
 {
     faces->push_back(face);
 
-    int *vi = face->getVertices();
+    int *vi = face.getVertices();
 
-    Vec3 *trash;
+    Vec3 faceNormal = Vec3();
+    Vec3 v1;
+    Vec3 v2;
 
-    Vec3 *faceNormal = new Vec3();
-    Vec3 *v1;
-    Vec3 *v2;
+    v1 = getVertex(vi[0]) - getVertex(vi[2]);
+    v2 = getVertex(vi[1]) - getVertex(vi[2]);
 
-    v1 = getVertex(vi[0])->sub(getVertex(vi[2]));
-    v2 = getVertex(vi[1])->sub(getVertex(vi[2]));
+    faceNormal = v1.cross_(v2);
 
-    trash = faceNormal;
-    faceNormal = v1->cross(v2);
-    delete trash;
-
-    faceNormal->normalize();
+    faceNormal.normalize();
     faceNormals->push_back(faceNormal);
 
-    for (int i=0;i<face->getSides();i++) {
-        v1 = getVertexNormal(vi[i])->sum(faceNormal);
-        v1->normalize();
+    for (int i=0;i<face.getSides();i++) {
+        v1 = getVertexNormal(vi[i]) + faceNormal;
+        v1.normalize();
         setVertexNormal(vi[i],v1);
     }
 }
 
-glFace *glObject::getFace(int index)
+glFace glObject::getFace(int index)
 {
     return faces->at(index);
 }
 
-Vec3 *glObject::getFaceNormal(int index)
+Vec3 glObject::getFaceNormal(int index)
 {
     return faceNormals->at(index);
 }
@@ -129,11 +129,11 @@ void glObject::setColor(double color[])
 void glObject::draw()
 {
     for (int i=0;i<numOfFaces();i++) {
-        int *v = faces->at(i)->getVertices();
-        Vec3 *temp;
-        Vec3 *normal;
+        int *v = faces->at(i).getVertices();
+        Vec3 temp;
+        Vec3 normal;
 
-        if ((solid)&&(!faces->at(i)->getEmpty())) {
+        if ((solid)&&(!faces->at(i).getEmpty())) {
             glColor4d(color[0],color[1],color[2],opacity);
             glEnable(GL_LIGHTING);
             glBegin(GL_POLYGON);
@@ -143,7 +143,7 @@ void glObject::draw()
             glBegin(GL_LINE_STRIP);
         }
 
-        for (int j=0;j<faces->at(i)->getSides();j++) {
+        for (int j=0;j<faces->at(i).getSides();j++) {
             temp = getVertex(v[j]);
 
             if (smooth)
@@ -151,9 +151,9 @@ void glObject::draw()
             else
                 normal = getFaceNormal(i);
 
-            glNormal3d(-normal->getX(),-normal->getY(),-normal->getZ());
+            glNormal3d(-normal.getX(),-normal.getY(),-normal.getZ());
 
-            glVertex3d(temp->getX(),temp->getY(),temp->getZ());
+            glVertex3d(temp.getX(),temp.getY(),temp.getZ());
         }
 
         if (!solid) {
@@ -164,8 +164,8 @@ void glObject::draw()
             else
                 normal = getFaceNormal(i);
 
-            glNormal3d(normal->getX(),normal->getY(),normal->getZ());
-            glVertex3d(temp->getX(),temp->getY(),temp->getZ());
+            glNormal3d(normal.getX(),normal.getY(),normal.getZ());
+            glVertex3d(temp.getX(),temp.getY(),temp.getZ());
         }
 
         glEnd();

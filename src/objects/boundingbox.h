@@ -11,8 +11,8 @@
 class BoundingBox
 {
 private:
-    Vec3 *maxCoords;
-    Vec3 *minCoords;
+    Vec3 maxCoords;
+    Vec3 minCoords;
     Object* content;
 
 public:    
@@ -21,8 +21,8 @@ public:
 
     Object* getContent() const;
     void setContent(Object* content);
-    Vec3 *getMaximumCoords();
-    Vec3 *getMinimumCoords();
+    Vec3 getMaximumCoords();
+    Vec3 getMinimumCoords();
 };
 
 #endif // BOUNDINGBOX_H

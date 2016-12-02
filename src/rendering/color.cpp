@@ -4,6 +4,8 @@ Color::Color() : Vec3(1,1,1) {}
 
 Color::Color(double red, double green, double blue) : Vec3(red,green,blue) {}
 
+Color::Color(Vec3 vec) : Vec3(vec) {}
+
 double Color::getRed()
 {
     return Vec3::getX();
@@ -59,4 +61,24 @@ Color *Color::prod(double lambda)
 Color *Color::prod(Color *color)
 {
     return new Color(getRed()*color->getRed(),getGreen()*color->getGreen(),getBlue()*color->getBlue());
+}
+
+Color Color::operator+(Color color)
+{
+    return (Color) Vec3::operator+(color);
+}
+
+Color Color::operator-(Color color)
+{
+    return (Color) Vec3::operator-(color);
+}
+
+Color Color::operator*(double lambda)
+{
+    return (Color) Vec3::operator*(lambda);
+}
+
+Color Color::operator*(Color color)
+{
+    return Color(getRed()*color.getRed(),getGreen()*color.getGreen(),getBlue()*color.getBlue());
 }

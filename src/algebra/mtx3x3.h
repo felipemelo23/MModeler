@@ -10,7 +10,6 @@ public:
     Mtx3x3(double value=0);
     Mtx3x3(double v00,double v01,double v02,double v10,double v11, double v12,double v20,double v21, double v22);
     Mtx3x3(Mtx mtx);
-    ~Mtx3x3();
 
     Vec3 *getLine(unsigned int line);
     Vec3 *getColumn(unsigned int column);

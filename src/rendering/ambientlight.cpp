@@ -2,17 +2,17 @@
 
 AmbientLight::AmbientLight()
 {
-    this->color = new Color();
+    this->color = Color();
     this->intesity = 1;
 }
 
-AmbientLight::AmbientLight(Color *color, double intesity)
+AmbientLight::AmbientLight(Color color, double intesity)
 {
     this->color = color;
     this->intesity = intesity;
 }
 
-Color *AmbientLight::getColor() const
+Color AmbientLight::getColor() const
 {
     return color;
 }

@@ -8,6 +8,7 @@ class Color : public Vec3
 public:
     Color();
     Color(double red, double green, double blue);
+    Color(Vec3 vec);
 
     double getRed();
     double getGreen();
@@ -22,6 +23,11 @@ public:
     Color *sub(Color *color);
     Color *prod(double lambda);
     Color *prod(Color *color);
+
+    Color operator+(Color color);
+    Color operator-(Color color);
+    Color operator*(double lambda);
+    Color operator*(Color color);
 };
 
 #endif // COLOR_H

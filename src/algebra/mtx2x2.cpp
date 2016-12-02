@@ -6,8 +6,6 @@ Mtx2x2::Mtx2x2(double v00, double v01, double v10, double v11) : MtxNxN(2,v00,v0
 
 Mtx2x2::Mtx2x2(Mtx mtx) : MtxNxN(mtx) {}
 
-Mtx2x2::~Mtx2x2() {}
-
 Vec2 *Mtx2x2::getLine(unsigned int line)
 {
     return (Vec2*) Mtx::getLine(line);
@@ -140,7 +138,7 @@ Mtx2x2 Mtx2x2::getIdentity_()
     return (Mtx2x2) MtxNxN::getIdentity_(2);
 }
 
-Mtx2x2 Mtx2x2::getRotateMtx_(double degree, bool x, bool y)
+Mtx2x2 Mtx2x2::getRotateMtx_(double degree)
 {
     return Mtx2x2(cos(degree),-sin(degree),
                   sin(degree),cos(degree));

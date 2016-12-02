@@ -10,8 +10,8 @@ public:
     Vec4(double value=0);
     Vec4(double x, double y, double z, double w);
     Vec4(Vec3 *vec, double w);
+    Vec4(Vec3 vec, double w);
     Vec4(Mtx mtx);
-    ~Vec4();
 
     double getX();
     double getY();

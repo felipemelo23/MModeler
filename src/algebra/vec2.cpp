@@ -6,8 +6,6 @@ Vec2::Vec2(double x, double y) : VecN(2,x,y) {}
 
 Vec2::Vec2(Mtx mtx) : VecN(mtx) {}
 
-Vec2::~Vec2() {}
-
 double Vec2::getX()
 {
     return VecN::getValue(0);

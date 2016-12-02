@@ -17,13 +17,9 @@ CompoundObject::CompoundObject(Object *a, Object *b, int op)
     this->material = a->getMaterial();
 }
 
-CompoundObject::~CompoundObject()
-{
-    delete ow;
-    delete wo;
-}
+CompoundObject::~CompoundObject() {}
 
-int CompoundObject::isInside(Vec4 *pos)
+int CompoundObject::isInside(Vec4 pos)
 {
     bool value = false;
     switch (operation) {
@@ -41,7 +37,7 @@ int CompoundObject::isInside(Vec4 *pos)
     return value;
 }
 
-vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
+vector<RCResult> CompoundObject::checkIntersection(Ray ray)
 {
     vector<RCResult> aResults = a->checkIntersection(ray);
     vector<RCResult> bResults = b->checkIntersection(ray);
@@ -76,8 +72,8 @@ vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
 
         if (sortedResults.size() > 0) {
             while ((i < sortedResults.size())&&
-                   !((a->isInside(new Vec4(sortedResults.at(i).getPoint(),1)))&&
-                     (b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)))))
+                   !((a->isInside(Vec4(sortedResults.at(i).getPoint(),1)))&&
+                     (b->isInside(Vec4(sortedResults.at(i).getPoint(),1)))))
                 i++;
 
             if (i < sortedResults.size()) {
@@ -95,15 +91,15 @@ vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
         int i = 0;
 
         while ((i < sortedResults.size())&&
-               (!a->isInside(new Vec4(sortedResults.at(i).getPoint(),1))||
-                !(b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)) <= 0)))
+               (!a->isInside(Vec4(sortedResults.at(i).getPoint(),1))||
+                !(b->isInside(Vec4(sortedResults.at(i).getPoint(),1)) <= 0)))
             i++;
 
         if (i < sortedResults.size()) {
             RCResult result = sortedResults.at(i);
             result.setMaterial(material);
-            if (b->isInside(new Vec4(sortedResults.at(i).getPoint(),1)) == -1)
-                result.setNormal(result.getNormal()->prod(-1));
+            if (b->isInside(Vec4(sortedResults.at(i).getPoint(),1)) == -1)
+                result.setNormal(result.getNormal()*(-1));
             results.push_back(result);
         }
         break;
@@ -113,19 +109,17 @@ vector<RCResult> CompoundObject::checkIntersection(Ray *ray)
     return results;
 }
 
-Vec3 *CompoundObject::getMaximumCoords()
+Vec3 CompoundObject::getMaximumCoords()
 {
-    Vec3 *maxA = a->getMaximumCoords();
-    Vec3 *maxCoords;
+    Vec3 maxA = a->getMaximumCoords();
+    Vec3 maxCoords;
     if (operation != DIFFERENCE) {
-        Vec3 *maxB = b->getMaximumCoords();
+        Vec3 maxB = b->getMaximumCoords();
 
-        maxCoords = new Vec3(max(maxA->getX(),maxB->getX()),
-                                 max(maxA->getY(),maxB->getY()),
-                                 max(maxA->getZ(),maxB->getZ()));
+        maxCoords = Vec3(max(maxA.getX(),maxB.getX()),
+                         max(maxA.getY(),maxB.getY()),
+                         max(maxA.getZ(),maxB.getZ()));
 
-        delete maxA;
-        delete maxB;
     } else {
         maxCoords = maxA;
     }
@@ -133,20 +127,18 @@ Vec3 *CompoundObject::getMaximumCoords()
     return maxCoords;
 }
 
-Vec3 *CompoundObject::getMinimumCoords()
+Vec3 CompoundObject::getMinimumCoords()
 {
-    Vec3 *minA = a->getMinimumCoords();
-    Vec3 *minCoords;
+    Vec3 minA = a->getMinimumCoords();
+    Vec3 minCoords;
 
     if (operation != DIFFERENCE) {
-        Vec3 *minB = b->getMinimumCoords();
+        Vec3 minB = b->getMinimumCoords();
 
-        minCoords = new Vec3(min(minA->getX(),minB->getX()),
-                                 min(minA->getY(),minB->getY()),
-                                 min(minA->getZ(),minB->getZ()));
+        minCoords = Vec3(min(minA.getX(),minB.getX()),
+                         min(minA.getY(),minB.getY()),
+                         min(minA.getZ(),minB.getZ()));
 
-        delete minA;
-        delete minB;
     } else {
         minCoords = minA;
     }
@@ -164,9 +156,9 @@ Object *CompoundObject::getObjectB()
     return b;
 }
 
-Vec3 *CompoundObject::getOrigin()
+Vec3 CompoundObject::getOrigin()
 {
-    return a->getOrigin()->sum(b->getOrigin())->prod(0.5);
+    return (a->getOrigin() - b->getOrigin())*0.5;
 }
 
 void CompoundObject::translate(double x, double y, double z)

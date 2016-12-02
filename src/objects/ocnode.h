@@ -38,10 +38,10 @@ public:
     void classify(vector<Object *> src, int maxDepth,bool hasBoundingBox=false);
     static Ocnode *intersection(Ocnode *A, Ocnode *B);
 
-    int isInside(Vec4 *pos);
-    Vec3 *getMinimumCoords();
-    Vec3 *getMaximumCoords();
-    Vec4 **getVertices();
+    int isInside(Vec4 pos);
+    Vec3 getMinimumCoords();
+    Vec3 getMaximumCoords();
+    Vec4 *getVertices();
 
     void translate(double x, double y, double z);
     void scale(double x, double y, double z);

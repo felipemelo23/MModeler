@@ -1,13 +1,13 @@
 #include "raycaster.h"
 
 
-RCResult RayCaster::cast(Ray *ray, Scene *scene)
+RCResult RayCaster::cast(Ray ray, Scene scene)
 {
-    if (scene->numOfObjects() > 0) {
+    if (scene.numOfObjects() > 0) {
         vector<RCResult> results = vector<RCResult>();
 
-        for (int i=0;i<scene->numOfObjects();i++) {
-            vector<RCResult> result = scene->getObject(i)->checkIntersection(ray);
+        for (int i=0;i<scene.numOfObjects();i++) {
+            vector<RCResult> result = scene.getObject(i)->checkIntersection(ray);
 
             if ((result.size() > 0) && (result.at(0).getT() > 0)) {
                 for (int j=0;j<result.size();j++)
@@ -32,15 +32,6 @@ RCResult RayCaster::getNearestIntersection(vector<RCResult> results) {
                 iNearest = i;
             }
         }
-
-        for (int i=0;i<results.size();i++) {
-            if (i!=iNearest) {
-                delete results.at(i).getPoint();
-                delete results.at(i).getNormal();
-            }
-        }
-
-
 
         return result;
     }

@@ -12,11 +12,7 @@ BoundingBox::BoundingBox(Object *content)
     this->maxCoords = content->getMaximumCoords();
 }
 
-BoundingBox::~BoundingBox()
-{
-    delete minCoords;
-    delete maxCoords;
-}
+BoundingBox::~BoundingBox() {}
 
 Object *BoundingBox::getContent() const
 {
@@ -28,12 +24,12 @@ void BoundingBox::setContent(Object *content)
     this->content = content;
 }
 
-Vec3 *BoundingBox::getMaximumCoords()
+Vec3 BoundingBox::getMaximumCoords()
 {
     return maxCoords;
 }
 
-Vec3 *BoundingBox::getMinimumCoords()
+Vec3 BoundingBox::getMinimumCoords()
 {
     return minCoords;
 }

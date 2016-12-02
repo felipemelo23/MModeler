@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Render::Render(Scene *scene, Camera *camera, QImage *canvas)
+Render::Render(Scene scene, Camera camera, QImage *canvas)
 {
     this->scene = scene;
     this->camera = camera;
@@ -14,30 +14,30 @@ Render::Render(Scene *scene, Camera *camera, QImage *canvas)
 
 void Render::render()
 {
-    double widthPP = camera->getMaxPP()->getX() - camera->getMinPP()->getX();
-    double heightPP = camera->getMaxPP()->getY() - camera->getMinPP()->getY();
+    double widthPP = camera.getMaxPP().getX() - camera.getMinPP().getX();
+    double heightPP = camera.getMaxPP().getY() - camera.getMinPP().getY();
 
     double dX = widthPP/canvas->width();
     double dY = heightPP/canvas->height();
 
-    double initialX = camera->getMinPP()->getX() + (dX/2);
+    double initialX = camera.getMinPP().getX() + (dX/2);
 
     double currX;
-    double currY = camera->getMaxPP()->getY() - (dY/2);
+    double currY = camera.getMaxPP().getY() - (dY/2);
 
-    Vec3 *origin = new Vec3();
-    Vec3 *dir = new Vec3();
+    Vec3 origin = Vec3();
+    Vec3 dir = Vec3();
     for (int i=0;i<canvas->height();i++) {
         currX = initialX;
         for (int j=0;j<canvas->width();j++) {
-            dir->setX(currX);
-            dir->setY(currY);
-            dir->setZ(camera->getProjectionPlane());
-            dir->normalize();
+            dir.setX(currX);
+            dir.setY(currY);
+            dir.setZ(camera.getProjectionPlane());
+            dir.normalize();
 
-            Ray *ray = new Ray(origin,dir);
+            Ray ray = Ray(origin,dir);
 
-            ray = ray->transform(camera->getCW());
+            ray = ray.transform(camera.getCW());
 
             RCResult result = RayCaster::cast(ray,scene);
 
@@ -60,45 +60,34 @@ QColor Render::getPixelColor(RCResult income)
 
 QColor Render::calculatePhong(RCResult income)
 {
-    Color *I;
-    Color *Ia = new Color(0,0,0);
-    Color *Id = new Color(0,0,0);
-    Color *Is = new Color(0,0,0);
+    Color I;
+    Color Ia = Color(0,0,0);
+    Color Id = Color(0,0,0);
+    Color Is = Color(0,0,0);
 
-    Vec3 *eye = camera->getOrigin()->sub(income.getPoint());
-    eye->normalize();
+    Vec3 eye = camera.getOrigin() - income.getPoint();
+    eye.normalize();
 
-    Ia = scene->getAmbLight()->getColor()->prod(income.getMaterial()->getAmbient())->prod(scene->getAmbLight()->getIntesity());
+    Ia = (scene.getAmbLight().getColor()*income.getMaterial()->getAmbient())*scene.getAmbLight().getIntesity();
 
-    if (scene->numOfLights() > 0) {
-        for (int i=0;i<scene->numOfLights();i++) {
-            Light *light = scene->getLight(i);
+    if (scene.numOfLights() > 0) {
+        for (int i=0;i<scene.numOfLights();i++) {
+            Light light = *(scene.getLight(i));
 
-            Vec3 *lightDir = light->getOrigin()->sub(income.getPoint());
-            lightDir->normalize();
+            Vec3 lightDir = light.getOrigin() - income.getPoint();
+            lightDir.normalize();
 
-            Vec3 *reflect = income.getNormal()->prod(income.getNormal()->dot(lightDir)*2)->sub(lightDir);
-            reflect->normalize();
+            Vec3 reflect = income.getNormal()*(income.getNormal().dot_(lightDir))*2 - lightDir;
+            reflect.normalize();
 
-            Id->sum_(light->getColor()->prod(income.getMaterial()->getDiffuse())->prod(max(income.getNormal()->dot(lightDir),0.0))->prod(light->getIntensity()));
-            Is->sum_(light->getColor()->prod(income.getMaterial()->getSpecular())->prod(pow(max(reflect->dot(eye),0.0),income.getMaterial()->getShininess()))->prod(light->getIntensity()));
-
-            delete lightDir;
-            delete reflect;
+            Id = Id + light.getColor() * income.getMaterial()->getDiffuse() * max(income.getNormal().dot_(lightDir),0.0) * light.getIntensity();
+            Is = Is + light.getColor() * income.getMaterial()->getSpecular() * pow(max(reflect.dot_(eye),0.0),income.getMaterial()->getShininess()) * light.getIntensity();
         }
     }
 
-    I = Ia->sum(Id)->sum(Is);
+    I = Ia + Id + Is;
 
-    delete eye;
-    delete Ia;
-    delete Id;
-    delete Is;
-
-    delete income.getNormal();
-    delete income.getPoint();
-
-    return QColor(255*min(I->getRed(),1.0),255*min(I->getGreen(),1.0),255*min(I->getBlue(),1.0));
+    return QColor(255*min(I.getRed(),1.0),255*min(I.getGreen(),1.0),255*min(I.getBlue(),1.0));
 }
 
 QColor Render::getBackgroundColor() const
@@ -111,9 +100,7 @@ void Render::setBackgroundColor(const QColor &value)
     backgroundColor = value;
 }
 
-void Render::setScene(Scene *value)
+void Render::setScene(Scene value)
 {
     scene = value;
 }
-
-

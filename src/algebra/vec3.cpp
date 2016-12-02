@@ -6,8 +6,6 @@ Vec3::Vec3(double x, double y, double z) : VecN(3,x,y,z) {}
 
 Vec3::Vec3(Mtx mtx) : VecN(mtx) {}
 
-Vec3::~Vec3() {}
-
 double Vec3::getX()
 {
     return VecN::getValue(0);

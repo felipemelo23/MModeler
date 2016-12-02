@@ -59,7 +59,6 @@ SOURCES += main.cpp\
     util/scenefilemanager.cpp \
     objects/compoundobject.cpp \
     visualization/glcompoundobjectadapter.cpp \
-    objects/csgnode.cpp \
     rendering/camera.cpp \
     rendering/ray.cpp \
     rendering/raycaster.cpp \

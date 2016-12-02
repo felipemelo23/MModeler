@@ -9,14 +9,15 @@
 class Face
 {
 public:
-    Face(int sides, Vec4 **v, Material *material);
-    Face(int sides, Material *material, Vec4 *v1, Vec4 *v2, Vec4 *v3, ...);
+    Face();
+    Face(int sides, Vec4 *v, Material *material);
+    Face(int sides, Material *material, Vec4 v1, Vec4 v2, Vec4 v3, ...);
     ~Face();
 
     int getSides() const;
-    Vec4 **getVertices() const;
+    Vec4 *getVertices() const;
 
-    RCResult checkIntersection(Ray *ray);
+    RCResult checkIntersection(Ray ray);
 
     Material *getMaterial() const;
     void setMaterial(Material *value);
@@ -24,8 +25,8 @@ public:
 
 private:
     int sides;
-    Vec4 **vertices;
-    bool isInside(Vec4 *pos);
+    Vec4 *vertices;
+    bool isInside(Vec4 pos);
 
     Material *material;
 };

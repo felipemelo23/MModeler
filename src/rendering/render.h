@@ -11,18 +11,18 @@
 class Render
 {
 public:
-    Render(Scene *scene, Camera *camera, QImage *canvas);
+    Render(Scene scene, Camera camera, QImage *canvas);
 
     void render();
 
     QColor getBackgroundColor() const;
     void setBackgroundColor(const QColor &value);
 
-    void setScene(Scene *value);
+    void setScene(Scene value);
 
 private:
-    Scene *scene;
-    Camera *camera;
+    Scene scene;
+    Camera camera;
     QImage *canvas;
 
     QColor backgroundColor;

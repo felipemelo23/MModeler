@@ -45,9 +45,9 @@ void OctreeFileManager::save()
 
 QString OctreeFileManager::saveOctree(Ocnode *octree) {
     QString line = "";
-    line += QString::number(octree->getOrigin()->getX()) + ",";
-    line += QString::number(octree->getOrigin()->getY()) + ",";
-    line += QString::number(octree->getOrigin()->getZ()) + ",";
+    line += QString::number(octree->getOrigin().getX()) + ",";
+    line += QString::number(octree->getOrigin().getY()) + ",";
+    line += QString::number(octree->getOrigin().getZ()) + ",";
     line += QString::number(octree->getSize()) + " ";
     line += octreeRepresetation(octree);
 
@@ -125,7 +125,7 @@ void OctreeFileManager::loadChildren(Ocnode *parent, queue<char> *repQueue) {
         child = new Ocnode();
         child->setDepth(parent->getDepth() + 1);
         child->setSize(parent->getSize()/2);
-        child->translate(parent->getOrigin()->getX(),parent->getOrigin()->getY(),parent->getOrigin()->getZ());
+        child->translate(parent->getOrigin().getX(),parent->getOrigin().getY(),parent->getOrigin().getZ());
         reposition(child,i);
 
         char state = repQueue->front();

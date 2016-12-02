@@ -381,11 +381,8 @@ void glDisplayWidget::checkDirts() {
                 } while (color[0] + color[1] + color[2] > 2);
 
                 newObj->setColor(color);
-                Color *c = new Color(color[0],color[1],color[2]);
-                objects->getObject(i)->setMaterial(new Material(c->prod(0.4),
-                                                                c->prod(0.6),
-                                                                c->prod(0.0),5));
-                delete c;
+                Color c = Color(color[0],color[1],color[2]);
+                objects->getObject(i)->setMaterial(new Material(c*0.4,c*0.6,c*0.0,5));
                 scene->addObject(newObj);
             } else {
                 newObj->setColor(scene->getObject(i)->getColor());

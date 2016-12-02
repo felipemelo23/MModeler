@@ -46,8 +46,6 @@ VecN::VecN(Mtx mtx)
     }
 }
 
-VecN::~VecN() {}
-
 int VecN::getSize()
 {
     if (columns > 1) return columns;

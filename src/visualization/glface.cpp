@@ -1,5 +1,11 @@
 #include "glface.h"
 
+glFace::glFace()
+{
+    this->empty = false;
+    this->sides = 0;
+}
+
 glFace::glFace(int sides, int *v)
 {
     this->empty = false;

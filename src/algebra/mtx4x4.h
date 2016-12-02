@@ -13,7 +13,6 @@ public:
            double v20,double v21,double v22,double v23,
            double v30,double v31,double v32,double v33);
     Mtx4x4(Mtx mtx);
-    ~Mtx4x4();
 
     Vec4 *getLine(unsigned int line);    
     Vec4 *getColumn(unsigned int column);

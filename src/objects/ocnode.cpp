@@ -11,8 +11,6 @@ Ocnode::Ocnode(bool isRoot) : Object()
 
 Ocnode::~Ocnode()
 {
-    delete ow;
-    delete wo;
     if (children != NULL) {
         for (int i=0;i<8;i++)
             delete getChild(i);
@@ -68,9 +66,9 @@ vector<Ocnode *> *Ocnode::getChildrenCopy()
         child->setSize(getChild(i)->getSize());
         child->setState(getChild(i)->getState());
         child->setDepth(getChild(i)->getDepth());
-        child->translate(getChild(i)->getOrigin()->getX(),
-                         getChild(i)->getOrigin()->getY(),
-                         getChild(i)->getOrigin()->getZ());
+        child->translate(getChild(i)->getOrigin().getX(),
+                         getChild(i)->getOrigin().getY(),
+                         getChild(i)->getOrigin().getZ());
         child->setChildren(getChild(i)->getChildrenCopy());
         copy->push_back(child);
     }
@@ -100,40 +98,37 @@ Ocnode *Ocnode::getChild(int index)
     return NULL;
 }
 
-int Ocnode::isInside(Vec4 *pos)
+int Ocnode::isInside(Vec4 pos)
 {
 
 }
 
-Vec3 *Ocnode::getMinimumCoords()
+Vec3 Ocnode::getMinimumCoords()
 {
 
 }
 
-Vec3 *Ocnode::getMaximumCoords()
+Vec3 Ocnode::getMaximumCoords()
 {
 
 }
 
-Vec4 **Ocnode::getVertices()
+Vec4 *Ocnode::getVertices()
 {
-    Vec4 **v = new Vec4*[8];
+    Vec4 *v = new Vec4[8];
 
-    v[0] = new Vec4(size/2,-size/2,size/2,1);
-    v[1] = new Vec4(-size/2,-size/2,size/2,1);
-    v[2] = new Vec4(-size/2,-size/2,-size/2,1);
-    v[3] = new Vec4(size/2,-size/2,-size/2,1);
-    v[4] = new Vec4(size/2,size/2,-size/2,1);
-    v[5] = new Vec4(-size/2,size/2,-size/2,1);
-    v[6] = new Vec4(-size/2,size/2,size/2,1);
-    v[7] = new Vec4(size/2,size/2,size/2,1);
+    v[0] = Vec4(size/2,-size/2,size/2,1);
+    v[1] = Vec4(-size/2,-size/2,size/2,1);
+    v[2] = Vec4(-size/2,-size/2,-size/2,1);
+    v[3] = Vec4(size/2,-size/2,-size/2,1);
+    v[4] = Vec4(size/2,size/2,-size/2,1);
+    v[5] = Vec4(-size/2,size/2,-size/2,1);
+    v[6] = Vec4(-size/2,size/2,size/2,1);
+    v[7] = Vec4(size/2,size/2,size/2,1);
 
-    Vec4 *trash;
     for (int i=0;i<8;i++)
     {
-        trash = v[i];
-        v[i] = ow->prod(v[i]);
-        delete trash;
+        v[i] = ow*v[i];
     }
 
     return v;
@@ -187,13 +182,13 @@ void Ocnode::classify(Object *src, int maxDepth,bool hasBoundingBox)
     //define a boundingbox do objeto
     if((isRoot)&&(!hasBoundingBox))
     {
-        Vec3 *range = src->getMaximumCoords()->sub(src->getMinimumCoords());
-        Vec3 *p = src->getMaximumCoords()->sum(src->getMinimumCoords())->prod(0.5);
-        size = max(max(range->getX(),range->getY()) , range->getZ());
-        translate(p->getX(),p->getY(),p->getZ());
+        Vec3 range = src->getMaximumCoords() - src->getMinimumCoords();
+        Vec3 p = (src->getMaximumCoords() + src->getMinimumCoords())*0.5;
+        size = max(max(range.getX(),range.getY()),range.getZ());
+        translate(p.getX(),p.getY(),p.getZ());
     }
 
-    Vec4 **v = getVertices();
+    Vec4 *v = getVertices();
     int count=0;
 
     for(int i=0; i<8; i++)
@@ -211,7 +206,7 @@ void Ocnode::classify(Object *src, int maxDepth,bool hasBoundingBox)
             children->at(i)->setDepth(depth+1);
             children->at(i)->setSize(size/2);
 
-            children->at(i)->translate(getOrigin()->getX(),getOrigin()->getY(),getOrigin()->getZ());
+            children->at(i)->translate(getOrigin().getX(),getOrigin().getY(),getOrigin().getZ());
         }
 
         double t = size/4;
@@ -242,7 +237,7 @@ void Ocnode::classify(Object *src, int maxDepth,bool hasBoundingBox)
 void Ocnode::classify(vector<Object *> src, int maxDepth,bool hasBoundingBox)
 {
     int count=0;
-    Vec4 **v = getVertices();
+    Vec4 *v = getVertices();
 
     for (int i=0;i<src.size();i++) {
         int countObj = 0;
@@ -265,7 +260,7 @@ void Ocnode::classify(vector<Object *> src, int maxDepth,bool hasBoundingBox)
             children->at(i)->setDepth(depth+1);
             children->at(i)->setSize(size/2);
 
-            children->at(i)->translate(getOrigin()->getX(),getOrigin()->getY(),getOrigin()->getZ());
+            children->at(i)->translate(getOrigin().getX(),getOrigin().getY(),getOrigin().getZ());
         }
 
         double t = size/4;
@@ -299,7 +294,7 @@ Ocnode* Ocnode::intersection(Ocnode *A, Ocnode *B)
 
     octree->setSize(A->getSize());
     octree->setState(0);
-    octree->translate(A->getOrigin()->getX(),A->getOrigin()->getY(),A->getOrigin()->getY());
+    octree->translate(A->getOrigin().getX(),A->getOrigin().getY(),A->getOrigin().getZ());
     octree->setChildren(getCommonChildren(A,B));
 
     return octree;
@@ -319,9 +314,9 @@ vector<Ocnode*> *Ocnode::getCommonChildren(Ocnode* A, Ocnode *B) {
             child = new Ocnode();
             child->setDepth(A->getChild(i)->getDepth());
             child->setSize(A->getChild(i)->getSize());
-            child->translate(A->getChild(i)->getOrigin()->getX(),
-                             A->getChild(i)->getOrigin()->getY(),
-                             A->getChild(i)->getOrigin()->getZ());
+            child->translate(A->getChild(i)->getOrigin().getX(),
+                             A->getChild(i)->getOrigin().getY(),
+                             A->getChild(i)->getOrigin().getZ());
 
             if ((A->getChild(i)->getState() == B->getChild(i)->getState())&&
                 (A->getChild(i)->getState() == 1)){

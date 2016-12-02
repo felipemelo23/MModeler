@@ -6,8 +6,6 @@ Mtx4x4::Mtx4x4(double v00, double v01, double v02, double v03, double v10, doubl
 
 Mtx4x4::Mtx4x4(Mtx mtx) : MtxNxN(mtx) {}
 
-Mtx4x4::~Mtx4x4() {}
-
 Vec4 *Mtx4x4::getLine(unsigned int line)
 {
     return (Vec4*) Mtx::getLine(line);
@@ -111,7 +109,7 @@ Vec4 Mtx4x4::operator*(Vec4 vec)
 
 Vec3 Mtx4x4::prod_(Vec3 vec, double w)
 {
-    return (Vec3) operator*(Vec4(&vec,w)).getVec3_();
+    return operator*(Vec4(&vec,w)).getVec3_();
 }
 
 Mtx4x4 Mtx4x4::operator*(double lambda)

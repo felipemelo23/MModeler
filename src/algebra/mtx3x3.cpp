@@ -4,12 +4,7 @@ Mtx3x3::Mtx3x3(double value) : MtxNxN(value) {}
 
 Mtx3x3::Mtx3x3(double v00, double v01, double v02, double v10, double v11, double v12, double v20, double v21, double v22) : MtxNxN(3,v00,v01,v02,v10,v11,v12,v20,v21,v22) {}
 
-Mtx3x3::Mtx3x3(Mtx mtx)
-{
-
-}
-
-Mtx3x3::~Mtx3x3() {}
+Mtx3x3::Mtx3x3(Mtx mtx) : MtxNxN(mtx) {}
 
 Vec3 *Mtx3x3::getLine(unsigned int line)
 {

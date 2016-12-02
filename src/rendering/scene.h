@@ -19,14 +19,14 @@ public:
     void addLight(Light *light);
     int numOfLights();
 
-    AmbientLight *getAmbLight() const;
-    void setAmbLight(AmbientLight *value);
+    AmbientLight getAmbLight() const;
+    void setAmbLight(AmbientLight value);
 
 private:
     vector<Object*> *objects;
     vector<Light*> *lights;
 
-    AmbientLight *ambLight;
+    AmbientLight ambLight;
 };
 
 #endif // SCENE_H

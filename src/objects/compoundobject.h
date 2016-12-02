@@ -13,15 +13,15 @@ public:
     CompoundObject(Object *a, Object *b, int op);
     ~CompoundObject();
 
-    int isInside(Vec4 *pos);
-    vector<RCResult> checkIntersection(Ray *ray);
-    Vec3 *getMaximumCoords();
-    Vec3 *getMinimumCoords();
+    int isInside(Vec4 pos);
+    vector<RCResult> checkIntersection(Ray ray);
+    Vec3 getMaximumCoords();
+    Vec3 getMinimumCoords();
 
     Object *getObjectA();
     Object *getObjectB();
 
-    Vec3 *getOrigin();
+    Vec3 getOrigin();
 
     void translate(double x, double y, double z);
     void scale(double x, double y, double z);

@@ -11,7 +11,6 @@ public:
     VecN(int size, double value=0);
     VecN(int size, double v1, double v2, ...);
     VecN(Mtx mtx);
-    ~VecN();
 
     int getSize();
 

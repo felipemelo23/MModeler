@@ -4,7 +4,7 @@ Scene::Scene()
 {
     this->objects = new vector<Object*>();
     this->lights = new vector<Light*>();
-    this->ambLight = new AmbientLight();
+    this->ambLight = AmbientLight();
 }
 
 Object *Scene::getObject(int index)
@@ -37,12 +37,12 @@ int Scene::numOfLights()
     return lights->size();
 }
 
-AmbientLight *Scene::getAmbLight() const
+AmbientLight Scene::getAmbLight() const
 {
     return ambLight;
 }
 
-void Scene::setAmbLight(AmbientLight *value)
+void Scene::setAmbLight(AmbientLight value)
 {
     ambLight = value;
 }

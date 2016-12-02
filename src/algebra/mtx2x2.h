@@ -10,7 +10,6 @@ public:
     Mtx2x2(double value=0);
     Mtx2x2(double v00,double v01,double v10,double v11);
     Mtx2x2(Mtx mtx);
-    ~Mtx2x2();
 
     Vec2 *getLine(unsigned int line);
     Vec2 *getColumn(unsigned int column);
@@ -44,7 +43,7 @@ public:
     static Mtx2x2 *getScaleMtx(double x, double y);
 
     static Mtx2x2 getIdentity_();
-    static Mtx2x2 getRotateMtx_(double degree, bool x, bool y);
+    static Mtx2x2 getRotateMtx_(double degree);
     static Mtx2x2 getScaleMtx_(double x, double y);
 };
 

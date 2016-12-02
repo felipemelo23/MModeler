@@ -19,7 +19,6 @@ public:
     Mtx(double value=0);
     Mtx(unsigned int lines, unsigned int columns, double value=0);
     Mtx(unsigned int lines, unsigned int columns, double v1, double v2, ...);
-    virtual ~Mtx();
 
     /* BASIC ACCESSORS */
     unsigned int getLines() const;

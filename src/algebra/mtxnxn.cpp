@@ -49,8 +49,6 @@ MtxNxN::MtxNxN(Mtx mtx)
     }
 }
 
-MtxNxN::~MtxNxN() {}
-
 int MtxNxN::getN()
 {
     return lines;

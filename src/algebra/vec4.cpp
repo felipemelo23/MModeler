@@ -6,9 +6,9 @@ Vec4::Vec4(double x, double y, double z, double w) : VecN(4,x,y,z,w) {}
 
 Vec4::Vec4(Vec3 *vec, double w) : VecN(4,vec->getX(),vec->getY(),vec->getZ(),w) {}
 
-Vec4::Vec4(Mtx mtx) : VecN(mtx) {}
+Vec4::Vec4(Vec3 vec, double w) : VecN(4,vec.getX(),vec.getY(),vec.getZ(),w) {}
 
-Vec4::~Vec4() {}
+Vec4::Vec4(Mtx mtx) : VecN(mtx) {}
 
 double Vec4::getX()
 {

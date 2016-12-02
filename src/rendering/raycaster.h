@@ -8,7 +8,7 @@
 class RayCaster
 {
 public:
-    static RCResult cast(Ray *ray, Scene *scene);
+    static RCResult cast(Ray ray, Scene scene);
 private:
     static RCResult getNearestIntersection(vector<RCResult> results);
 };

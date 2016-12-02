@@ -7,13 +7,13 @@ class AmbientLight
 {
 public:
     AmbientLight();
-    AmbientLight(Color *color, double intesity);
+    AmbientLight(Color color, double intesity);
 
-    Color *getColor() const;
+    Color getColor() const;
     double getIntesity() const;
 
 private:
-    Color *color;
+    Color color;
     double intesity;
 };
 

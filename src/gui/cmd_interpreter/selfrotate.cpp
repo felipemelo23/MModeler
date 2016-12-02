@@ -13,9 +13,9 @@ void SelfRotate::execute(QStringList params, ObjectsManager *objects)
             for (int i=0;i<objects->numOfSelected();i++) {
                 int objId = objects->getSelected(i);
 
-                Vec3 *origin = objects->getObject(objId)->getOrigin();
+                Vec3 origin = objects->getObject(objId)->getOrigin();
 
-                objects->getObject(objId)->translate(-origin->getX(),-origin->getY(),-origin->getZ());
+                objects->getObject(objId)->translate(-origin.getX(),-origin.getY(),-origin.getZ());
 
                 if (params.at(2) == "x") {
                     objects->getObject(objId)->rotate((params.at(1).toDouble()*3.141592)/180,true,false,false);
@@ -25,7 +25,7 @@ void SelfRotate::execute(QStringList params, ObjectsManager *objects)
                     objects->getObject(objId)->rotate((params.at(1).toDouble()*3.141592)/180,false,false,true);
                 }
 
-                objects->getObject(objId)->translate(origin->getX(),origin->getY(),origin->getZ());
+                objects->getObject(objId)->translate(origin.getX(),origin.getY(),origin.getZ());
 
                 objects->pushDirt(objId,0);
             }

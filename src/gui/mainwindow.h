@@ -25,12 +25,6 @@ private:
     CommandInterpreter *interpreter;
     ObjectsManager *objects;
 
-    Render *render;
-    AmbientLight *ambLight;
-    Light *light;
-    Camera *camera;
-    QImage *image;
-
     vector<QString> commandList;
 
     void updateObjectsTree();

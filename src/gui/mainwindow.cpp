@@ -37,15 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpenSF,SIGNAL(triggered(bool)),this,SLOT(openSceneFile()));
     connect(ui->actionSaveSF,SIGNAL(triggered(bool)),this,SLOT(saveSceneFile()));
     connect(ui->actionOpenCF,SIGNAL(triggered(bool)),this,SLOT(openCSGFile()));
-
-    camera = NULL;
-
-    image = new QImage(250,250,QImage::Format_RGB32);
-
-    render = new Render(NULL,camera,image);
-
-    ambLight = NULL;
-    light = NULL;
 }
 
 MainWindow::~MainWindow()
@@ -174,9 +165,9 @@ void MainWindow::updateObjectsTree() {
             item->setText(0, obj->getName() + " - id: " + QString::number(i));
 
             subItem = new QTreeWidgetItem();
-            subItem->setText(0, "Position: " + QString::number(obj->getOrigin()->getX()) + "," +
-                                               QString::number(obj->getOrigin()->getY()) + "," +
-                                               QString::number(obj->getOrigin()->getZ()));
+            subItem->setText(0, "Position: " + QString::number(obj->getOrigin().getX()) + "," +
+                                               QString::number(obj->getOrigin().getY()) + "," +
+                                               QString::number(obj->getOrigin().getZ()));
             item->addChild(subItem);
 
             if (obj->getType() == Object::RBPRISM) {
@@ -284,7 +275,7 @@ void MainWindow::on_delBtn_clicked()
 
 void MainWindow::on_renderBtn_clicked()
 {
-    Scene *scene = new Scene();
+    Scene scene = Scene();
 
     if (objects->numOfObjects() > 0) {
         for (int i=0;i<objects->numOfObjects();i++) {
@@ -294,27 +285,32 @@ void MainWindow::on_renderBtn_clicked()
                 (objects->getObject(i)->getType() == Object::COMPOUND)||
                 (objects->getObject(i)->getType() == Object::BOX)||
                 (objects->getObject(i)->getType() == Object::CYLINDER))
-                scene->addObject(objects->getObject(i));
+                scene.addObject(objects->getObject(i));
         }
     }
 
-    if (ambLight != NULL) delete ambLight;
-    ambLight = new AmbientLight(new Color(ui->ambLightRed->value(),ui->ambLightGreen->value(),ui->ambLightBlue->value()),1);
+    AmbientLight ambLight = AmbientLight(Color(ui->ambLightRed->value(),ui->ambLightGreen->value(),ui->ambLightBlue->value()),1);
 
-    if (light != NULL) delete light;
-    light = new Light(new Vec3(ui->xLightPos->value(),ui->yLightPos->value(),ui->zLightPos->value()),
-                      new Color(ui->pontualLightRed->value(),ui->pontualLightGreen->value(),ui->pontualLightBlue->value()),1);
+    Light *light = new Light(Vec3(ui->xLightPos->value(),ui->yLightPos->value(),ui->zLightPos->value()),
+                             Color(ui->pontualLightRed->value(),ui->pontualLightGreen->value(),ui->pontualLightBlue->value()),1);
 
-    scene->setAmbLight(ambLight);
-    scene->addLight(light);
+    scene.setAmbLight(ambLight);
+    scene.addLight(light);
 
-    camera = new Camera(new Vec3(ui->xCamPos->value(),ui->yCamPos->value(),ui->zCamPos->value()),
-                        new Vec3(ui->xCamLookAt->value(),ui->yCamLookAt->value(),ui->zCamLookAt->value()),
-                        new Vec3(ui->xCamVUp->value(),ui->yCamVUp->value(),ui->zCamVUp->value()));
+    Camera camera = Camera(Vec3(ui->xCamPos->value(),ui->yCamPos->value(),ui->zCamPos->value()),
+                           Vec3(ui->xCamLookAt->value(),ui->yCamLookAt->value(),ui->zCamLookAt->value()),
+                           Vec3(ui->xCamVUp->value(),ui->yCamVUp->value(),ui->zCamVUp->value()));
 
-    render = new Render(scene,camera,image);
+    double camW = ui->widthSpn->value()/(float) max(ui->widthSpn->value(),ui->heightSpn->value());
+    double camH = ui->heightSpn->value()/(float) max(ui->widthSpn->value(),ui->heightSpn->value());
 
-    render->render();
+    camera.setMaxPP(Vec2(camW/2,camH/2));
+    camera.setMinPP(Vec2(-camW/2,-camH/2));
+
+    QImage *image = new QImage(ui->widthSpn->value(),ui->heightSpn->value(),QImage::Format_RGB32);
+    Render render = Render(scene,camera,image);
+
+    render.render();
 
     ui->canvas->setPixmap(QPixmap::fromImage(*image));
 }

@@ -9,7 +9,6 @@ public:
     Vec2(double value=0);
     Vec2(double x, double y);
     Vec2(Mtx mtx);
-    ~Vec2();
 
     double getX();
     double getY();
