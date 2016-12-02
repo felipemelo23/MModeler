@@ -21,9 +21,9 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
     setMinimumHeight(300);
     setMinimumWidth(400);
 
-    backgroundColor[0] = 1;
-    backgroundColor[1] = 1;
-    backgroundColor[2] = 1;
+    backgroundColor[0] = 0.8;
+    backgroundColor[1] = 0.8;
+    backgroundColor[2] = 0.8;
 
     lmbPressed = false;
     mmbPressed = false;
@@ -93,20 +93,25 @@ void glDisplayWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
     double norm = max(minimumWidth(),minimumHeight());
     windowWidth = width/norm;
     windowHeight = height/norm;
 
-    glBegin(GL_PROJECTION_MATRIX);
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-windowWidth/20,windowWidth/20,-windowHeight/20,windowHeight/20,0.1,10000);
-    glEnd();
+
+    glMatrixMode(GL_MODELVIEW);
 
     glPushMatrix();
     glTranslated(transX,transY,zoom);
     glRotated(rotX,1,0,0);
     glRotated(rotY,0,1,0);
     glRotated(rotZ,0,0,1);
+
+    GLfloat light1_position[] = { -1.0, -2.0, -3.0, 0.0 };
+    glLightfv(GL_LIGHT0, GL_POSITION, light1_position);
 
     if (grid) drawGrid();
     drawScene();
@@ -270,7 +275,7 @@ void glDisplayWidget::drawGizmo()
 void glDisplayWidget::drawGrid()
 {
     glDisable(GL_LIGHTING);
-    glColor3d(0.8,0.8,0.8);
+    glColor3d(backgroundColor[0]*0.8,backgroundColor[1]*0.8,backgroundColor[2]*0.8);
     glLineWidth(2);
     for (int i=0;i<11;i++) {
         glBegin(GL_LINES);
@@ -308,25 +313,16 @@ void glDisplayWidget::initDisplay() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
-    glEnable(GL_LIGHT2);
-    glEnable(GL_LIGHT3);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
 
-    GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-    GLfloat mat_ambient[] = { 0.6, 0.6, 0.6, 1.0};
-    GLfloat light1_position[] = { 10.0, 10.0, 10.0, 1.0 };
-    GLfloat light2_position[] = { 10.0, 10.0, -10.0, 1.0 };
-    GLfloat light3_position[] = { -10.0, 10.0, 10.0, 1.0 };
-    GLfloat light4_position[] = { -10.0, 10.0, -10.0, 1.0 };
-    glShadeModel (GL_SMOOTH);
+    GLfloat mat_diffuse[] = { 1,1,1,1 };
+    GLfloat mat_ambient[] = { 1,1,1,1 };
 
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-    glLightfv(GL_LIGHT0, GL_POSITION, light1_position);
-    glLightfv(GL_LIGHT1, GL_POSITION, light2_position);
-    glLightfv(GL_LIGHT2, GL_POSITION, light3_position);
-    glLightfv(GL_LIGHT3, GL_POSITION, light4_position);
+
+    glShadeModel (GL_SMOOTH);
 }
 
 void glDisplayWidget::drawScene() {

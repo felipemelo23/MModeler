@@ -46,6 +46,7 @@ void RBPyramid::generateVertices()
         v[i] = ow*v[i];
     }
 
+    if (vertices != NULL) delete[] vertices;
     vertices = v;
 }
 
@@ -95,6 +96,7 @@ RBPyramid::RBPyramid(int numOfSides) : Object()
     this->numOfSides = numOfSides;
     this->type = Object::RBPYRAMID;
     this->name = "Pyramid";
+    this->vertices = NULL;
     this->generateVertices();
     this->generateFaces();
 }
@@ -192,4 +194,22 @@ Vec3 RBPyramid::getMinimumCoords()
     }
 
     return Vec3(x,y,z);
+}
+
+void RBPyramid::translate(double x, double y, double z)
+{
+    Object::translate(x,y,z);
+    this->generateVertices();
+}
+
+void RBPyramid::scale(double x, double y, double z)
+{
+    Object::scale(x,y,z);
+    this->generateVertices();
+}
+
+void RBPyramid::rotate(double degree, bool x, bool y, bool z)
+{
+    Object::rotate(degree,x,y,z);
+    this->generateVertices();
 }

@@ -50,6 +50,8 @@ private slots:
     void on_insertBoxBtn_clicked();
     void on_insertCylinderBtn_clicked();
     void on_cmdFeed_returnPressed();
+    void on_insertPyramidBtn_clicked();
+    void on_insertPrismBtn_clicked();
 };
 
 #endif // MAINWINDOW_H

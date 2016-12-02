@@ -27,6 +27,10 @@ public:
     Vec3 getMinimumCoords();
     int getNumOfSides() const;
 
+    void translate(double x, double y, double z);
+    void scale(double x, double y, double z);
+    void rotate(double degree, bool x=true, bool y=false, bool z=false);
+
     vector<RCResult> checkIntersection(Ray ray);
 
     Vec4 *getVertices();

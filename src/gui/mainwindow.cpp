@@ -449,3 +449,25 @@ void MainWindow::on_cmdFeed_returnPressed()
 {
     feedCommand();
 }
+
+void MainWindow::on_insertPyramidBtn_clicked()
+{
+    bool ok;
+    int sides = QInputDialog::getInt(this,tr("Insert Pyramid"),tr("Number of Sides"),3,3,20,1,&ok);
+
+    if (ok) {
+        ui->cmdFeed->setText("insert pyramid " + QString::number(sides));
+        feedCommand();
+    }
+}
+
+void MainWindow::on_insertPrismBtn_clicked()
+{
+    bool ok;
+    int sides = QInputDialog::getInt(this,tr("Insert Prism"),tr("Number of Sides"),3,3,20,1,&ok);
+
+    if (ok) {
+        ui->cmdFeed->setText("insert prism " + QString::number(sides));
+        feedCommand();
+    }
+}

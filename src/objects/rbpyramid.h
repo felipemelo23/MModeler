@@ -29,6 +29,10 @@ public:
     vector<RCResult> checkIntersection(Ray ray);
 
     Vec4 *getVertices();
+
+    void translate(double x, double y, double z);
+    void scale(double x, double y, double z);
+    void rotate(double degree, bool x, bool y, bool z);
 };
 
 #endif // RBPYRAMID_H

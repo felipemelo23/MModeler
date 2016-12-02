@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/root">
         <file>gui/icon.ico</file>
+        <file>gui/sphere.png</file>
+        <file>gui/prism.png</file>
+        <file>gui/pyramid.png</file>
+        <file>gui/octree.png</file>
+        <file>gui/cylinder.png</file>
+        <file>gui/cube.png</file>
+        <file>gui/csg.png</file>
     </qresource>
 </RCC>

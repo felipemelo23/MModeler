@@ -12,6 +12,24 @@ int RBPrism::getNumOfSides() const
     return numOfSides;
 }
 
+void RBPrism::translate(double x, double y, double z)
+{
+    Object::translate(x,y,z);
+    this->generateVertices();
+}
+
+void RBPrism::scale(double x, double y, double z)
+{
+    Object::scale(x,y,z);
+    this->generateVertices();
+}
+
+void RBPrism::rotate(double degree, bool x, bool y, bool z)
+{
+    Object::rotate(degree,x,y,z);
+    this->generateVertices();
+}
+
 vector<RCResult> RBPrism::checkIntersection(Ray ray)
 {
     vector<RCResult> results = vector<RCResult>();
@@ -68,6 +86,7 @@ void RBPrism::generateVertices()
         v[numOfSides+i] = ow*v[numOfSides+i];
     }
 
+    if (vertices != NULL) delete[] vertices;
     vertices = v;
 }
 
@@ -112,6 +131,7 @@ RBPrism::RBPrism(int numOfSides) : Object()
     this->numOfSides = numOfSides;
     this->type = Object::RBPRISM;
     this->name = "Prism";
+    this->vertices = NULL;
     this->generateVertices();
     this->generateFaces();
 }
