@@ -36,6 +36,10 @@ public:
     MEdge *getRnext() const;
     void setRnext(MEdge *value);
 
+    string getId() const;
+    void setId(const string &value);
+
+
 private:
     string id;
 

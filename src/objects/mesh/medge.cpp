@@ -96,3 +96,13 @@ void MEdge::setRnext(MEdge *value)
 {
     rnext = value;
 }
+
+string MEdge::getId() const
+{
+    return id;
+}
+
+void MEdge::setId(const string &value)
+{
+    id = value;
+}

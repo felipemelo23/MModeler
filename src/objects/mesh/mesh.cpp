@@ -37,6 +37,137 @@ void Mesh::addEdge(std::__cxx11::string id, MEdge *edge)
     edges.insert(std::make_pair(id,edge));
 }
 
+void Mesh::mvfs()
+{
+
+}
+
+void Mesh::mev(std::__cxx11::string vertexId)
+{
+
+}
+
+void Mesh::mef(std::__cxx11::string sVertexId, std::__cxx11::string eVertexId)
+{
+
+}
+
+vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
+{
+    vector<MEdge*> result = vector<MEdge*>();
+
+    MEdge *vertexEdge = edges.at(vertices.at(vertexId)->getEdgeId());
+
+    result.push_back(vertexEdge);
+    result.push_back(vertexEdge->getRnext());
+
+    vector<string> facesVisited = vector<string>();
+
+    facesVisited.push_back(vertexEdge->getLeft()->getId());
+    facesVisited.push_back(vertexEdge->getRight()->getId());
+
+    MEdge *currEdge = vertexEdge->getRnext();
+
+    while (currEdge->getId() != vertexEdge->getLprev()->getId()) {
+        if (!isFaceVisited(facesVisited,currEdge->getRight()->getId())) {
+            vector<MEdge*> faceEdges = ef(currEdge->getRight()->getId());
+
+            for (MEdge* edge : faceEdges) {
+                if ((edge->getStart()->getId() == vertexId)||
+                    (edge->getEnd()->getId() == vertexId)) {
+                    result.push_back(edge);
+                    currEdge = edge;
+                    break;
+                }
+            }
+        }
+
+        if (!isFaceVisited(facesVisited,currEdge->getLeft()->getId())) {
+            vector<MEdge*> faceEdges = ef(currEdge->getLeft()->getId());
+
+            for (MEdge* edge : faceEdges) {
+                if ((edge->getStart()->getId() == vertexId)||
+                    (edge->getEnd()->getId() == vertexId)) {
+                    result.push_back(edge);
+                    currEdge = edge;
+                    break;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+bool Mesh::isFaceVisited(vector<string> facesVisited, string faceId) {
+    bool result = false;
+
+    for (string face : facesVisited) {
+        if (face == faceId) {
+            result = true;
+            break;
+        }
+    }
+
+    return result;
+}
+
+vector<MEdge *> Mesh::ee(std::__cxx11::string edgeId)
+{
+    vector<MEdge *> edges1 = ev(edges.at(edgeId)->getStart()->getId());
+    vector<MEdge *> edges2 = ev(edges.at(edgeId)->getEnd()->getId());
+
+    for (MEdge *edge : edges2) {
+        if (edge->getId() != edgeId) edges1.push_back(edge);
+    }
+
+    return edges1;
+}
+
+std::pair<MFace *, MFace *> Mesh::fe(std::__cxx11::string edgeId)
+{
+    MEdge *edge = edges.at(edgeId);
+    return std::make_pair(edge->getRight(), edge->getLeft());
+}
+
+vector<MEdge *> Mesh::ef(std::__cxx11::string faceId)
+{
+    vector<MEdge *> result = vector<MEdge *>();
+
+    MVertex *vertex;
+    MEdge *nextEdge;
+
+    MEdge *edge0 = edges.at(faces.at(faceId)->getEdgeId());
+
+    result.push_back(edge0);
+
+    if (edge0->getLeft()->getId() == faceId) {
+        vertex = edge0->getStart();
+        nextEdge = edge0->getLnext();
+    }
+
+    if (edge0->getRight()->getId() == faceId) {
+        vertex = edge0->getEnd();
+        nextEdge = edge0->getRnext();
+    }
+
+    while (nextEdge->getId() != edge0->getId()) {
+        result.push_back(nextEdge);
+
+        if (nextEdge->getStart()->getId() == vertex->getId()) {
+            vertex = nextEdge->getEnd();
+            nextEdge = nextEdge->getRnext();
+        }
+
+        if (nextEdge->getEnd()->getId() == vertex->getId()) {
+            vertex = nextEdge->getStart();
+            nextEdge = nextEdge->getLnext();
+        }
+    }
+
+    return result;
+}
+
 int Mesh::isInside(Vec4 pos)
 {
     return 0;

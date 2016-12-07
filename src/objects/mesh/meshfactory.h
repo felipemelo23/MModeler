@@ -7,7 +7,9 @@
 class MeshFactory
 {
 public:
-    static Mesh factory(vector<Vec3*> vertices, vector<Face> faces);
+    static Mesh *buildGenMesh(vector<Vec3*> vertices, vector<Face> faces);
+    static Mesh *buildBox();
+    static Mesh *buildSphere();
 };
 
 #endif // MESHFACTORY_H

@@ -23,6 +23,15 @@ public:
     void addFace(string id, MFace *face);
     void addEdge(string id, MEdge *edge);
 
+    void mvfs();
+    void mev(string vertexId);
+    void mef(string sVertexId, string eVertexId);
+
+    vector<MEdge*> ev(string vertexId);
+    vector<MEdge*> ee(string edgeId);
+    std::pair<MFace*, MFace*> fe(string edgeId);
+    vector<MEdge *> ef(string faceId);
+
     int isInside(Vec4 pos);
     vector<RCResult> checkIntersection(Ray ray);
 
@@ -34,6 +43,7 @@ private:
     unordered_map<string, MFace*> faces;
     unordered_map<string, MEdge*> edges;
 
+    bool isFaceVisited(vector<string> facesVisited, string faceId);
 };
 
 #endif // MESH_H
