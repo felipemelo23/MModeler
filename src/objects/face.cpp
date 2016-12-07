@@ -10,7 +10,7 @@ Face::Face()
     this->vertices = NULL;
 }
 
-Face::Face(int sides, Vec4 *v, Material *material)
+Face::Face(int sides, Material *material, Vec4 *v)
 {
     this->sides = sides;
     this->vertices = v;

@@ -79,8 +79,11 @@ SOURCES += main.cpp\
     objects/cylinder.cpp \
     visualization/glcylinderadapter.cpp \
     util/csgfilemanager.cpp \
-    objects/mesh.cpp \
-    objects/vertex.cpp
+    objects/mesh/mesh.cpp \
+    objects/mesh/mvertex.cpp \
+    objects/mesh/medge.cpp \
+    objects/mesh/mface.cpp \
+    objects/mesh/meshfactory.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -147,8 +150,11 @@ HEADERS  += gui/mainwindow.h \
     objects/cylinder.h \
     visualization/glcylinderadapter.h \
     util/csgfilemanager.h \
-    objects/mesh.h \
-    objects/vertex.h
+    objects/mesh/mesh.h \
+    objects/mesh/mvertex.h \
+    objects/mesh/medge.h \
+    objects/mesh/mface.h \
+    objects/mesh/meshfactory.h
 
 FORMS    += gui/mainwindow.ui \
     gui/octreedialog.ui \

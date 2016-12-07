@@ -63,7 +63,7 @@ void RBPyramid::generateFaces()
         bottomInv[numOfSides-1-i] = v[i+1];
     }
 
-    faces[0] = Face(numOfSides,bottomInv,material);
+    faces[0] = Face(numOfSides,material,bottomInv);
 
     for (int i=0;i<numOfSides;i++) {
         faces[i+1] = Face(3,material,v[0],v[bottomVertices[i]],v[bottomVertices[(i+1)%numOfSides]]);

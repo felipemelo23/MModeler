@@ -10,7 +10,7 @@ class Face
 {
 public:
     Face();
-    Face(int sides, Vec4 *v, Material *material);
+    Face(int sides, Material *material, Vec4 *v);
     Face(int sides, Material *material, Vec4 v1, Vec4 v2, Vec4 v3, ...);
     ~Face();
 

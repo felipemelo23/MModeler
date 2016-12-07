@@ -106,8 +106,8 @@ void RBPrism::generateFaces()
         bottomInv[numOfSides-1-i] = v[i];
     }
 
-    faces[0] = Face(numOfSides,bottomInv,material);
-    faces[1] = Face(numOfSides,topVertices,material);
+    faces[0] = Face(numOfSides,material,bottomInv);
+    faces[1] = Face(numOfSides,material,topVertices);
 
     for (int i=0;i<numOfSides;i++) {
         faces[i+2] = Face(4,material,topVertices[i],bottomVertices[i],bottomVertices[(i+1)%numOfSides],

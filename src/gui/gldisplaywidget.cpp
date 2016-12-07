@@ -13,6 +13,7 @@
 #include <objects/rbpyramid.h>
 #include <objects/sphere.h>
 #include <random>
+#include <QTime>
 
 using namespace std;
 
@@ -39,10 +40,10 @@ glDisplayWidget::glDisplayWidget(QWidget *parent) : QGLWidget(parent)
     transX = 0;
     transY = 0;
 
-    zoom = -10;
+    zoom = -5;
 
     gizmo = true;
-    grid = true;
+    grid = false;
 
     scene = new glScene();
 }
@@ -129,7 +130,7 @@ void glDisplayWidget::resetView()
     transX = 0;
     transY = 0;
 
-    zoom = -10;
+    zoom = -5;
 }
 
 void glDisplayWidget::mousePressEvent(QMouseEvent *event)
@@ -370,11 +371,14 @@ void glDisplayWidget::checkDirts() {
             if (mode == 1) {
                 double *color = new double[3];
 
+                qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
+
                 do {
                     color[0] = (qrand()%256)/255.0;
                     color[1] = (qrand()%256)/255.0;
                     color[2] = (qrand()%256)/255.0;
-                } while (color[0] + color[1] + color[2] > 2);
+                } while ((color[0] + color[1] + color[2] > 1) &&
+                         (color[0] + color[1] + color[2] < 2));
 
                 newObj->setColor(color);
                 Color c = Color(color[0],color[1],color[2]);
