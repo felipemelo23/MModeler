@@ -1,5 +1,10 @@
 #include "medge.h"
 
+MEdge::MEdge(std::string id)
+{
+    this->id = id;
+}
+
 MEdge::MEdge(string id, MVertex *start, MVertex *end, MFace *left, MFace *right, MEdge *lprev, MEdge *lnext, MEdge *rprev, MEdge *rnext)
 {
     this->id = id;

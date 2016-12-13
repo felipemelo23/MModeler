@@ -4,7 +4,10 @@
 #include <algebra/vec3.h>
 #include <algebra/vec4.h>
 #include <rendering/ray.h>
+#include <utility>
 #include <rendering/rcresult.h>
+
+using namespace std;
 
 class Face
 {
@@ -21,6 +24,8 @@ public:
 
     Material *getMaterial() const;
     void setMaterial(Material *value);
+
+    vector< pair<Vec3,Vec3> > getEdges();
 
 
 private:

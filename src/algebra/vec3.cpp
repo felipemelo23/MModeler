@@ -80,6 +80,17 @@ Vec3 Vec3::operator*(double lambda)
     return (Vec3) VecN::operator*(lambda);
 }
 
+bool Vec3::operator==(Vec3 vec)
+{
+    if((this->getX() == vec.getX())
+        && (this->getY() == vec.getY())
+        && (this->getZ() == vec.getZ()))
+    {
+        return true;
+    }
+    return false;
+}
+
 double Vec3::dot_(Vec3 vec)
 {
     return VecN::dot_(vec);

@@ -10,6 +10,7 @@ using std::string;
 class MEdge
 {
 public:
+    MEdge(string id);
     MEdge(string id, MVertex *start, MVertex *end, MFace *left, MFace *right, MEdge *lprev, MEdge *lnext, MEdge *rprev, MEdge *rnext);
 
     MVertex *getStart() const;

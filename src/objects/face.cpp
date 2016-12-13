@@ -104,3 +104,15 @@ void Face::setMaterial(Material *value)
 {
     material = value;
 }
+
+vector<pair<Vec3, Vec3> > Face::getEdges()
+{
+    vector< pair<Vec3, Vec3> > edges;
+
+    for(int i=0; i<sides-1; i++)
+    {
+        edges.push_back(pair<Vec3,Vec3>(vertices[i].getVec3_(),vertices[i+1].getVec3_()));
+    }
+    edges.push_back(pair<Vec3,Vec3>(vertices[sides-1].getVec3_(),vertices[0].getVec3_()));
+}
+
