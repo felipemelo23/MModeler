@@ -10,6 +10,7 @@ class MVertex : public Vec3
 {
 public:
     MVertex(string id, string edgeId, double x, double y, double z);
+    MVertex(string id, string edgeId, Vec3 pos);
 
     string getId() const;
     void setId(const string &value);

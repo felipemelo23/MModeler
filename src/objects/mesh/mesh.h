@@ -24,8 +24,9 @@ public:
     void addEdge(string id, MEdge *edge);
 
     void mvfs();
-    void mev(string vertexId);
-    void mef(string sVertexId, string eVertexId);
+    void mev(string vertexId, Vec3 dir, string edge1Id="", string edge2Id="");
+    void mev(string sEdgeId, string eEdgeId, string vertexId);
+    void mef();
 
     vector<MEdge*> ev(string vertexId);
     vector<MEdge*> ee(string edgeId);
@@ -44,6 +45,13 @@ private:
     unordered_map<string, MEdge*> edges;
 
     bool isFaceVisited(vector<string> facesVisited, string faceId);
+    void setTopWings(MEdge *edge, MEdge *nl=NULL, MEdge *pr=NULL);
+    void setBotWings(MEdge *edge, MEdge *pl=NULL, MEdge *nr=NULL);
+    void setWings(MVertex *vertex, MEdge *edge, MEdge *wings);
+    MEdge *getEdgeCCW(MVertex *vertex, MEdge *edge);
+    MEdge *getEdgeCW(MVertex *vertex, MEdge *edge);
+    MVertex *getNextVertex(MVertex *vertex, MEdge *edge);
+    vector<MEdge*> getEdges(MFace *loop);
 };
 
 #endif // MESH_H

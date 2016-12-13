@@ -1,9 +1,10 @@
 #include "mface.h"
 
-MFace::MFace(string id, string edgeId)
+MFace::MFace(string id, string edgeId, int orientation)
 {
     this->id = id;
     this->edgeId = edgeId;
+    this->orientation = orientation;
 }
 
 string MFace::getId() const
@@ -24,4 +25,14 @@ string MFace::getEdgeId() const
 void MFace::setEdgeId(const string &value)
 {
     edgeId = value;
+}
+
+int MFace::getOrientation() const
+{
+    return orientation;
+}
+
+void MFace::setOrientation(int value)
+{
+    orientation = value;
 }
