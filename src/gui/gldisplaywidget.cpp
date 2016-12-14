@@ -369,7 +369,7 @@ void glDisplayWidget::checkDirts() {
                 newObj = glCylinderAdapter::adapt((Cylinder*)objects->getObject(i));
                 break;
             case Object::MESH:
-                newObj = glMeshAdapter::adapt((Mesh*)objects->getObject(i));
+                newObj = glMeshAdapter::adapt((Mesh*)objects->getObject(i),this);
                 break;
             }
 

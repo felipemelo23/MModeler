@@ -8,7 +8,7 @@
 class glMeshAdapter
 {
 public:
-    static glObject *adapt(Mesh *mesh);
+    static glObject *adapt(Mesh *mesh, QGLWidget *widget);
 };
 
 #endif // GLMESHADAPTER_H

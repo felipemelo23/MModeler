@@ -56,6 +56,12 @@ void Mesh::mvfs()
     addFace(faceId,new MFace(faceId,""));
 }
 
+void Mesh::clearActives() {
+    activeVertices = vector<string>();
+    activeEdges = vector<string>();
+    activeFaces = vector<string>();
+}
+
 void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edge1Id, std::__cxx11::string edge2Id)
 {
     MVertex *vertex = vertices.at(vertexId);
@@ -82,8 +88,15 @@ void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edg
     addEdge(QString::number(edges.size()).toStdString(), new_edge);
 
     if (edge2Id == "") {
-        if (edge1Id != "") {
-            setBotWings(new_edge, edge1, edge1);
+        if (edge1Id == "") {
+            new_edge->setLeft(faces.at("0"));
+            new_edge->setRight(faces.at("0"));
+            MFace *face = faces.at("0");
+            face->setEdgeId(new_edge->getId());
+        } else {
+            setBotWings(new_edge,edge1,edge1);
+            setWings(vertex, edge1, new_edge);
+
             if (vertex->getId() == edge1->getEnd()->getId()) {
                 new_edge->setLeft(edge1->getLeft());
                 new_edge->setRight(edge1->getRight());
@@ -91,81 +104,161 @@ void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edg
                 new_edge->setLeft(edge1->getRight());
                 new_edge->setRight(edge1->getLeft());
             }
-
-            setWings(vertex, edge1, new_edge);
-        }
-        else {
-            new_edge->setLeft(faces.at("0"));
-            new_edge->setRight(faces.at("0"));
         }
     } else {
-        cout << 2 << endl;
-        new_edge->setLprev(edge1);
-        new_edge->setRprev(edge2);
-
-        /* GETTING NEW_EDGE'S NEXT RIGHT EDGE */
-        MEdge *curr_edge = edge1;
-        MEdge *next_edge = getEdgeCW(vertex, curr_edge);
-
-        while (next_edge->getId() != edge2->getId()) {
-            curr_edge = next_edge;
-            next_edge = getEdgeCW(vertex, curr_edge);
+        if (edge1->getLeft()->getId() == edge2->getLeft()->getId()) {
+            new_edge->setLprev(edge1);
+            new_edge->setRnext(edge2);
+            edge1->setLnext(new_edge);
+            edge2->setLprev(new_edge);
+            new_edge->setLeft(edge1->getLeft());
+            new_edge->setRight(edge1->getLeft());
+        } else if (edge1->getRight()->getId() == edge2->getRight()->getId()) {
+            new_edge->setLprev(edge2);
+            new_edge->setRnext(edge1);
+            edge1->setRprev(new_edge);
+            edge2->setRnext(new_edge);
+            new_edge->setLeft(edge1->getRight());
+            new_edge->setRight(edge1->getRight());
+        } else if (edge1->getLeft()->getId() == edge2->getRight()->getId()) {
+            if (edge1->getStart()->getId() == vertexId) {
+                new_edge->setLprev(edge2);
+                new_edge->setRnext(edge1);
+                edge1->setLprev(new_edge);
+                edge2->setRnext(new_edge);
+            } else if (edge1->getEnd()->getId() == vertexId) {
+                new_edge->setLprev(edge1);
+                new_edge->setRnext(edge2);
+                edge1->setLnext(new_edge);
+                edge2->setRprev(new_edge);
+            }
+        } else if (edge1->getRight()->getId() == edge2->getLeft()->getId()) {
+            if (edge1->getStart()->getId() == vertexId) {
+                new_edge->setLprev(edge1);
+                new_edge->setRnext(edge2);
+                edge1->setRnext(new_edge);
+                edge2->setLprev(new_edge);
+            } else if (edge1->getEnd()->getId() == vertexId) {
+                new_edge->setLprev(edge2);
+                new_edge->setRnext(edge1);
+                edge1->setRprev(new_edge);
+                edge2->setLnext(new_edge);
+            }
         }
-
-        new_edge->setRnext(curr_edge);
-
-        /* GETTING NEW_EDGE'S NEXT LEFT EDGE */
-        curr_edge = edge2;
-        next_edge = getEdgeCW(vertex, curr_edge);
-
-        while (next_edge->getId() != edge1->getId()) {
-            curr_edge = next_edge;
-            next_edge = getEdgeCW(vertex, curr_edge);
-        }
-
-        new_edge->setLnext(curr_edge);
-
-        MEdge *nl = new_edge->getLnext();
-        MEdge *pl = new_edge->getLprev();
-        MEdge *nr = new_edge->getRnext();
-        MEdge *pr = new_edge->getRprev();
-
-        if (vertex->getId() == nl->getStart()->getId())
-            nl->setStart(new_vertex);
-        else if (vertex->getId() == nl->getEnd()->getId())
-            nl->setEnd(new_vertex);
-
-        if (vertex->getId() == pr->getStart()->getId())
-            pr->setStart(new_vertex);
-        else if (vertex->getId() == pr->getEnd()->getId())
-            pr->setEnd(new_vertex);
-
-        if (new_vertex->getId() == nl->getStart()->getId()) {
-            nl->setLprev(new_edge);
-        } else if (new_vertex->getId() == nl->getEnd()->getId()) {
-            nl->setRprev(new_edge);
-        }
-
-        if (vertex->getId() == pl->getStart()->getId()) {
-            pl->setRnext(new_edge);
-        } else if (vertex->getId() == pl->getEnd()->getId()) {
-            pl->setLnext(new_edge);
-        }
-
-        if (vertex->getId() == nr->getStart()->getId()) {
-            nr->setLprev(new_edge);
-        } else if (vertex->getId() == nr->getEnd()->getId()) {
-            nr->setRprev(new_edge);
-        }
-
-        if (new_vertex->getId() == pr->getStart()->getId()) {
-            pr->setRnext(new_edge);
-        } else if (new_vertex->getId() == pr->getEnd()->getId()) {
-            pr->setLnext(new_edge);
-        }
-
     }
+
 }
+
+//void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edge1Id, std::__cxx11::string edge2Id)
+//{
+//    MVertex *vertex = vertices.at(vertexId);
+
+//    MEdge *edge1;
+//    if (edge1Id != "")
+//        edge1 = edges.at(edge1Id);
+//    MEdge *edge2;
+//    if (edge2Id != "")
+//        edge2 = edges.at(edge2Id);
+
+//    Vec3 new_vertex_pos = *vertex + dir;
+//    MVertex *new_vertex = new MVertex(QString::number(vertices.size()).toStdString(), "", new_vertex_pos);
+//    addVertex(QString::number(vertices.size()).toStdString(), new_vertex);
+
+//    MEdge *new_edge;
+//    new_edge = new MEdge(QString::number(edges.size()).toStdString(), vertex, new_vertex, NULL, NULL, NULL, NULL, NULL, NULL);
+//    new_edge->setLnext(new_edge);
+//    new_edge->setLprev(new_edge);
+//    new_edge->setRnext(new_edge);
+//    new_edge->setRprev(new_edge);
+
+//    new_vertex->setEdgeId(new_edge->getId());
+//    addEdge(QString::number(edges.size()).toStdString(), new_edge);
+
+//    if (edge2Id == "") {
+//        if (edge1Id != "") {
+//            setBotWings(new_edge, edge1, edge1);
+//            if (vertex->getId() == edge1->getEnd()->getId()) {
+//                new_edge->setLeft(edge1->getLeft());
+//                new_edge->setRight(edge1->getRight());
+//            } else if (vertex->getId() == edge1->getStart()->getId()) {
+//                new_edge->setLeft(edge1->getRight());
+//                new_edge->setRight(edge1->getLeft());
+//            }
+
+//            setWings(vertex, edge1, new_edge);
+//        }
+//        else {
+//            new_edge->setLeft(faces.at("0"));
+//            new_edge->setRight(faces.at("0"));
+//        }
+//    } else {
+//        cout << 2 << endl;
+//        new_edge->setLprev(edge1);
+//        new_edge->setRprev(edge2);
+
+//        /* GETTING NEW_EDGE'S NEXT RIGHT EDGE */
+//        MEdge *curr_edge = edge1;
+//        MEdge *next_edge = getEdgeCW(vertex, curr_edge);
+
+//        while (next_edge->getId() != edge2->getId()) {
+//            curr_edge = next_edge;
+//            next_edge = getEdgeCW(vertex, curr_edge);
+//        }
+
+//        new_edge->setRnext(curr_edge);
+
+//        /* GETTING NEW_EDGE'S NEXT LEFT EDGE */
+//        curr_edge = edge2;
+//        next_edge = getEdgeCW(vertex, curr_edge);
+
+//        while (next_edge->getId() != edge1->getId()) {
+//            curr_edge = next_edge;
+//            next_edge = getEdgeCW(vertex, curr_edge);
+//        }
+
+//        new_edge->setLnext(curr_edge);
+
+//        MEdge *nl = new_edge->getLnext();
+//        MEdge *pl = new_edge->getLprev();
+//        MEdge *nr = new_edge->getRnext();
+//        MEdge *pr = new_edge->getRprev();
+
+//        if (vertex->getId() == nl->getStart()->getId())
+//            nl->setStart(new_vertex);
+//        else if (vertex->getId() == nl->getEnd()->getId())
+//            nl->setEnd(new_vertex);
+
+//        if (vertex->getId() == pr->getStart()->getId())
+//            pr->setStart(new_vertex);
+//        else if (vertex->getId() == pr->getEnd()->getId())
+//            pr->setEnd(new_vertex);
+
+//        if (new_vertex->getId() == nl->getStart()->getId()) {
+//            nl->setLprev(new_edge);
+//        } else if (new_vertex->getId() == nl->getEnd()->getId()) {
+//            nl->setRprev(new_edge);
+//        }
+
+//        if (vertex->getId() == pl->getStart()->getId()) {
+//            pl->setRnext(new_edge);
+//        } else if (vertex->getId() == pl->getEnd()->getId()) {
+//            pl->setLnext(new_edge);
+//        }
+
+//        if (vertex->getId() == nr->getStart()->getId()) {
+//            nr->setLprev(new_edge);
+//        } else if (vertex->getId() == nr->getEnd()->getId()) {
+//            nr->setRprev(new_edge);
+//        }
+
+//        if (new_vertex->getId() == pr->getStart()->getId()) {
+//            pr->setRnext(new_edge);
+//        } else if (new_vertex->getId() == pr->getEnd()->getId()) {
+//            pr->setLnext(new_edge);
+//        }
+
+//    }
+//}
 
 void Mesh::mef(std::__cxx11::string v1Id, std::__cxx11::string e1Id, std::__cxx11::string v2Id, std::__cxx11::string e2Id)
 {
@@ -179,7 +272,21 @@ vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
     activeFaces = vector<string>();
 
     MVertex *vertex = vertices.at(vertexId);
-    MEdge *initial_edge = edges.at(vertex->getEdgeId());
+
+
+
+    MEdge *initial_edge;
+    if (vertex->getEdgeId() != "") {
+        initial_edge = edges.at(vertex->getEdgeId());
+    } else {
+        for (pair<string,MEdge*> edge : edges) {
+            if ((edge.second->getEnd()->getId() == vertexId)||
+                (edge.second->getStart()->getId() == vertexId)) {
+                initial_edge = edge.second;
+                break;
+            }
+        }
+    }
 
     vector<MEdge*> result = vector<MEdge*>();
     result.push_back(initial_edge);
@@ -200,6 +307,7 @@ vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
     }
 
     return result;
+
 }
 
 void Mesh::setTopWings(MEdge *edge, MEdge *nl, MEdge *pr)
@@ -261,11 +369,11 @@ vector<MEdge *> Mesh::getLoopEdges(MFace *loop)
         vertex = initial_edge->getEnd();
     else
         vertex = initial_edge->getStart();
-
+    MVertex *initial_vertex = vertex;
     MEdge *curr_edge = initial_edge;
     MEdge *next_edge = getEdgeCCW(vertex, curr_edge);
 
-    while (next_edge->getId() != initial_edge->getId()) {
+    while (vertex->getId() != initial_vertex->getId()) {
         curr_edge = next_edge;
         vertex = getNextVertex(vertex, curr_edge);
         next_edge = getEdgeCCW(vertex, curr_edge);
@@ -312,9 +420,7 @@ std::pair<MFace *, MFace *> Mesh::fe(std::__cxx11::string edgeId)
 
 vector<MEdge *> Mesh::ef(std::__cxx11::string faceId)
 {
-    activeVertices.clear();
-    activeEdges.clear();
-    activeFaces.clear();
+    clearActives();
 
     vector<MEdge *> loopEdges = getLoopEdges(faces.at(faceId));
 
@@ -325,21 +431,60 @@ vector<MEdge *> Mesh::ef(std::__cxx11::string faceId)
     return loopEdges;
 }
 
+vector<MVertex *> Mesh::vv(string vertexId)
+{
+    vector<MEdge *> adjEdges = ev(vertexId);
+    vector<MVertex *> result = vector<MVertex *>();
+
+    for (MEdge *edge : adjEdges) {
+        if (edge->getEnd()->getId() != vertexId)
+            result.push_back(edge->getEnd());
+
+        if (edge->getStart()->getId() != vertexId)
+            result.push_back(edge->getStart());
+    }
+
+    clearActives();
+
+    for (MVertex *vertex : result)
+        activeVertices.push_back(vertex->getId());
+
+    return result;
+}
+
+vector<MVertex *> Mesh::ve(string edgeId)
+{
+    clearActives();
+    MEdge *edge = edges.at(edgeId);
+
+    activeVertices.push_back(edge->getStart()->getId());
+    activeVertices.push_back(edge->getEnd()->getId());
+
+    return vector<MVertex*>();
+}
+
 vector<MVertex *> Mesh::vf(std::__cxx11::string faceId)
 {
-    activeVertices.clear();
-    activeEdges.clear();
-    activeFaces.clear();
-
     vector<MEdge *> faceEdges = ef(faceId);
     vector<MVertex *> result = vector<MVertex*>();
 
+    clearActives();
+
     for (MEdge *edge : faceEdges) {
-        result.push_back(edge->getEnd());
-        activeVertices.push_back(edge->getEnd()->getId());
+
+        if (!contains(activeVertices, edge->getEnd()->getId()))
+            activeVertices.push_back(edge->getEnd()->getId());
+        if (!contains(activeVertices, edge->getStart()->getId()))
+            activeVertices.push_back(edge->getStart()->getId());
     }
 
     return result;
+}
+
+bool Mesh::contains(vector<string> list, string item) {
+    for (string listItem : list)
+        if (listItem == item) return true;
+    return false;
 }
 
 int Mesh::isInside(Vec4 pos)
@@ -380,6 +525,45 @@ Vec3 Mesh::getMaximumCoords()
     }
 
     return Vec3(maxX,maxY,maxZ);
+}
+
+void Mesh::translate(double x, double y, double z)
+{
+    Mtx4x4 T = Mtx4x4::getTranslateMtx_(x,y,z);
+
+    for (pair<string,MVertex *> v : vertices) {
+        MVertex *vertex = v.second;
+        Vec3 new_pos = T.prod_(*vertex,1);
+        vertex->setX(new_pos.getX());
+        vertex->setY(new_pos.getY());
+        vertex->setZ(new_pos.getZ());
+    }
+}
+
+void Mesh::scale(double x, double y, double z)
+{
+    Mtx4x4 S = Mtx4x4::getScaleMtx_(x,y,z);
+
+    for (pair<string,MVertex *> v : vertices) {
+        MVertex *vertex = v.second;
+        Vec3 new_pos = S.prod_(*vertex,1);
+        vertex->setX(new_pos.getX());
+        vertex->setY(new_pos.getY());
+        vertex->setZ(new_pos.getZ());
+    }
+}
+
+void Mesh::rotate(double degree, bool x, bool y, bool z)
+{
+    Mtx4x4 R = Mtx4x4::getRotateMtx_(degree,x,y,z);
+
+    for (pair<string,MVertex *> v : vertices) {
+        MVertex *vertex = v.second;
+        Vec3 new_pos = R.prod_(*vertex,1);
+        vertex->setX(new_pos.getX());
+        vertex->setY(new_pos.getY());
+        vertex->setZ(new_pos.getZ());
+    }
 }
 
 unordered_map<string, MFace *> Mesh::getFaces() const

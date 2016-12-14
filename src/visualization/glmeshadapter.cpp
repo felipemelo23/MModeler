@@ -1,7 +1,7 @@
 
 #include "glmeshadapter.h"
 
-glObject *glMeshAdapter::adapt(Mesh *mesh)
+glObject *glMeshAdapter::adapt(Mesh *mesh, QGLWidget *widget)
 {
-    return new glMesh(mesh);
+    return new glMesh(mesh, widget);
 }

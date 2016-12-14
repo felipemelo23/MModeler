@@ -76,7 +76,9 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
             objects->addObject(new Cylinder());
         }
         if (objType == "mesh") {
-            objects->addObject(new Mesh());
+            Mesh *mesh = new Mesh();
+            mesh->mvfs();
+            objects->addObject(mesh);
         }
         if (objType == "box_mesh") {
             objects->addObject(MeshFactory::buildBox());

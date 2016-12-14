@@ -12,12 +12,13 @@ using std::unordered_map;
 class glMesh : public glObject
 {
 public:
-    glMesh(Mesh *mesh);
+    glMesh(Mesh *mesh, QGLWidget *widget);
 
     void draw();
 
 private:
     Mesh *mesh;
+    QGLWidget *widget;
 
     bool contains(vector<string> list, string item);
 };

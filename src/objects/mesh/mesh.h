@@ -29,15 +29,22 @@ public:
 
     vector<MEdge*> ev(string vertexId);
     vector<MEdge*> ee(string edgeId);
-    std::pair<MFace*, MFace*> fe(string edgeId);
     vector<MEdge *> ef(string faceId);
+    vector<MVertex *> vv(string vertexId);
+    vector<MVertex *> ve(string edgeId);
     vector<MVertex *> vf(string faceId);
+
+    std::pair<MFace*, MFace*> fe(string edgeId);
 
     int isInside(Vec4 pos);
     vector<RCResult> checkIntersection(Ray ray);
 
     Vec3 getMinimumCoords();
     Vec3 getMaximumCoords();
+
+    void translate(double x, double y, double z);
+    void scale(double x, double y, double z);
+    void rotate(double degree, bool x=true, bool y=false, bool z=false);
 
     unordered_map<string, MFace *> getFaces() const;
     unordered_map<string, MVertex *> getVertices() const;
@@ -53,6 +60,7 @@ public:
 
     Vec3 getFaceCenter(vector<MVertex *> faceVertices);
 
+    void clearActives();
 private:
     unordered_map<string, MVertex*> vertices;
     unordered_map<string, MFace*> faces;
@@ -69,6 +77,7 @@ private:
     MEdge *getEdgeCW(MVertex *vertex, MEdge *edge);
     MVertex *getNextVertex(MVertex *vertex, MEdge *edge);
     vector<MEdge*> getLoopEdges(MFace *loop);
+    bool contains(vector<string> list, string item);
 };
 
 #endif // MESH_H
