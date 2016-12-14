@@ -3,6 +3,7 @@
 #include <objects/box.h>
 #include <objects/compoundobject.h>
 #include <objects/cylinder.h>
+#include <objects/mesh/meshfactory.h>
 
 using namespace std;
 
@@ -73,6 +74,15 @@ void InsertCmd::execute(QStringList params, ObjectsManager *objects)
         }
         if (objType == "cylinder") {
             objects->addObject(new Cylinder());
+        }
+        if (objType == "mesh") {
+            objects->addObject(new Mesh());
+        }
+        if (objType == "box_mesh") {
+            objects->addObject(MeshFactory::buildBox());
+        }
+        if (objType == "sphere_mesh") {
+            objects->addObject(MeshFactory::buildSphere());
         }
     }
 }

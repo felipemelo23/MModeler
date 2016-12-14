@@ -2,7 +2,7 @@
 
 glObject *glCylinderAdapter::adapt(Cylinder *cylinder)
 {
-    int numOfSides = 16;
+    int numOfSides = 32;
 
     Vec4 *v = cylinder->getVertices(numOfSides);
 

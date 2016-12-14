@@ -51,6 +51,7 @@ public:
     static const int COMPOUND = 6;
     static const int CSGTREE = 7;
     static const int BOX = 8;
+    static const int MESH = 9;
 
     Material *getMaterial() const;
     void setMaterial(Material *value);

@@ -83,7 +83,11 @@ SOURCES += main.cpp\
     objects/mesh/mvertex.cpp \
     objects/mesh/medge.cpp \
     objects/mesh/mface.cpp \
-    objects/mesh/meshfactory.cpp
+    objects/mesh/meshfactory.cpp \
+    visualization/glmeshadapter.cpp \
+    visualization/glmesh.cpp \
+    gui/cmd_interpreter/euleroperator.cpp \
+    gui/cmd_interpreter/adjacencyoperator.cpp
 
 HEADERS  += gui/mainwindow.h \
     gui/gldisplaywidget.h \
@@ -154,7 +158,11 @@ HEADERS  += gui/mainwindow.h \
     objects/mesh/mvertex.h \
     objects/mesh/medge.h \
     objects/mesh/mface.h \
-    objects/mesh/meshfactory.h
+    objects/mesh/meshfactory.h \
+    visualization/glmeshadapter.h \
+    visualization/glmesh.h \
+    gui/cmd_interpreter/euleroperator.h \
+    gui/cmd_interpreter/adjacencyoperator.h
 
 FORMS    += gui/mainwindow.ui \
     gui/octreedialog.ui \

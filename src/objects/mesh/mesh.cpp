@@ -1,10 +1,20 @@
 #include "mesh.h"
+#include <iostream>
+
+using namespace std;
 
 Mesh::Mesh()
 {
     this->vertices = unordered_map<string, MVertex*>();
     this->faces = unordered_map<string, MFace*>();
     this->edges = unordered_map<string, MEdge*>();
+
+    this->activeVertices = vector<string>();
+    this->activeFaces = vector<string>();
+    this->activeEdges = vector<string>();
+
+    this->type = Object::MESH;
+    this->name = "Mesh";
 }
 
 MVertex *Mesh::getVertex(std::__cxx11::string id)
@@ -24,17 +34,17 @@ MEdge *Mesh::getEdge(std::__cxx11::string id)
 
 void Mesh::addVertex(std::__cxx11::string id, MVertex *vertex)
 {
-    vertices.insert(std::make_pair(id,vertex));
+    vertices.emplace(id,vertex);
 }
 
 void Mesh::addFace(std::__cxx11::string id, MFace *face)
 {
-    faces.insert(std::make_pair(id,face));
+    faces.emplace(id,face);
 }
 
 void Mesh::addEdge(std::__cxx11::string id, MEdge *edge)
 {
-    edges.insert(std::make_pair(id,edge));
+    edges.emplace(id,edge);
 }
 
 void Mesh::mvfs()
@@ -42,8 +52,8 @@ void Mesh::mvfs()
     string vertexId = QString::number(vertices.size()).toStdString();
     string faceId = QString::number((faces.size())).toStdString();
 
-    vertices.insert(std::make_pair(vertexId,new MVertex(vertexId,"",0,0,0)));
-    faces.insert(std::make_pair(faceId,new MFace(faceId,"")));
+    addVertex(vertexId,new MVertex(vertexId,"",0,0,0));
+    addFace(faceId,new MFace(faceId,""));
 }
 
 void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edge1Id, std::__cxx11::string edge2Id)
@@ -59,15 +69,37 @@ void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edg
 
     Vec3 new_vertex_pos = *vertex + dir;
     MVertex *new_vertex = new MVertex(QString::number(vertices.size()).toStdString(), "", new_vertex_pos);
+    addVertex(QString::number(vertices.size()).toStdString(), new_vertex);
 
     MEdge *new_edge;
-    new_edge = new MEdge(QString::number(edges.size()).toStdString(), vertex, new_vertex, NULL, NULL, new_edge, new_edge, new_edge, new_edge);
+    new_edge = new MEdge(QString::number(edges.size()).toStdString(), vertex, new_vertex, NULL, NULL, NULL, NULL, NULL, NULL);
+    new_edge->setLnext(new_edge);
+    new_edge->setLprev(new_edge);
+    new_edge->setRnext(new_edge);
+    new_edge->setRprev(new_edge);
+
+    new_vertex->setEdgeId(new_edge->getId());
+    addEdge(QString::number(edges.size()).toStdString(), new_edge);
 
     if (edge2Id == "") {
-        if (edge1Id != "")
+        if (edge1Id != "") {
             setBotWings(new_edge, edge1, edge1);
-        setWings(vertex, edge1, new_edge);
+            if (vertex->getId() == edge1->getEnd()->getId()) {
+                new_edge->setLeft(edge1->getLeft());
+                new_edge->setRight(edge1->getRight());
+            } else if (vertex->getId() == edge1->getStart()->getId()) {
+                new_edge->setLeft(edge1->getRight());
+                new_edge->setRight(edge1->getLeft());
+            }
+
+            setWings(vertex, edge1, new_edge);
+        }
+        else {
+            new_edge->setLeft(faces.at("0"));
+            new_edge->setRight(faces.at("0"));
+        }
     } else {
+        cout << 2 << endl;
         new_edge->setLprev(edge1);
         new_edge->setRprev(edge2);
 
@@ -98,6 +130,16 @@ void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edg
         MEdge *nr = new_edge->getRnext();
         MEdge *pr = new_edge->getRprev();
 
+        if (vertex->getId() == nl->getStart()->getId())
+            nl->setStart(new_vertex);
+        else if (vertex->getId() == nl->getEnd()->getId())
+            nl->setEnd(new_vertex);
+
+        if (vertex->getId() == pr->getStart()->getId())
+            pr->setStart(new_vertex);
+        else if (vertex->getId() == pr->getEnd()->getId())
+            pr->setEnd(new_vertex);
+
         if (new_vertex->getId() == nl->getStart()->getId()) {
             nl->setLprev(new_edge);
         } else if (new_vertex->getId() == nl->getEnd()->getId()) {
@@ -125,18 +167,17 @@ void Mesh::mev(std::__cxx11::string vertexId, Vec3 dir, std::__cxx11::string edg
     }
 }
 
-void Mesh::mev(std::__cxx11::string sEdgeId, std::__cxx11::string eEdgeId, std::__cxx11::string vertexId)
-{
-
-}
-
-void Mesh::mef()
+void Mesh::mef(std::__cxx11::string v1Id, std::__cxx11::string e1Id, std::__cxx11::string v2Id, std::__cxx11::string e2Id)
 {
 
 }
 
 vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
 {
+    activeVertices = vector<string>();
+    activeEdges = vector<string>();
+    activeFaces = vector<string>();
+
     MVertex *vertex = vertices.at(vertexId);
     MEdge *initial_edge = edges.at(vertex->getEdgeId());
 
@@ -151,19 +192,11 @@ vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
         next_edge = getEdgeCW(vertex, curr_edge);
 
         result.push_back(curr_edge);
+        activeEdges.push_back(curr_edge->getId());
     }
 
-    return result;
-}
-
-bool Mesh::isFaceVisited(vector<string> facesVisited, string faceId) {
-    bool result = false;
-
-    for (string face : facesVisited) {
-        if (face == faceId) {
-            result = true;
-            break;
-        }
+    for (auto edge : result) {
+        activeEdges.push_back(edge->getId());
     }
 
     return result;
@@ -217,7 +250,7 @@ MVertex *Mesh::getNextVertex(MVertex *vertex, MEdge *edge)
     }
 }
 
-vector<MEdge *> Mesh::getEdges(MFace *loop)
+vector<MEdge *> Mesh::getLoopEdges(MFace *loop)
 {
     MEdge *initial_edge = edges.at(loop->getEdgeId());
     vector<MEdge *> result = vector<MEdge*>();
@@ -245,6 +278,10 @@ vector<MEdge *> Mesh::getEdges(MFace *loop)
 
 vector<MEdge *> Mesh::ee(std::__cxx11::string edgeId)
 {
+    activeVertices.clear();
+    activeEdges.clear();
+    activeFaces.clear();
+
     vector<MEdge *> edges1 = ev(edges.at(edgeId)->getStart()->getId());
     vector<MEdge *> edges2 = ev(edges.at(edgeId)->getEnd()->getId());
 
@@ -252,18 +289,57 @@ vector<MEdge *> Mesh::ee(std::__cxx11::string edgeId)
         if (edge->getId() != edgeId) edges1.push_back(edge);
     }
 
+    for (MEdge *edge : edges1) {
+        activeEdges.push_back(edge->getId());
+    }
+
     return edges1;
 }
 
 std::pair<MFace *, MFace *> Mesh::fe(std::__cxx11::string edgeId)
 {
+    activeVertices.clear();
+    activeEdges.clear();
+    activeFaces.clear();
+
     MEdge *edge = edges.at(edgeId);
+
+    activeFaces.push_back(edge->getRight()->getId());
+    activeFaces.push_back(edge->getLeft()->getId());
+
     return std::make_pair(edge->getRight(), edge->getLeft());
 }
 
 vector<MEdge *> Mesh::ef(std::__cxx11::string faceId)
 {
-    return getEdges(faces.at(faceId));
+    activeVertices.clear();
+    activeEdges.clear();
+    activeFaces.clear();
+
+    vector<MEdge *> loopEdges = getLoopEdges(faces.at(faceId));
+
+    for (MEdge *edge : loopEdges) {
+        activeEdges.push_back(edge->getId());
+    }
+
+    return loopEdges;
+}
+
+vector<MVertex *> Mesh::vf(std::__cxx11::string faceId)
+{
+    activeVertices.clear();
+    activeEdges.clear();
+    activeFaces.clear();
+
+    vector<MEdge *> faceEdges = ef(faceId);
+    vector<MVertex *> result = vector<MVertex*>();
+
+    for (MEdge *edge : faceEdges) {
+        result.push_back(edge->getEnd());
+        activeVertices.push_back(edge->getEnd()->getId());
+    }
+
+    return result;
 }
 
 int Mesh::isInside(Vec4 pos)
@@ -305,3 +381,78 @@ Vec3 Mesh::getMaximumCoords()
 
     return Vec3(maxX,maxY,maxZ);
 }
+
+unordered_map<string, MFace *> Mesh::getFaces() const
+{
+    return faces;
+}
+
+unordered_map<string, MVertex *> Mesh::getVertices() const
+{
+    return vertices;
+}
+
+unordered_map<string, MEdge *> Mesh::getEdges() const
+{
+    return edges;
+}
+
+vector<string> Mesh::getActiveVertices() const
+{
+    return activeVertices;
+}
+
+vector<string> Mesh::getActiveEdges() const
+{
+    return activeEdges;
+}
+
+vector<string> Mesh::getActiveFaces() const
+{
+    return activeFaces;
+}
+
+double Mesh::getSurfaceArea()
+{
+    double area = 0;
+
+    for (std::pair<string,MFace *> face : faces) {
+        vector<MVertex*> faceVertices = vf(face.second->getId());
+
+        Vec3 faceCenter = getFaceCenter(faceVertices);
+
+        for (int i=0;i<faceVertices.size();i++) {
+            Vec3 v1 = *(faceVertices[i]) - faceCenter;
+            Vec3 v2 = *(faceVertices[i%faceVertices.size()]) - faceCenter;
+
+            area = v1.cross_(v2).getNorm();
+        }
+    }
+
+    return area;
+}
+
+Vec3 Mesh::getFaceCenter(vector<MVertex*> faceVertices)
+{
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

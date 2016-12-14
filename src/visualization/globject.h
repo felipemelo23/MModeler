@@ -39,7 +39,7 @@ public:
 
     void setOpacity(double value);
 
-private:
+protected:
     vector<Vec3> *vertices;
     vector<glFace> *faces;
 

@@ -1,4 +1,6 @@
+#include "adjacencyoperator.h"
 #include "commandinterpreter.h"
+#include "euleroperator.h"
 #include "insertcmd.h"
 #include "octreecmd.h"
 #include "selfrotate.h"
@@ -23,6 +25,8 @@ CommandInterpreter::CommandInterpreter(ObjectsManager *objects)
     this->acceptableCommand.push_back(new OctreeCMD());
     this->acceptableCommand.push_back(new SelfRotate());
     this->acceptableCommand.push_back(new SelfScale());
+    this->acceptableCommand.push_back(new EulerOperator());
+    this->acceptableCommand.push_back(new AdjacencyOperator());
 }
 
 void CommandInterpreter::interpretCommand(QString command)

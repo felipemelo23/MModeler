@@ -5,6 +5,7 @@
 #include <visualization/glboxadapter.h>
 #include <visualization/glcompoundobjectadapter.h>
 #include <visualization/glcylinderadapter.h>
+#include <visualization/glmeshadapter.h>
 #include <visualization/gloctreeadapter.h>
 #include <visualization/glrbprismadapter.h>
 #include <visualization/glrbpyramidadapter.h>
@@ -14,6 +15,7 @@
 #include <objects/sphere.h>
 #include <random>
 #include <QTime>
+#include <objects/mesh/mesh.h>
 
 using namespace std;
 
@@ -365,6 +367,9 @@ void glDisplayWidget::checkDirts() {
                 break;
             case Object::CYLINDER:
                 newObj = glCylinderAdapter::adapt((Cylinder*)objects->getObject(i));
+                break;
+            case Object::MESH:
+                newObj = glMeshAdapter::adapt((Mesh*)objects->getObject(i));
                 break;
             }
 

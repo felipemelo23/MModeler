@@ -8,6 +8,7 @@
 #include <QInputDialog>
 #include <iostream>
 #include <objects/compoundobject.h>
+#include <objects/mesh/mesh.h>
 #include <objects/rbprism.h>
 #include <objects/rbpyramid.h>
 #include <objects/sphere.h>
@@ -194,6 +195,18 @@ void MainWindow::updateObjectsTree() {
 
             if (obj->getType() == Object::COMPOUND) {
                 createCSGRep(subItem,obj);
+                item->addChild(subItem);
+            }
+
+            if (obj->getType() == Object::MESH) {
+                subItem = new QTreeWidgetItem();
+                subItem->setText(0,"Vertices: " + QString::number(((Mesh*)obj)->getVertices().size()));
+                item->addChild(subItem);
+                subItem = new QTreeWidgetItem();
+                subItem->setText(0,"Edges: " + QString::number(((Mesh*)obj)->getEdges().size()));
+                item->addChild(subItem);
+                subItem = new QTreeWidgetItem();
+                subItem->setText(0,"Faces: " + QString::number(((Mesh*)obj)->getFaces().size()));
                 item->addChild(subItem);
             }
 
