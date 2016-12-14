@@ -19,8 +19,9 @@ private:
     static bool edgeEqual(MEdge e1, MEdge e2);
     static bool edgeEqual(MEdge e1, pair<Vec3,Vec3> e2);
 
-    static void healEdges(Mesh *mesh);
-    static void buildGenMesh_recursive(vector<Face> faces, vector< pair<Vec3,Vec3> > edges, Mesh *mesh, int edge_qtd, int eID=-1, int vID=-1, int fID=-1, int it=1, int parent_edge=-1);
+    static void buildEdge(Mesh *mesh, int eID, MVertex *vs, MVertex *ve);
+    static void makeAdjascents(Mesh *mesh, int eID, MEdge *rprev, MEdge *lnext, MEdge *rnext, MEdge *lprev);
+    static void linkEdgeFace(Mesh *mesh, int eID, int RfID, int LfID);
 };
 
 #endif // MESHFACTORY_H
