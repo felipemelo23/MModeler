@@ -28,6 +28,7 @@ public:
     Vec3 operator-(Vec3 vec);
     Vec3 operator*(double lambda);
     bool operator==(Vec3 vec);
+    bool operator!=(Vec3 vec);
     double dot_(Vec3 vec);
     Vec3 cross_(Vec3 vec);
 
