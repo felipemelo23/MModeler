@@ -14,9 +14,13 @@ public:
 private:
     static vector< pair<Vec3,Vec3> > getEdges(vector<Face> faces);
     static int *getNeighborEdges(pair<Vec3,Vec3> edge, vector< pair<Vec3,Vec3> > edges);
+    static int *getNeighborFaces(pair<Vec3,Vec3> edge, vector<Face> faces);
     static bool edgeEqual(pair<Vec3,Vec3> e1, pair<Vec3,Vec3> e2);
+    static bool edgeEqual(MEdge e1, MEdge e2);
+    static bool edgeEqual(MEdge e1, pair<Vec3,Vec3> e2);
 
-    static void buildGenMesh_recursive(vector< pair<Vec3,Vec3> > edges, Mesh *mesh, int edge_qtd, int eID=-1, int vID=-1, int fID=-1, int it=1, int parent_edge=-1);
+    static void healEdges(Mesh *mesh);
+    static void buildGenMesh_recursive(vector<Face> faces, vector< pair<Vec3,Vec3> > edges, Mesh *mesh, int edge_qtd, int eID=-1, int vID=-1, int fID=-1, int it=1, int parent_edge=-1);
 };
 
 #endif // MESHFACTORY_H
