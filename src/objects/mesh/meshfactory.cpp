@@ -125,6 +125,8 @@ Mesh *MeshFactory::buildGenMesh(vector<Vec3 *> vertices, vector<Face> faces)
     }
 
 //a malha foi totalmente convertida para WED
+
+    return mesh;
 }
 
 //void MeshFactory::buildGenMesh_recursive(vector<Face> faces, vector< pair<Vec3,Vec3> > edges, Mesh *mesh, int edge_qtd, int eID, int vID, int fID, int it, int parent_edge)
@@ -187,7 +189,16 @@ Mesh *MeshFactory::buildGenMesh(vector<Vec3 *> vertices, vector<Face> faces)
 
 Mesh *MeshFactory::buildBox()
 {
+    Mesh* mesh = new Mesh();
 
+    int eID = -1;
+    int vID = -1;
+    int fID = -1;
+
+    for(int i=0; i<18; i++) //numero de arestas de um cubo triangularizado
+    {
+        mesh->addEdge(to_string(++eID), new MEdge(to_string(eID)));
+    }
 }
 
 Mesh *MeshFactory::buildSphere()
