@@ -38,5 +38,7 @@ glObject *glCylinderAdapter::adapt(Cylinder *cylinder)
     delete[] v;
     delete[] faces;
 
+    obj->setSmooth(true);
+
     return obj;
 }

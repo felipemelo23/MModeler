@@ -273,8 +273,6 @@ vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
 
     MVertex *vertex = vertices.at(vertexId);
 
-
-
     MEdge *initial_edge;
     if (vertex->getEdgeId() != "") {
         initial_edge = edges.at(vertex->getEdgeId());
@@ -307,7 +305,6 @@ vector<MEdge *> Mesh::ev(std::__cxx11::string vertexId)
     }
 
     return result;
-
 }
 
 void Mesh::setTopWings(MEdge *edge, MEdge *nl, MEdge *pr)

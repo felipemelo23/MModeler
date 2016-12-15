@@ -134,16 +134,16 @@ Mesh *MeshFactory::buildBox()
     Mesh* mesh = new Mesh();
 
 //criamos os vertices do cubo:
-    mesh->addVertex(to_string(0), new MVertex(to_string(++vID), to_string(3), -1, -1, 1));
-    mesh->addVertex(to_string(1), new MVertex(to_string(++vID), to_string(0), 1, -1, 1));
-    mesh->addVertex(to_string(2), new MVertex(to_string(++vID), to_string(1), 1, -1, -1));
-    mesh->addVertex(to_string(3), new MVertex(to_string(++vID), to_string(2), -1, -1, -1));
-    mesh->addVertex(to_string(4), new MVertex(to_string(++vID), to_string(7), -1, 1, 1));
-    mesh->addVertex(to_string(5), new MVertex(to_string(++vID), to_string(9), 1, 1, 1));
-    mesh->addVertex(to_string(6), new MVertex(to_string(++vID), to_string(11), 1, 1, -1));
-    mesh->addVertex(to_string(7), new MVertex(to_string(++vID), to_string(13), -1, 1, -1));
-    mesh->addVertex(to_string(8), new MVertex(to_string(++vID), to_string(16), 0, 1, 0));
-    mesh->addVertex(to_string(9), new MVertex(to_string(++vID), to_string(20), 0, -1, 0));
+    mesh->addVertex(to_string(0), new MVertex(to_string(0), to_string(3), -1, -1, 1));
+    mesh->addVertex(to_string(1), new MVertex(to_string(1), to_string(0), 1, -1, 1));
+    mesh->addVertex(to_string(2), new MVertex(to_string(2), to_string(1), 1, -1, -1));
+    mesh->addVertex(to_string(3), new MVertex(to_string(3), to_string(2), -1, -1, -1));
+    mesh->addVertex(to_string(4), new MVertex(to_string(4), to_string(7), -1, 1, 1));
+    mesh->addVertex(to_string(5), new MVertex(to_string(5), to_string(9), 1, 1, 1));
+    mesh->addVertex(to_string(6), new MVertex(to_string(6), to_string(11), 1, 1, -1));
+    mesh->addVertex(to_string(7), new MVertex(to_string(7), to_string(13), -1, 1, -1));
+    mesh->addVertex(to_string(8), new MVertex(to_string(8), to_string(16), 0, 1, 0));
+    mesh->addVertex(to_string(9), new MVertex(to_string(9), to_string(20), 0, -1, 0));
 
 //construimos as arestas
     buildEdge(mesh, 0, mesh->getVertex(to_string(0)), mesh->getVertex(to_string(1)));
@@ -331,17 +331,17 @@ int *MeshFactory::getNeighborFaces(pair<Vec3, Vec3> edge, vector<Face> faces)
 
 bool MeshFactory::edgeEqual(pair<Vec3, Vec3> e1, pair<Vec3, Vec3> e2)
 {
-    if(
-    ((e1.at(j).first == e2.at(k).first)
-        && (e1.at(j).second == e2.at(k).second))
-    ||
-    ((e1.at(j).first == e2.at(k).second)
-        && (e1.at(j).second == e2.at(k).first))
-    )
-    {
-        return true;
-    }
-    return false;
+//    if(
+//    ((e1.at(j).first == e2.at(k).first)
+//        && (e1.at(j).second == e2.at(k).second))
+//    ||
+//    ((e1.at(j).first == e2.at(k).second)
+//        && (e1.at(j).second == e2.at(k).first))
+//    )
+//    {
+//        return true;
+//    }
+//    return false;
 }
 
 bool MeshFactory::edgeEqual(MEdge e1, MEdge e2)
@@ -356,24 +356,24 @@ bool MeshFactory::edgeEqual(MEdge e1, MEdge e2)
 
 bool MeshFactory::edgeEqual(MEdge e1, pair<Vec3, Vec3> e2)
 {
-    if(
-    ((e1.getStart() == e2.at(k).first)
-        && (e1.getEnd() == e2.at(k).second))
-    ||
-    ((e1.getStart() == e2.at(k).second)
-        && (e1.getEnd() == e2.at(k).first))
-    )
-    {
-        return true;
-    }
-    return false;
+//    if(
+//    ((e1.getStart() == e2.at(k).first)
+//        && (e1.getEnd() == e2.at(k).second))
+//    ||
+//    ((e1.getStart() == e2.at(k).second)
+//        && (e1.getEnd() == e2.at(k).first))
+//    )
+//    {
+//        return true;
+//    }
+//    return false;
 }
 
 void MeshFactory::buildEdge(Mesh *mesh, int eID, MVertex *vs, MVertex *ve)
 {
     mesh->addEdge(to_string(eID), new MEdge(to_string(eID)));
-    mesh->getEdge(eID)->setStart(vs);
-    mesh->getEdge(eID)->setEnd(ve);
+    mesh->getEdge(to_string(eID))->setStart(vs);
+    mesh->getEdge(to_string(eID))->setEnd(ve);
 }
 
 void MeshFactory::makeAdjascents(Mesh *mesh, int eID, MEdge *rprev, MEdge *lnext, MEdge *rnext, MEdge *lprev)
